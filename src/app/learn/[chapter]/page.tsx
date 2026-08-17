@@ -143,29 +143,29 @@ export default async function ChapterPage({
 
         {/* Project Card */}
         {chapter.project && (
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 md:p-12 border-2 border-orange-500/50 relative overflow-hidden text-white">
+          <div className="bg-gradient-to-br from-white to-slate-50 rounded-2xl p-8 md:p-12 border-2 border-orange-200 relative overflow-hidden text-slate-900 shadow-sm">
             <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
             
             <div className="relative z-10">
               <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
                 Chapter Project
               </span>
-              <h2 className="text-3xl font-bold text-white mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-4">
                 {chapter.project.title}
               </h2>
-              <p className="text-slate-300 text-lg mb-6 max-w-2xl">
+              <p className="text-slate-600 text-lg mb-6 max-w-2xl">
                 {chapter.project.description}
               </p>
 
               {chapter.project.architecture && (
-                <div className="bg-slate-950/80 p-4 rounded-xl font-mono text-sm text-orange-300 mb-6 max-w-lg border border-slate-700">
+                <div className="bg-slate-100 p-4 rounded-xl font-mono text-sm text-orange-700 mb-6 max-w-lg border border-slate-200">
                   <pre className="whitespace-pre-wrap">{chapter.project.architecture}</pre>
                 </div>
               )}
 
               <Link 
                 href="/projects"
-                className="inline-flex items-center justify-center bg-white text-slate-900 hover:bg-orange-500 hover:text-white font-bold py-3 px-6 rounded-xl transition-colors"
+                className="inline-flex items-center justify-center bg-slate-900 text-white hover:bg-orange-500 font-bold py-3 px-6 rounded-xl transition-colors"
               >
                 View in Projects Gallery
               </Link>

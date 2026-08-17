@@ -143,22 +143,22 @@ const projects: Project[] = [
 
 export default function ProjectsPage() {
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-200 pb-24">
+    <main className="min-h-screen bg-slate-50 text-slate-900 pb-24">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-orange-900/20 via-slate-950 to-slate-950"></div>
-        <div className="absolute -top-40 right-0 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full pointer-events-none"></div>
-        <div className="absolute top-40 left-0 w-[500px] h-[500px] bg-red-600/5 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-orange-100 via-slate-50 to-slate-50"></div>
+        <div className="absolute -top-40 right-0 w-[600px] h-[600px] bg-orange-200/50 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-40 left-0 w-[500px] h-[500px] bg-red-200/50 blur-[120px] rounded-full pointer-events-none"></div>
         
         <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 text-orange-400 font-semibold text-sm mb-6 border border-orange-500/20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 font-semibold text-sm mb-6 border border-orange-200">
             <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
             12 Production Projects
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
-            Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Real Systems</span>
+          <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-6 tracking-tight">
+            Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">Real Systems</span>
           </h1>
-          <p className="text-xl text-slate-400 leading-relaxed font-light max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 leading-relaxed font-light max-w-2xl mx-auto">
             Stop watching tutorials and start building. Apply what you learn immediately through 
             hands-on, production-grade engineering projects designed to challenge you.
           </p>

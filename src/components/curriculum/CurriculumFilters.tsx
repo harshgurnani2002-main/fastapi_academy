@@ -21,9 +21,9 @@ export function CurriculumFilters({ currentDifficulty, onDifficultyChange, searc
   ];
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-12 p-4 rounded-2xl bg-slate-900/50 border border-slate-800">
+    <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-12 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm text-slate-400 mr-2 font-medium">Filter:</span>
+        <span className="text-sm text-slate-500 mr-2 font-medium">Filter:</span>
         {difficulties.map((diff) => (
           <button
             key={diff.value}
@@ -31,7 +31,7 @@ export function CurriculumFilters({ currentDifficulty, onDifficultyChange, searc
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
               currentDifficulty === diff.value
                 ? 'bg-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)]'
-                : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
             }`}
           >
             {diff.label}
@@ -40,7 +40,7 @@ export function CurriculumFilters({ currentDifficulty, onDifficultyChange, searc
       </div>
       
       <div className="w-full md:w-64 relative">
-        <svg className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input
@@ -48,7 +48,7 @@ export function CurriculumFilters({ currentDifficulty, onDifficultyChange, searc
           placeholder="Search chapters..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition-all"
+          className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 transition-all"
         />
       </div>
     </div>

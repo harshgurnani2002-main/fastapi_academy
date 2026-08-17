@@ -16,21 +16,21 @@ const steps = [
 
 export default function PhilosophySection() {
   return (
-    <section className="py-24 bg-slate-900 text-slate-50 overflow-hidden">
+    <section className="py-24 bg-slate-50 text-slate-900 overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           
           {/* Left Side - Text */}
           <div className="max-w-xl">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 text-white">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 text-slate-900">
               The Engineering Apprenticeship
             </h2>
-            <div className="space-y-6 text-lg text-slate-300">
+            <div className="space-y-6 text-lg text-slate-600">
               <p>
                 We don't believe in passive video watching. This is an active engineering apprenticeship designed to transform you from a developer into a senior systems engineer.
               </p>
               <p>
-                Our philosophy is simple: <strong className="text-orange-400">you don't understand a system until you've broken it.</strong>
+                Our philosophy is simple: <strong className="text-orange-600">you don't understand a system until you've broken it.</strong>
               </p>
               <p>
                 Throughout the curriculum, you will follow a rigorous 8-step cycle. You won't just build the happy path; you will subject your APIs to massive load, induce race conditions, simulate network partitions, and learn how to engineer resilient solutions.
@@ -40,7 +40,7 @@ export default function PhilosophySection() {
 
           {/* Right Side - Flow Diagram */}
           <div className="relative py-8">
-            <div className="absolute left-8 md:left-1/2 top-10 bottom-10 w-1 bg-slate-800 rounded-full transform md:-translate-x-1/2">
+            <div className="absolute left-8 md:left-1/2 top-10 bottom-10 w-1 bg-slate-200 rounded-full transform md:-translate-x-1/2">
               <motion.div 
                 className="w-full bg-orange-500 rounded-full"
                 animate={{ height: ['0%', '100%'] }}
@@ -63,15 +63,15 @@ export default function PhilosophySection() {
                     className={`relative flex items-center gap-6 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} flex-row`}
                   >
                     {/* Number / Icon */}
-                    <div className={`relative z-10 w-16 h-16 rounded-full border-4 border-slate-900 ${step.color} flex items-center justify-center text-white shadow-lg shrink-0 md:absolute md:left-1/2 md:transform md:-translate-x-1/2`}>
+                    <div className={`relative z-10 w-16 h-16 rounded-full border-4 border-slate-50 ${step.color} flex items-center justify-center text-white shadow-lg shrink-0 md:absolute md:left-1/2 md:transform md:-translate-x-1/2`}>
                       <Icon className="w-6 h-6" />
                     </div>
 
                     {/* Content Box */}
-                    <div className={`bg-slate-800 border border-slate-700 rounded-xl p-5 flex-1 md:w-[calc(50%-3rem)] ${isEven ? 'md:mr-auto' : 'md:ml-auto md:text-right'} hover:border-orange-500 transition-colors`}>
-                      <div className="text-orange-400 font-mono text-sm font-bold mb-1">Step 0{step.id}</div>
-                      <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
-                      <p className="text-slate-400 text-sm leading-relaxed">{step.description}</p>
+                    <div className={`bg-white border border-slate-200 shadow-sm rounded-xl p-5 flex-1 md:w-[calc(50%-3rem)] ${isEven ? 'md:mr-auto' : 'md:ml-auto md:text-right'} hover:border-orange-500 transition-colors`}>
+                      <div className="text-orange-600 font-mono text-sm font-bold mb-1">Step 0{step.id}</div>
+                      <h3 className="text-xl font-bold text-slate-900 mb-2">{step.title}</h3>
+                      <p className="text-slate-600 text-sm leading-relaxed">{step.description}</p>
                     </div>
                   </motion.div>
                 )

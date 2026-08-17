@@ -13,8 +13,8 @@ export function ChapterCard({ chapter, progress = 0 }: { chapter: Chapter; progr
   const primaryCategory = chapter.technologies[0]?.category || 'backend';
 
   return (
-    <div className="group relative flex flex-col justify-between p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-orange-500/50 hover:shadow-[0_0_30px_rgba(249,115,22,0.1)] transition-all duration-300">
-      <div className="absolute top-6 right-6 text-6xl font-black text-slate-800/50 group-hover:text-slate-800 transition-colors pointer-events-none">
+    <div className="group relative flex flex-col justify-between p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-500/50 hover:shadow-[0_0_30px_rgba(249,115,22,0.1)] transition-all duration-300">
+      <div className="absolute top-6 right-6 text-6xl font-black text-slate-100 group-hover:text-slate-200 transition-colors pointer-events-none">
         {chapter.id.toString().padStart(2, '0')}
       </div>
       
@@ -23,30 +23,30 @@ export function ChapterCard({ chapter, progress = 0 }: { chapter: Chapter; progr
           <span className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${diffColors[chapter.difficulty] || diffColors.advanced}`}>
             {chapter.difficulty.toUpperCase()}
           </span>
-          <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{primaryCategory}</span>
+          <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">{primaryCategory}</span>
         </div>
         
         <div>
-          <h3 className="text-xl font-bold text-white mb-2 leading-tight">{chapter.title}</h3>
-          <p className="text-slate-400 text-sm line-clamp-2">{chapter.description}</p>
+          <h3 className="text-xl font-bold text-slate-900 mb-2 leading-tight">{chapter.title}</h3>
+          <p className="text-slate-600 text-sm line-clamp-2">{chapter.description}</p>
         </div>
         
         <div className="flex flex-wrap gap-2 pt-2">
           {chapter.technologies.slice(0, 3).map(tech => (
-            <span key={tech.id} className="px-2 py-1 text-xs font-medium rounded-md bg-slate-800 text-slate-300">
+            <span key={tech.id} className="px-2 py-1 text-xs font-medium rounded-md bg-slate-100 text-slate-700">
               {tech.name}
             </span>
           ))}
           {chapter.technologies.length > 3 && (
-            <span className="px-2 py-1 text-xs font-medium rounded-md bg-slate-800 text-slate-400">
+            <span className="px-2 py-1 text-xs font-medium rounded-md bg-slate-100 text-slate-600">
               +{chapter.technologies.length - 3} more
             </span>
           )}
         </div>
       </div>
       
-      <div className="relative z-10 pt-6 mt-6 border-t border-slate-800/50">
-        <div className="flex items-center justify-between text-sm text-slate-400 mb-4">
+      <div className="relative z-10 pt-6 mt-6 border-t border-slate-100">
+        <div className="flex items-center justify-between text-sm text-slate-500 mb-4">
           <div className="flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -62,14 +62,14 @@ export function ChapterCard({ chapter, progress = 0 }: { chapter: Chapter; progr
         </div>
         
         {progress > 0 && (
-          <div className="w-full bg-slate-800 rounded-full h-1.5 mb-4 overflow-hidden">
+          <div className="w-full bg-slate-200 rounded-full h-1.5 mb-4 overflow-hidden">
             <div className="bg-orange-500 h-1.5 rounded-full" style={{ width: `${progress}%` }}></div>
           </div>
         )}
         
         <Link 
           href={`/learn/${chapter.slug}`}
-          className="block w-full py-2.5 px-4 text-center text-sm font-semibold text-white bg-slate-800 hover:bg-orange-500 rounded-xl transition-colors duration-200"
+          className="block w-full py-2.5 px-4 text-center text-sm font-semibold text-slate-900 bg-slate-100 hover:bg-orange-500 hover:text-white rounded-xl transition-colors duration-200"
         >
           {progress > 0 ? 'Continue Chapter' : 'Start Chapter'}
         </Link>
