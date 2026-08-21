@@ -4,11 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CodeBlock from './CodeBlock';
 
-interface CodeExample {
-  code: string;
-  language?: string;
-  filename?: string;
-}
+import { CodeExample } from '@/lib/content/types';
 
 interface ChallengeProps {
   id: string;
@@ -99,8 +95,8 @@ export default function Challenge({
                 
                 {solutionCode && (
                   <CodeBlock 
-                    code={solutionCode.code} 
-                    language={solutionCode.language} 
+                    code={solutionCode.code || ''} 
+                    language={solutionCode.language || 'text'} 
                     filename={solutionCode.filename} 
                   />
                 )}

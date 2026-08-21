@@ -12,13 +12,13 @@ const reasons = [
     icon: Shield,
   },
   {
-    title: 'Performance Engineering',
-    description: 'Achieve P95 < 120ms. Profile endpoints, optimize DB queries, configure connection pools, and master async/await.',
+    title: 'Performance & Scale',
+    description: 'Learn to measure and optimize P50/P95/P99 latency against explicit workload SLOs. Profile endpoints, optimize DB queries, and configure connection pools.',
     icon: Zap,
   },
   {
     title: 'Distributed Systems',
-    description: 'Understand the CAP theorem, distributed consensus, circuit breakers, retries, and distributed locks with Redis.',
+    description: 'Master Redis, Celery, and RabbitMQ. Build event-driven architectures, handle race conditions, and implement distributed locking.',
     icon: Network,
   },
   {
@@ -33,7 +33,7 @@ const reasons = [
   },
   {
     title: 'DevOps & Deployment',
-    description: 'Containerize with Docker, orchestrate with Kubernetes, and build bulletproof CI/CD pipelines with GitHub Actions.',
+    description: 'Containerize with Docker, orchestrate with Kubernetes, and build pipelines with isolated test stages, image scanning, and automated rollback.',
     icon: GitBranch,
   },
   {

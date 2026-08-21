@@ -1006,3 +1006,11 @@ export const curriculum: Chapter[] = [
     ],
   },
 ];
+
+export function getCurriculumStats() {
+  const totalChapters = curriculum.length;
+  const totalLessons = curriculum.reduce((sum, ch) => sum + ch.lessons.length, 0);
+  const totalProjects = curriculum.filter(ch => ch.project).length;
+  const totalHours = curriculum.reduce((sum, ch) => sum + ch.estimatedHours, 0);
+  return { totalChapters, totalLessons, totalProjects, totalHours };
+}

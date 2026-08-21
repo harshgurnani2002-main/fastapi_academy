@@ -10,6 +10,7 @@ interface CodeBlockProps {
   highlightLines?: number[];
   maxHeight?: number;
   title?: string;
+  className?: string;
 }
 
 export default function CodeBlock({
@@ -19,7 +20,8 @@ export default function CodeBlock({
   showLineNumbers = true,
   highlightLines = [],
   maxHeight,
-  title
+  title,
+  className = ''
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -40,38 +42,56 @@ export default function CodeBlock({
   };
 
   const highlightCode = (text: string) => {
-    if (!mounted) return text; // Avoid hydration mismatch on server
+    if (!mounted) return text;
     
-    // Simple regex-based syntax highlighting for python
-    const keywords = ['def', 'class', 'async', 'await', 'from', 'import', 'return', 'if', 'else', 'elif', 'for', 'while', 'with', 'as', 'try', 'except', 'raise', 'None', 'True', 'False', 'not', 'and', 'or', 'in', 'is'];
-    const builtins = ['print', 'len', 'range', 'str', 'int', 'dict', 'list', 'type'];
+    const keywords = new Set(['def', 'class', 'async', 'await', 'from', 'import', 'return', 'if', 'else', 'elif', 'for', 'while', 'with', 'as', 'try', 'except', 'raise', 'None', 'True', 'False', 'not', 'and', 'or', 'in', 'is', 'yield', 'pass']);
+    const builtins = new Set(['print', 'len', 'range', 'str', 'int', 'dict', 'list', 'type', 'set']);
 
-    let highlighted = text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-
-    // Highlight strings (single and double quotes)
-    highlighted = highlighted.replace(/("[^"]*"|'[^']*')/g, '<span class="text-green-600">$1</span>');
+    const tokens = text.match(/("[^"]*"|'[^']*'|#.*|\b[a-zA-Z_]\w*\b|.)/g) || [];
     
-    // Highlight comments
-    highlighted = highlighted.replace(/(#.*)/g, '<span class="text-slate-500">$1</span>');
+    let out = '';
+    let nextIsFuncOrClass = false;
     
-    // Highlight decorators
-    highlighted = highlighted.replace(/(@[\w\.]+)/g, '<span class="text-orange-600">$1</span>');
+    const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     
-    // Highlight keywords
-    const keywordRegex = new RegExp(`\\b(${keywords.join('|')})\\b(?=(?:(?:[^"']*["']){2})*[^"']*$)`, 'g');
-    highlighted = highlighted.replace(keywordRegex, '<span class="text-purple-600">$1</span>');
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (token.startsWith('"') || token.startsWith("'")) {
+        out += `<span class="text-green-600">${escapeHtml(token)}</span>`;
+      } else if (token.startsWith('#')) {
+        out += `<span class="text-slate-500">${escapeHtml(token)}</span>`;
+      } else if (token === '@') {
+         let j = i + 1;
+         let decorator = '@';
+         while (j < tokens.length && (/^[a-zA-Z_]\w*$/.test(tokens[j]) || tokens[j] === '.')) {
+           decorator += tokens[j];
+           j++;
+         }
+         out += `<span class="text-orange-600">${escapeHtml(decorator)}</span>`;
+         i = j - 1;
+      } else if (keywords.has(token)) {
+        out += `<span class="text-purple-600">${escapeHtml(token)}</span>`;
+        if (token === 'def' || token === 'class') {
+          nextIsFuncOrClass = true;
+        }
+      } else if (builtins.has(token)) {
+        out += `<span class="text-blue-600">${escapeHtml(token)}</span>`;
+      } else if (/^[a-zA-Z_]\w*$/.test(token)) {
+        if (nextIsFuncOrClass) {
+          out += `<span class="text-blue-700">${escapeHtml(token)}</span>`;
+          nextIsFuncOrClass = false;
+        } else {
+          out += escapeHtml(token);
+        }
+      } else {
+        out += escapeHtml(token);
+        if (token.trim() !== '') {
+           nextIsFuncOrClass = false;
+        }
+      }
+    }
 
-    // Highlight builtins
-    const builtinRegex = new RegExp(`\\b(${builtins.join('|')})\\b(?=(?:(?:[^"']*["']){2})*[^"']*$)`, 'g');
-    highlighted = highlighted.replace(builtinRegex, '<span class="text-blue-600">$1</span>');
-
-    // Highlight class/function names
-    highlighted = highlighted.replace(/\b(class|def)\s+([a-zA-Z_]\w*)/g, '<span class="text-purple-600">$1</span> <span class="text-blue-700">$2</span>');
-
-    return <div dangerouslySetInnerHTML={{ __html: highlighted }} />;
+    return <div dangerouslySetInnerHTML={{ __html: out }} />;
   };
 
   const lines = code.trimEnd().split('\n');
@@ -79,7 +99,7 @@ export default function CodeBlock({
   const displayLines = !expanded && isLong ? lines.slice(0, maxHeight || 25) : lines;
 
   return (
-    <div className="rounded-xl overflow-hidden bg-slate-50 border border-slate-200 shadow-sm my-6 flex flex-col font-mono text-sm">
+    <div className={`rounded-xl overflow-hidden bg-slate-50 border border-slate-200 shadow-sm my-6 flex flex-col font-mono text-sm ${className}`}>
       {/* Header */}
       {(filename || title || language) && (
         <div className="flex items-center justify-between px-4 py-3 bg-slate-100 border-b border-slate-200">

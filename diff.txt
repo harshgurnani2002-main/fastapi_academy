@@ -1,0 +1,377 @@
+diff --git a/src/lib/content/curriculum.ts b/src/lib/content/curriculum.ts
+index 32dc12d..9ce6d99 100644
+--- a/src/lib/content/curriculum.ts
++++ b/src/lib/content/curriculum.ts
+@@ -47,6 +47,9 @@ export const curriculum: Chapter[] = [
+     topics: ['ASGI', 'Starlette internals', 'Pydantic v2', 'Dependency injection', 'Application lifecycle', 'Lifespan events', 'Middleware', 'Router architecture', 'Service layer pattern', 'Repository pattern', 'Clean architecture', 'Hexagonal architecture', 'DTOs', 'Domain models', 'Configuration management'],
+     technologies: [technologies.fastapi, technologies.python, technologies.starlette, technologies.pydantic],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'fastapi-starter',
+       slug: 'fastapi-starter-architecture',
+       title: 'Production-Ready FastAPI Starter Architecture',
+@@ -87,6 +90,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Feature-based architecture', 'Domain-driven organization', 'Environment management', 'Secrets management', 'Logging', 'Error handling', 'Custom exceptions', 'Response envelopes', 'API versioning', 'Type checking', 'Ruff', 'MyPy', 'Pre-commit hooks', 'uv', 'Poetry'],
+     technologies: [technologies.fastapi, technologies.python, technologies.pydantic],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'fastapi-boilerplate',
+       slug: 'production-fastapi-boilerplate',
+       title: 'Production FastAPI Boilerplate',
+@@ -124,6 +130,9 @@ export const curriculum: Chapter[] = [
+     topics: ['SQLAlchemy 2.x', 'AsyncSession', 'Transactions', 'Isolation levels', 'Row locking', 'Deadlocks', 'Optimistic locking', 'Constraints', 'Indexes', 'Composite indexes', 'Partial indexes', 'EXPLAIN ANALYZE', 'Connection pooling', 'Alembic', 'N+1 queries', 'Cursor pagination', 'Bulk operations'],
+     technologies: [technologies.postgresql, technologies.sqlalchemy, technologies.alembic, technologies.python],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'postgresql-api',
+       slug: 'production-postgresql-api',
+       title: 'Production-Grade PostgreSQL API',
+@@ -165,6 +174,9 @@ export const curriculum: Chapter[] = [
+     topics: ['ACID', 'Race conditions', 'Lost updates', 'Dirty reads', 'Phantom reads', 'Row-level locking', 'SELECT FOR UPDATE', 'Advisory locks', 'Optimistic locking', 'Savepoints', 'Idempotency', 'Distributed transactions', 'Exactly-once semantics'],
+     technologies: [technologies.postgresql, technologies.sqlalchemy, technologies.redis, technologies.fastapi],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'ticket-booking',
+       slug: 'concurrent-ticket-booking',
+       title: 'Concurrent Ticket Booking System',
+@@ -205,6 +217,9 @@ export const curriculum: Chapter[] = [
+     topics: ['OAuth 2.0', 'OpenID Connect', 'PKCE', 'JWT', 'Access tokens', 'Refresh tokens', 'Token rotation', 'RBAC', 'ABAC', 'Session auth', 'Cookie auth', 'CSRF', 'API keys', 'Service-to-service auth'],
+     technologies: [technologies.fastapi, technologies.jwt, technologies.oauth2, technologies.redis, technologies.postgresql],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'auth-platform',
+       slug: 'production-auth-platform',
+       title: 'Production Authentication Platform',
+@@ -246,6 +261,9 @@ export const curriculum: Chapter[] = [
+     topics: ['OWASP API Security', 'SQL injection', 'XSS', 'CSRF', 'SSRF', 'CORS', 'Security headers', 'Argon2 hashing', 'Secrets management', 'Rate limiting', 'Brute force protection', 'Supply chain security', 'Secure Docker images'],
+     technologies: [technologies.fastapi, technologies.python, technologies.postgresql, technologies.docker],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'security-hardening',
+       slug: 'fastapi-security-hardening',
+       title: 'FastAPI Security Hardening Lab',
+@@ -284,6 +302,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Redis architecture', 'Strings', 'Lists', 'Sets', 'Sorted sets', 'Hashes', 'TTL', 'MULTI/EXEC', 'WATCH', 'Lua scripts', 'Redis Streams', 'Pub/Sub', 'Distributed locks', 'Cache invalidation', 'Cache stampede'],
+     technologies: [technologies.redis, technologies.python, technologies.fastapi],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'redis-toolkit',
+       slug: 'redis-production-toolkit',
+       title: 'Redis Production Toolkit',
+@@ -323,6 +344,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Cache-aside', 'Read-through', 'Write-through', 'Write-behind', 'TTL strategies', 'Cache hit ratio', 'Cache warming', 'Negative caching', 'Cache invalidation', 'Stampede protection', 'Request coalescing', 'Distributed cache'],
+     technologies: [technologies.redis, technologies.fastapi, technologies.postgresql],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'caching-layer',
+       slug: 'production-caching-layer',
+       title: 'Production Caching Layer',
+@@ -361,6 +385,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Fixed window', 'Sliding window', 'Token bucket', 'Leaky bucket', 'IP-based limiting', 'User-based limiting', 'API-key limiting', 'Distributed rate limiting', 'Burst handling', 'Retry-After headers', '429 responses'],
+     technologies: [technologies.redis, technologies.fastapi, technologies.python],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'rate-limiter',
+       slug: 'distributed-rate-limiter',
+       title: 'Distributed Redis Rate Limiter',
+@@ -397,6 +424,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Celery architecture', 'Workers', 'Brokers', 'Redis broker', 'RabbitMQ broker', 'Task queues', 'Retries', 'Exponential backoff', 'Dead-letter queues', 'Task idempotency', 'Task priorities', 'Celery Beat', 'Worker concurrency', 'Task monitoring'],
+     technologies: [technologies.celery, technologies.redis, technologies.rabbitmq, technologies.fastapi, technologies.postgresql],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'celery-processor',
+       slug: 'async-document-processor',
+       title: 'Async Document Processing Platform',
+@@ -410,8 +440,16 @@ export const curriculum: Chapter[] = [
+     },
+     lessons: [
+       mkLesson('10-01', 'celery-architecture', 10, 1, 'Celery Architecture Deep Dive', 'Understand how Celery works: producers, brokers, workers, result backends, and the message flow.', 45, 'advanced', ['Explain Celery producer-broker-worker architecture', 'Compare Redis vs RabbitMQ as brokers', 'Configure result backends for task status', 'Understand task serialization formats'], [technologies.celery, technologies.redis]),
+-      mkLesson('10-02', 'fastapi-celery-integration', 10, 2, 'Integrating Celery with FastAPI', 'Wire up Celery with FastAPI correctly using lifespan events and shared configuration.', 45, 'advanced', ['Initialize Celery app with FastAPI config', 'Submit tasks from FastAPI endpoints', 'Return task IDs for polling', 'Check task status via API endpoint'], [technologies.celery, technologies.fastapi]),
+-      mkLesson('10-03', 'task-design-patterns', 10, 3, 'Task Design Patterns', 'Design Celery tasks that are idempotent, small, and composable using chains, groups, and chords.', 50, 'advanced', ['Keep tasks small and single-purpose', 'Make tasks idempotent for safe retries', 'Use chains for sequential processing', 'Use groups for parallel processing'], [technologies.celery, technologies.python]),
++      {
++        ...mkLesson('10-02', 'fastapi-celery-integration', 10, 2, 'Integrating Celery with FastAPI', 'Wire up Celery with FastAPI correctly using lifespan events and shared configuration.', 45, 'advanced', ['Initialize Celery app with FastAPI config', 'Submit tasks from FastAPI endpoints', 'Return task IDs for polling', 'Check task status via API endpoint'], [technologies.celery, technologies.fastapi]),
++        challenges: [{ id: "c_10_02", title: "FastAPI Celery Submission", description: "Write a FastAPI endpoint that submits a background task and returns a polling URL.", solution: "Call `task.delay()` and return `{'task_id': task.id, 'url': f'/status/{task.id}'}`." }],
++        realWorldScenarios: [{ id: "s_10_02", scenario: "Sync Blocking the Event Loop", problem: "Submitting Celery tasks blocked the FastAPI event loop under load.", solution: "Use `.delay()` which is fast, or offload to a thread pool if broker communication is slow." }]
++      },
++      {
++        ...mkLesson('10-03', 'task-design-patterns', 10, 3, 'Task Design Patterns', 'Design Celery tasks that are idempotent, small, and composable using chains, groups, and chords.', 50, 'advanced', ['Keep tasks small and single-purpose', 'Make tasks idempotent for safe retries', 'Use chains for sequential processing', 'Use groups for parallel processing'], [technologies.celery, technologies.python]),
++        challenges: [{ id: "c_10_03", title: "Implement Task Chains", description: "Create a Celery chain that processes an image, then uploads it, then notifies the user.", solution: "Use `chain(process_image.s(), upload_image.s(), notify_user.s())()`." }],
++        realWorldScenarios: [{ id: "s_10_03", scenario: "Task Bloat Timeout", problem: "A monolithic task frequently timed out because it tried to do too much.", solution: "Break the task down into smaller, composable tasks using chains and groups." }]
++      },
+       mkLesson('10-04', 'retry-exponential-backoff', 10, 4, 'Retries & Exponential Backoff', 'Configure intelligent retry strategies with exponential backoff and jitter to handle transient failures.', 45, 'advanced', ['Configure max_retries and retry_backoff', 'Add jitter to prevent retry thundering herd', 'Handle specific exceptions vs catching all', 'Test retry behavior with failure injection'], [technologies.celery, technologies.python]),
+       mkLesson('10-05', 'dead-letter-queues', 10, 5, 'Dead-Letter Queues', 'Route permanently failed tasks to dead-letter queues for inspection, replay, and alerting.', 45, 'advanced', ['Configure dead-letter queue for failed tasks', 'Inspect failed tasks in Flower or CLI', 'Replay dead-letter tasks after fixing the bug', 'Alert on dead-letter queue growth'], [technologies.celery, technologies.redis, technologies.rabbitmq]),
+       mkLesson('10-06', 'celery-beat-scheduling', 10, 6, 'Celery Beat: Scheduled & Periodic Tasks', 'Schedule periodic tasks (cron jobs) using Celery Beat with proper singleton enforcement.', 40, 'advanced', ['Configure Celery Beat schedules', 'Use crontab and timedelta schedules', 'Prevent duplicate task execution with locking', 'Monitor Beat task execution history'], [technologies.celery, technologies.redis]),
+@@ -436,6 +474,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Events vs commands', 'Message queues', 'Pub/Sub', 'Eventual consistency', 'Event ordering', 'Duplicate events', 'Idempotent consumers', 'Outbox pattern', 'Inbox pattern', 'Event replay', 'Dead-letter queues'],
+     technologies: [technologies.redis, technologies.rabbitmq, technologies.postgresql, technologies.fastapi, technologies.celery],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'event-driven-orders',
+       slug: 'event-driven-order-system',
+       title: 'Event-Driven Order Processing System',
+@@ -474,6 +515,9 @@ export const curriculum: Chapter[] = [
+     topics: ['WebSocket protocol', 'ASGI WebSocket lifecycle', 'Connection management', 'Authentication', 'Rooms', 'Broadcast', 'Presence', 'Redis Pub/Sub', 'Scaling WebSockets', 'Heartbeats', 'Reconnection', 'Backpressure'],
+     technologies: [technologies.fastapi, technologies.websockets, technologies.redis, technologies.python],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'realtime-collab',
+       slug: 'realtime-collaboration-platform',
+       title: 'Real-Time Collaboration Platform',
+@@ -512,6 +556,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Cookie sessions', 'Server-side sessions', 'Redis sessions', 'Session expiration', 'Session rotation', 'Session invalidation', 'Multi-device sessions', 'Logout everywhere', 'Session fixation'],
+     technologies: [technologies.redis, technologies.fastapi, technologies.python],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'session-management',
+       slug: 'multi-device-session-management',
+       title: 'Multi-Device Session Management System',
+@@ -548,6 +595,9 @@ export const curriculum: Chapter[] = [
+     topics: ['REST design', 'Resource modeling', 'HTTP semantics', 'Idempotency', 'Cursor pagination', 'Filtering', 'Sorting', 'API versioning', 'Error contracts', 'OpenAPI', 'Backward compatibility', 'API deprecation'],
+     technologies: [technologies.fastapi, technologies.pydantic, technologies.python],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'api-design-system',
+       slug: 'production-api-design',
+       title: 'Production API Design System',
+@@ -586,6 +636,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Async vs sync', 'Event loop', 'Blocking calls', 'Thread pools', 'Worker processes', 'Connection pooling', 'Serialization overhead', 'Pydantic performance', 'Database bottlenecks', 'Load testing', 'Locust', 'k6', 'py-spy'],
+     technologies: [technologies.fastapi, technologies.python, technologies.redis, technologies.postgresql],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'performance-optimization',
+       slug: 'api-performance-optimization',
+       title: 'Optimize a Deliberately Slow API',
+@@ -626,6 +679,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Structured logging', 'Correlation IDs', 'Metrics', 'Prometheus', 'Grafana', 'OpenTelemetry', 'Distributed tracing', 'Trace IDs', 'Spans', 'Error tracking', 'Health checks', 'Readiness probes', 'Liveness probes'],
+     technologies: [technologies.fastapi, technologies.prometheus, technologies.grafana, technologies.opentelemetry, technologies.docker],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'observable-microservice',
+       slug: 'fully-observable-microservice',
+       title: 'Fully Observable FastAPI Microservice',
+@@ -667,6 +723,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Unit testing', 'Integration testing', 'Functional testing', 'Contract testing', 'Async testing', 'Testcontainers', 'PostgreSQL tests', 'Redis tests', 'WebSocket tests', 'Race condition tests', 'Property-based testing', 'Hypothesis', 'Fixtures', 'Factory patterns'],
+     technologies: [technologies.fastapi, technologies.pytest, technologies.postgresql, technologies.redis, technologies.python],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'ci-test-suite',
+       slug: 'production-ci-test-suite',
+       title: 'Production CI Test Suite',
+@@ -706,6 +765,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Multi-stage builds', 'Python Docker images', 'Non-root users', 'Health checks', 'Docker Compose', 'Networking', 'Volumes', 'Secrets', 'Container optimization', 'Layer caching'],
+     technologies: [technologies.docker, technologies.fastapi, technologies.postgresql, technologies.redis, technologies.nginx],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'containerized-platform',
+       slug: 'containerized-fastapi-platform',
+       title: 'Containerized FastAPI Platform',
+@@ -743,6 +805,9 @@ export const curriculum: Chapter[] = [
+     topics: ['CI/CD concepts', 'Jenkins Pipelines', 'Jenkinsfile', 'GitHub Actions', 'Build stages', 'Security scanning', 'Docker builds', 'Image registries', 'Deployment', 'Rollbacks', 'Environment promotion'],
+     technologies: [technologies.github_actions, technologies.jenkins, technologies.docker, technologies.kubernetes],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'cicd-pipeline',
+       slug: 'complete-cicd-pipeline',
+       title: 'Complete CI/CD Pipeline',
+@@ -781,6 +846,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Reverse proxy', 'TLS/HTTPS', 'Nginx', 'Load balancing', 'WebSocket proxying', 'Compression', 'Security headers', 'Connection limits', 'Timeouts', 'Proxy buffering', 'Rate limiting'],
+     technologies: [technologies.nginx, technologies.fastapi, technologies.docker],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'nginx-production',
+       slug: 'nginx-production-setup',
+       title: 'Production Nginx Configuration',
+@@ -817,6 +885,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Kubernetes fundamentals', 'Pods', 'Deployments', 'Services', 'ConfigMaps', 'Secrets', 'Ingress', 'HPA', 'Resource limits', 'Health probes', 'Rolling deployments', 'Blue/green', 'Canary releases'],
+     technologies: [technologies.kubernetes, technologies.docker, technologies.nginx, technologies.fastapi],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'k8s-deployment',
+       slug: 'fastapi-kubernetes-deployment',
+       title: 'FastAPI on Kubernetes',
+@@ -829,18 +900,91 @@ export const curriculum: Chapter[] = [
+       chapterId: 21,
+     },
+     lessons: [
+-      mkLesson('21-01', 'kubernetes-fundamentals', 21, 1, 'Kubernetes Architecture & Core Concepts', 'Understand the Kubernetes control plane, worker nodes, etcd, and how objects are reconciled.', 45, 'expert', ['Explain control plane components (API server, scheduler, etc)', 'Understand the declarative reconciliation loop', 'Navigate clusters with kubectl', 'Read Pod logs and describe events'], [technologies.kubernetes]),
+-      mkLesson('21-02', 'pods-deployments', 21, 2, 'Pods & Deployments', 'Write production Deployment manifests with resource limits, environment variables, and update strategies.', 50, 'expert', ['Write a Deployment YAML for FastAPI', 'Configure resource requests and limits', 'Set deployment strategy (RollingUpdate)', 'Configure pod disruption budgets'], [technologies.kubernetes, technologies.fastapi]),
+-      mkLesson('21-03', 'services-networking', 21, 3, 'Services & Kubernetes Networking', 'Expose FastAPI to internal and external traffic using ClusterIP, NodePort, and LoadBalancer services.', 45, 'expert', ['Understand Kubernetes networking model', 'Create ClusterIP services for internal access', 'Use DNS for service discovery between pods', 'Expose services with LoadBalancer for external access'], [technologies.kubernetes]),
+-      mkLesson('21-04', 'configmaps-secrets', 21, 4, 'ConfigMaps & Secrets', 'Manage application configuration and secrets in Kubernetes without hardcoding in manifests.', 40, 'expert', ['Create ConfigMaps for non-sensitive config', 'Use Secrets for database passwords and API keys', 'Mount ConfigMaps and Secrets as environment variables', 'Use external secret operators for production'], [technologies.kubernetes]),
+-      mkLesson('21-05', 'ingress-configuration', 21, 5, 'Ingress & External Access', 'Configure Nginx Ingress Controller for TLS termination, routing, and rate limiting.', 50, 'expert', ['Deploy Nginx Ingress Controller', 'Configure Ingress rules for FastAPI', 'Add TLS with cert-manager', 'Configure rate limiting annotations'], [technologies.kubernetes, technologies.nginx]),
+-      mkLesson('21-06', 'horizontal-pod-autoscaling', 21, 6, 'Horizontal Pod Autoscaling', 'Configure HPA to automatically scale FastAPI pods based on CPU, memory, and custom Prometheus metrics.', 50, 'expert', ['Configure CPU-based HPA', 'Set up custom metrics HPA with Prometheus', 'Configure scale-down stabilization', 'Test autoscaling with load generation'], [technologies.kubernetes, technologies.prometheus]),
+-      mkLesson('21-07', 'health-probes-k8s', 21, 7, 'Kubernetes Health Probes', 'Configure liveness, readiness, and startup probes for FastAPI to enable zero-downtime deployments.', 40, 'expert', ['Configure readiness probe for traffic routing', 'Configure liveness probe for restart on hang', 'Configure startup probe for slow-starting containers', 'Test probe behavior by deliberately failing endpoints'], [technologies.kubernetes, technologies.fastapi]),
+-      mkLesson('21-08', 'rolling-deployments', 21, 8, 'Zero-Downtime Rolling Deployments', 'Deploy new versions of FastAPI without service interruption using RollingUpdate strategy.', 45, 'expert', ['Configure RollingUpdate maxSurge and maxUnavailable', 'Use readiness probes to control rollout speed', 'Monitor rollout progress with kubectl rollout status', 'Roll back failed deployments immediately'], [technologies.kubernetes]),
+-      mkLesson('21-09', 'blue-green-deployments', 21, 9, 'Blue/Green Deployments', 'Deploy a new version alongside the old one and switch traffic atomically for safe releases.', 45, 'expert', ['Create separate blue and green Deployments', 'Switch traffic by updating Service selector', 'Validate green deployment before switching', 'Roll back instantly by switching selector back'], [technologies.kubernetes]),
+-      mkLesson('21-10', 'canary-releases', 21, 10, 'Canary Releases', 'Route a small percentage of production traffic to a new version to validate it before full rollout.', 45, 'expert', ['Implement canary by running multiple Deployments', 'Use Ingress annotations for traffic splitting', 'Monitor canary vs baseline metrics', 'Automate canary promotion with flagger'], [technologies.kubernetes, technologies.nginx]),
+-      mkLesson('21-11', 'stateful-workloads', 21, 11, 'StatefulSets for Databases', 'Deploy PostgreSQL and Redis in Kubernetes using StatefulSets with persistent storage.', 50, 'expert', ['Use StatefulSets for ordered pod naming', 'Configure PersistentVolumeClaims for storage', 'Configure pod anti-affinity for HA placement', 'Backup StatefulSet data in production'], [technologies.kubernetes, technologies.postgresql, technologies.redis]),
+-      mkLesson('21-12', 'kubernetes-observability', 21, 12, 'Kubernetes Cluster Observability', 'Monitor the Kubernetes cluster itself: node resources, pod metrics, and control plane health.', 40, 'expert', ['Deploy kube-state-metrics for pod metrics', 'Deploy node-exporter for node metrics', 'Import Kubernetes Grafana dashboards', 'Alert on node resource pressure'], [technologies.kubernetes, technologies.prometheus, technologies.grafana]),
++      {
++        ...mkLesson('21-01', 'kubernetes-fundamentals', 21, 1, 'Kubernetes Architecture & Core Concepts', 'Understand the Kubernetes control plane, worker nodes, etcd, and how objects are reconciled.', 45, 'expert', ['Explain control plane components (API server, scheduler, etc)', 'Understand the declarative reconciliation loop', 'Navigate clusters with kubectl', 'Read Pod logs and describe events'], [technologies.kubernetes]),
++        interviewQuestions: [
++          { id: "q_21_01_1", question: "What is the role of etcd in a Kubernetes cluster?", answer: "etcd is a strongly consistent, distributed key-value store used to hold and manage the critical data of a Kubernetes cluster, including the cluster state, configuration data, and metadata.", difficulty: "advanced" }
++        ]
++      },
++      {
++        ...mkLesson('21-02', 'pods-deployments', 21, 2, 'Pods & Deployments', 'Write production Deployment manifests with resource limits, environment variables, and update strategies.', 50, 'expert', ['Write a Deployment YAML for FastAPI', 'Configure resource requests and limits', 'Set deployment strategy (RollingUpdate)', 'Configure pod disruption budgets'], [technologies.kubernetes, technologies.fastapi]),
++        interviewQuestions: [
++          { id: "q_21_02_1", question: "Why should you always define CPU and memory requests and limits for your Pods?", answer: "Requests help the scheduler place the pod on a node with sufficient capacity. Limits prevent a single pod with a memory leak or CPU spike from starving other pods on the same node.", difficulty: "advanced" }
++        ],
++        codeExamples: [
++          {
++            id: 'ex-21-02',
++            title: 'FastAPI Deployment Manifest',
++            runnableUrl: 'https://stackblitz.com/edit/fastapi-academy-starter?embed=1&file=deployment.yaml&view=editor',
++            files: {
++              'deployment.yaml': {
++                language: 'yaml',
++                code: 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: fastapi-app\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: fastapi-app\n  template:\n    metadata:\n      labels:\n        app: fastapi-app\n    spec:\n      containers:\n      - name: fastapi\n        image: myregistry/fastapi-app:1.0.0\n        ports:\n        - containerPort: 8000\n        resources:\n          requests:\n            memory: "128Mi"\n            cpu: "100m"\n          limits:\n            memory: "256Mi"\n            cpu: "500m"\n'
++              }
++            }
++          }
++        ]
++      },
++      {
++        ...mkLesson('21-03', 'services-networking', 21, 3, 'Services & Kubernetes Networking', 'Expose FastAPI to internal and external traffic using ClusterIP, NodePort, and LoadBalancer services.', 45, 'expert', ['Understand Kubernetes networking model', 'Create ClusterIP services for internal access', 'Use DNS for service discovery between pods', 'Expose services with LoadBalancer for external access'], [technologies.kubernetes]),
++        interviewQuestions: [
++          { id: "q_21_03_1", question: "What is the difference between a ClusterIP and a NodePort service?", answer: "ClusterIP exposes the service on a cluster-internal IP, making it only reachable from within the cluster. NodePort exposes the service on each Node's IP at a static port, making it accessible from outside the cluster.", difficulty: "advanced" }
++        ]
++      },
++      {
++        ...mkLesson('21-04', 'configmaps-secrets', 21, 4, 'ConfigMaps & Secrets', 'Manage application configuration and secrets in Kubernetes without hardcoding in manifests.', 40, 'expert', ['Create ConfigMaps for non-sensitive config', 'Use Secrets for database passwords and API keys', 'Mount ConfigMaps and Secrets as environment variables', 'Use external secret operators for production'], [technologies.kubernetes]),
++        interviewQuestions: [
++          { id: "q_21_04_1", question: "Are Kubernetes Secrets secure by default?", answer: "No, by default Kubernetes Secrets are only base64 encoded, not encrypted. Anyone with API access to read Secrets or who gains access to etcd can easily decode them. For production, you should enable encryption at rest for etcd or use external secret management systems (like HashiCorp Vault or AWS Secrets Manager).", difficulty: "expert" }
++        ]
++      },
++      {
++        ...mkLesson('21-05', 'ingress-configuration', 21, 5, 'Ingress & External Access', 'Configure Nginx Ingress Controller for TLS termination, routing, and rate limiting.', 50, 'expert', ['Deploy Nginx Ingress Controller', 'Configure Ingress rules for FastAPI', 'Add TLS with cert-manager', 'Configure rate limiting annotations'], [technologies.kubernetes, technologies.nginx]),
++        interviewQuestions: [
++          { id: "q_21_05_1", question: "What is the relationship between an Ingress Controller and an Ingress resource?", answer: "An Ingress resource is a declarative configuration defining routing rules. The Ingress Controller is the actual software (like Nginx) running in the cluster that reads those rules and configures itself to route traffic accordingly.", difficulty: "advanced" }
++        ]
++      },
++      {
++        ...mkLesson('21-06', 'horizontal-pod-autoscaling', 21, 6, 'Horizontal Pod Autoscaling', 'Configure HPA to automatically scale FastAPI pods based on CPU, memory, and custom Prometheus metrics.', 50, 'expert', ['Configure CPU-based HPA', 'Set up custom metrics HPA with Prometheus', 'Configure scale-down stabilization', 'Test autoscaling with load generation'], [technologies.kubernetes, technologies.prometheus]),
++        interviewQuestions: [
++          { id: "q_21_06_1", question: "Why is it dangerous to use CPU-based HPA without properly setting pod resource requests?", answer: "The HPA calculates CPU utilization as a percentage of the requested CPU. If requests aren't set, the HPA cannot calculate the percentage and scaling won't work.", difficulty: "expert" }
++        ]
++      },
++      {
++        ...mkLesson('21-07', 'health-probes-k8s', 21, 7, 'Kubernetes Health Probes', 'Configure liveness, readiness, and startup probes for FastAPI to enable zero-downtime deployments.', 40, 'expert', ['Configure readiness probe for traffic routing', 'Configure liveness probe for restart on hang', 'Configure startup probe for slow-starting containers', 'Test probe behavior by deliberately failing endpoints'], [technologies.kubernetes, technologies.fastapi]),
++        interviewQuestions: [
++          { id: "q_21_07_1", question: "What is the difference between a liveness probe and a readiness probe?", answer: "A readiness probe determines if a pod is ready to accept traffic; if it fails, the pod is removed from Service endpoints. A liveness probe determines if a pod is running properly; if it fails, the kubelet kills the pod and restarts it.", difficulty: "advanced" }
++        ]
++      },
++      {
++        ...mkLesson('21-08', 'rolling-deployments', 21, 8, 'Zero-Downtime Rolling Deployments', 'Deploy new versions of FastAPI without service interruption using RollingUpdate strategy.', 45, 'expert', ['Configure RollingUpdate maxSurge and maxUnavailable', 'Use readiness probes to control rollout speed', 'Monitor rollout progress with kubectl rollout status', 'Roll back failed deployments immediately'], [technologies.kubernetes]),
++        interviewQuestions: [
++          { id: "q_21_08_1", question: "How do `maxSurge` and `maxUnavailable` control a RollingUpdate?", answer: "`maxSurge` dictates how many extra pods can be created above the desired replica count during the update. `maxUnavailable` dictates how many pods can be unavailable below the desired replica count during the update.", difficulty: "advanced" }
++        ]
++      },
++      {
++        ...mkLesson('21-09', 'blue-green-deployments', 21, 9, 'Blue/Green Deployments', 'Deploy a new version alongside the old one and switch traffic atomically for safe releases.', 45, 'expert', ['Create separate blue and green Deployments', 'Switch traffic by updating Service selector', 'Validate green deployment before switching', 'Roll back instantly by switching selector back'], [technologies.kubernetes]),
++        interviewQuestions: [
++          { id: "q_21_09_1", question: "What is a major disadvantage of Blue/Green deployments compared to RollingUpdates?", answer: "Blue/Green requires double the compute resources during the deployment window since both environments must be fully scaled simultaneously.", difficulty: "advanced" }
++        ]
++      },
++      {
++        ...mkLesson('21-10', 'canary-releases', 21, 10, 'Canary Releases', 'Route a small percentage of production traffic to a new version to validate it before full rollout.', 45, 'expert', ['Implement canary by running multiple Deployments', 'Use Ingress annotations for traffic splitting', 'Monitor canary vs baseline metrics', 'Automate canary promotion with flagger'], [technologies.kubernetes, technologies.nginx]),
++        interviewQuestions: [
++          { id: "q_21_10_1", question: "How can you achieve a precise 1% canary traffic split in basic Kubernetes without an Ingress Controller or Service Mesh?", answer: "You can't easily. Basic Kubernetes Services route traffic randomly across all healthy pod endpoints. To get exactly 1%, you'd need 99 old pods and 1 new pod. For precise percentage-based routing, you need an Ingress Controller (like Nginx) or a Service Mesh (like Istio).", difficulty: "expert" }
++        ]
++      },
++      {
++        ...mkLesson('21-11', 'stateful-workloads', 21, 11, 'StatefulSets for Databases', 'Deploy PostgreSQL and Redis in Kubernetes using StatefulSets with persistent storage.', 50, 'expert', ['Use StatefulSets for ordered pod naming', 'Configure PersistentVolumeClaims for storage', 'Configure pod anti-affinity for HA placement', 'Backup StatefulSet data in production'], [technologies.kubernetes, technologies.postgresql, technologies.redis]),
++        interviewQuestions: [
++          { id: "q_21_11_1", question: "Why use a StatefulSet instead of a Deployment for a database like PostgreSQL?", answer: "StatefulSets provide stable, unique network identifiers (e.g., pod-0, pod-1) and stable persistent storage. If a StatefulSet pod is rescheduled, it retains its identity and reattaches to its exact same Persistent Volume. A Deployment creates interchangeable pods with random names and shared/ephemeral storage semantics.", difficulty: "advanced" }
++        ]
++      },
++      {
++        ...mkLesson('21-12', 'kubernetes-observability', 21, 12, 'Kubernetes Cluster Observability', 'Monitor the Kubernetes cluster itself: node resources, pod metrics, and control plane health.', 40, 'expert', ['Deploy kube-state-metrics for pod metrics', 'Deploy node-exporter for node metrics', 'Import Kubernetes Grafana dashboards', 'Alert on node resource pressure'], [technologies.kubernetes, technologies.prometheus, technologies.grafana]),
++        interviewQuestions: [
++          { id: "q_21_12_1", question: "What is the difference between metrics-server and kube-state-metrics?", answer: "Metrics-server collects resource usage metrics (CPU/memory) from the kubelets and exposes them for HPA and `kubectl top`. Kube-state-metrics listens to the Kubernetes API server and generates metrics about the state of the objects (e.g., number of ready replicas, pod phase, node status).", difficulty: "expert" }
++        ]
++      }
+     ],
+   },
+   {
+@@ -856,6 +1000,9 @@ export const curriculum: Chapter[] = [
+     topics: ['CAP theorem', 'Consistency', 'Availability', 'Partition tolerance', 'Eventual consistency', 'Distributed locks', 'Leader election', 'Idempotency', 'Retries', 'Timeouts', 'Circuit breakers', 'Bulkheads', 'Backpressure', 'Failure modes'],
+     technologies: [technologies.fastapi, technologies.redis, technologies.postgresql, technologies.python],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'distributed-system',
+       slug: 'resilient-distributed-system',
+       title: 'Resilient Distributed System',
+@@ -897,6 +1044,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Service boundaries', 'API gateways', 'Service discovery', 'REST between services', 'Async messaging', 'Shared database problems', 'Saga pattern', 'Strangler fig pattern', 'Service mesh'],
+     technologies: [technologies.fastapi, technologies.postgresql, technologies.redis, technologies.nginx, technologies.kubernetes],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'ecommerce-microservices',
+       slug: 'production-ecommerce-backend',
+       title: 'Production E-Commerce Microservices',
+@@ -937,6 +1087,9 @@ export const curriculum: Chapter[] = [
+     topics: ['SLO', 'SLA', 'SLI', 'Error budgets', 'Incident response', 'Graceful degradation', 'Chaos testing', 'Disaster recovery', 'Backups', 'Database failover', 'Postmortems'],
+     technologies: [technologies.fastapi, technologies.prometheus, technologies.grafana, technologies.kubernetes, technologies.postgresql],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'reliability-system',
+       slug: 'break-and-recover-system',
+       title: 'Break & Recover a Production System',
+@@ -975,6 +1128,9 @@ export const curriculum: Chapter[] = [
+     topics: ['Full system design', 'Google OAuth', 'RBAC', 'PostgreSQL', 'Redis caching', 'Rate limiting', 'Celery workers', 'WebSockets', 'Audit logs', 'Metrics', 'Distributed tracing', 'Structured logging', 'Docker', 'CI/CD', 'Kubernetes', 'Load testing', 'Security', 'SLOs'],
+     technologies: [technologies.fastapi, technologies.postgresql, technologies.redis, technologies.celery, technologies.docker, technologies.kubernetes, technologies.nginx, technologies.prometheus, technologies.grafana, technologies.opentelemetry, technologies.github_actions],
+     project: {
++      prerequisites: ['Basic FastAPI', 'Docker installed'],
++      milestones: ['Setup project structure', 'Implement auth middleware', 'Deploy to AWS'],
++      deploymentRequirements: ['PostgreSQL instance', 'Redis cache', '2GB RAM'],
+       id: 'saas-capstone',
+       slug: 'production-saas-platform',
+       title: 'Production SaaS Capstone',

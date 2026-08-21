@@ -1,0 +1,584 @@
+{
+  "communities": {
+    "0": [
+      "content_technologies",
+      "content_technologies_techlist",
+      "content_technologies_technologies",
+      "content_types",
+      "content_types_challenge",
+      "content_types_commonmistake",
+      "content_types_failurescenario",
+      "content_types_interviewquestion",
+      "content_types_lesson",
+      "content_types_lessonsection",
+      "content_types_productionchecklistitem",
+      "content_types_productionnote",
+      "content_types_project",
+      "content_types_realworldscenario",
+      "content_types_techcategory",
+      "content_types_technology",
+      "content_types_userprogress",
+      "lessons_ch01_lessons",
+      "lessons_ch01_lessons_ch01lessons",
+      "lessons_ch02_lessons",
+      "lessons_ch02_lessons_ch02lessons",
+      "lessons_ch03_lessons",
+      "lessons_ch03_lessons_ch03lessons",
+      "lessons_ch04_lessons",
+      "lessons_ch04_lessons_ch04lessons",
+      "lessons_ch05_lessons",
+      "lessons_ch05_lessons_ch05lessons",
+      "lessons_ch06_lessons",
+      "lessons_ch06_lessons_ch06lessons",
+      "lessons_ch07_lessons",
+      "lessons_ch07_lessons_ch07lessons",
+      "lessons_ch08_cache_stampede",
+      "lessons_ch08_cache_stampede_ch08cachestampede",
+      "lessons_ch08_lessons",
+      "lessons_ch08_lessons_ch08lessons",
+      "lessons_ch09_lessons",
+      "lessons_ch09_lessons_ch09lessons",
+      "lessons_ch10_lessons",
+      "lessons_ch10_lessons_ch10lessons",
+      "lessons_ch11_lessons",
+      "lessons_ch11_lessons_ch11lessons",
+      "lessons_ch12_lessons",
+      "lessons_ch12_lessons_ch12lessons",
+      "lessons_ch13_lessons",
+      "lessons_ch13_lessons_ch13lessons",
+      "lessons_ch14_lessons",
+      "lessons_ch14_lessons_ch14lessons",
+      "lessons_ch15_lessons",
+      "lessons_ch15_lessons_ch15lessons",
+      "lessons_ch16_lessons",
+      "lessons_ch16_lessons_ch16lessons",
+      "lessons_ch17_lessons",
+      "lessons_ch17_lessons_ch17lessons",
+      "lessons_ch18_lessons",
+      "lessons_ch18_lessons_ch18lessons",
+      "lessons_ch19_lessons",
+      "lessons_ch19_lessons_ch19lessons",
+      "lessons_ch20_lessons",
+      "lessons_ch20_lessons_ch20lessons",
+      "lessons_ch21_lessons",
+      "lessons_ch21_lessons_ch21lessons",
+      "lessons_ch22_lessons",
+      "lessons_ch22_lessons_ch22lessons",
+      "lessons_ch23_lessons",
+      "lessons_ch23_lessons_ch23lessons",
+      "lessons_ch24_lessons",
+      "lessons_ch24_lessons_ch24lessons",
+      "lessons_ch25_lessons",
+      "lessons_ch25_lessons_ch25lessons",
+      "services_search_service",
+      "services_search_service_enrichedlessons",
+      "services_search_service_getallchapters",
+      "services_search_service_populatedlesson"
+    ],
+    "1": [
+      "chapter_page",
+      "chapter_page_chapterpage",
+      "chapter_page_generatemetadata",
+      "content_types_codeexample",
+      "content_types_lab",
+      "content_types_systemdesign",
+      "layout_tableofcontents",
+      "layout_tableofcontents_tableofcontents",
+      "layout_tableofcontents_tableofcontentsprops",
+      "layout_tableofcontents_tocsection",
+      "lesson_bookmarkbutton",
+      "lesson_bookmarkbutton_bookmarkbutton",
+      "lesson_challenge",
+      "lesson_challenge_challenge",
+      "lesson_challenge_challengeprops",
+      "lesson_codeblock",
+      "lesson_codeblock_codeblock",
+      "lesson_codeblock_codeblockprops",
+      "lesson_commonmistake",
+      "lesson_commonmistake_codeexample",
+      "lesson_commonmistake_commonmistake",
+      "lesson_commonmistake_commonmistakeprops",
+      "lesson_labview",
+      "lesson_labview_labprops",
+      "lesson_labview_labview",
+      "lesson_lessonnavigation",
+      "lesson_lessonnavigation_lessonnavigation",
+      "lesson_lessonnavigation_lessonnavigationprops",
+      "lesson_lessonnavigation_navlink",
+      "lesson_multifilecodeviewer",
+      "lesson_multifilecodeviewer_multifilecodeviewer",
+      "lesson_multifilecodeviewer_multifilecodeviewerprops",
+      "lesson_page",
+      "lesson_page_generatemetadata",
+      "lesson_page_lessonpage",
+      "lesson_productionchecklist",
+      "lesson_productionchecklist_checklistprops",
+      "lesson_productionchecklist_productionchecklist",
+      "lesson_productionnote",
+      "lesson_productionnote_productionnote",
+      "lesson_productionnote_productionnoteprops",
+      "lesson_realworldscenario",
+      "lesson_realworldscenario_codeexample",
+      "lesson_realworldscenario_realworldscenario",
+      "lesson_realworldscenario_realworldscenarioprops",
+      "lesson_systemdesignview",
+      "lesson_systemdesignview_systemdesignprops",
+      "lesson_systemdesignview_systemdesignview",
+      "services_search_service_getchapter",
+      "services_search_service_getlesson"
+    ],
+    "2": [
+      "app_page",
+      "app_page_homepage",
+      "content_curriculum",
+      "content_curriculum_curriculum",
+      "content_curriculum_mklesson",
+      "home_curriculumpreview",
+      "home_curriculumpreview_curriculumpreview",
+      "home_herosection",
+      "home_herosection_herosection",
+      "home_herosection_herosectionprops",
+      "home_philosophysection",
+      "home_philosophysection_philosophysection",
+      "home_philosophysection_steps",
+      "home_projectssection",
+      "home_projectssection_projects",
+      "home_projectssection_projectssection",
+      "home_skillssection",
+      "home_skillssection_skillgroups",
+      "home_skillssection_skillssection",
+      "home_targetaudience",
+      "home_targetaudience_targetaudience",
+      "home_whysection",
+      "home_whysection_reasons",
+      "home_whysection_whysection",
+      "labs_page",
+      "labs_page_labspage",
+      "labs_page_metadata",
+      "layout_curriculumsidebar",
+      "layout_curriculumsidebar_curriculumsidebar",
+      "layout_curriculumsidebar_curriculumsidebarprops",
+      "roadmap_page",
+      "roadmap_page_metadata",
+      "roadmap_page_roadmappage",
+      "slug_page",
+      "slug_page_generatestaticparams",
+      "slug_page_projectdetailspage",
+      "store_progress_store",
+      "store_progress_store_progressstate",
+      "store_progress_store_useprogressstore"
+    ],
+    "3": [
+      "package",
+      "package_dependencies",
+      "package_dependencies_framer_motion",
+      "package_dependencies_fuse_js",
+      "package_dependencies_lucide_react",
+      "package_dependencies_next",
+      "package_dependencies_next_themes",
+      "package_dependencies_radix_ui_react_dialog",
+      "package_dependencies_radix_ui_react_tooltip",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_shiki",
+      "package_dependencies_zustand",
+      "package_devdependencies",
+      "package_devdependencies_autoprefixer",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_config_next",
+      "package_devdependencies_postcss",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_types_node",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_typescript",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_start",
+      "package_version"
+    ],
+    "4": [
+      "app_layout",
+      "app_layout_inter",
+      "app_layout_metadata",
+      "app_layout_rootlayout",
+      "content_types_searchresult",
+      "layout_header",
+      "layout_header_header",
+      "layout_header_nav_links",
+      "layout_mobilesidebar",
+      "layout_mobilesidebar_mobilesidebar",
+      "layout_searchmodal",
+      "layout_searchmodal_searchmodal",
+      "services_search_service_buildsearchindex",
+      "services_search_service_searchcontent",
+      "store_auth_store",
+      "store_auth_store_authstate",
+      "store_auth_store_useauthstore",
+      "store_ui_store",
+      "store_ui_store_uistate",
+      "store_ui_store_useuistore"
+    ],
+    "5": [
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowjs",
+      "tsconfig_compileroptions_esmoduleinterop",
+      "tsconfig_compileroptions_incremental",
+      "tsconfig_compileroptions_isolatedmodules",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_plugins",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_compileroptions_target",
+      "tsconfig_exclude",
+      "tsconfig_include",
+      "tsconfig_paths"
+    ],
+    "6": [
+      "content_types_chapter",
+      "content_types_difficulty",
+      "curriculum_chaptercard",
+      "curriculum_chaptercard_chaptercard",
+      "curriculum_curriculumfilters",
+      "curriculum_curriculumfilters_curriculumfilters",
+      "curriculum_curriculumfilters_difficultyfilter",
+      "curriculum_curriculumfilters_filtersprops",
+      "curriculum_curriculumlist",
+      "curriculum_curriculumlist_curriculumlist",
+      "curriculum_page",
+      "curriculum_page_curriculumpage",
+      "curriculum_page_metadata"
+    ],
+    "7": [
+      "lesson_difficultybadge",
+      "lesson_difficultybadge_difficultybadge",
+      "lesson_interviewquestion",
+      "lesson_interviewquestion_interviewquestion",
+      "lesson_interviewquestion_interviewquestionprops",
+      "lesson_lessonheader",
+      "lesson_lessonheader_lessonheader",
+      "lesson_techbadge",
+      "lesson_techbadge_techbadge",
+      "lesson_techbadge_technology"
+    ],
+    "8": [
+      "projects_page",
+      "projects_page_metadata",
+      "projects_page_projects",
+      "projects_page_projectspage",
+      "projects_projectcard",
+      "projects_projectcard_project",
+      "projects_projectcard_projectcard",
+      "projects_projectslist",
+      "projects_projectslist_difficultyfilter",
+      "projects_projectslist_projectslist"
+    ],
+    "9": [
+      "roadmap_roadmapchart",
+      "roadmap_roadmapchart_colormap",
+      "roadmap_roadmapchart_roadmapchart",
+      "roadmap_roadmapchart_roadmapdata",
+      "roadmap_roadmapchart_roadmapnode"
+    ],
+    "10": [
+      "agents_agents_md",
+      "claude_claude_md",
+      "rules_graphify_md",
+      "workflows_graphify_md"
+    ],
+    "11": [
+      "dashboard_page",
+      "dashboard_page_dashboardpage",
+      "dashboard_page_useauthstore",
+      "dashboard_page_useprogressstore"
+    ],
+    "12": [
+      "technologies_page",
+      "technologies_page_categories",
+      "technologies_page_techdetails",
+      "technologies_page_technologiespage"
+    ],
+    "13": [
+      "bookmarks_page",
+      "bookmarks_page_bookmarkspage",
+      "bookmarks_page_useprogressstore"
+    ],
+    "14": [
+      "lesson_architecturediagram",
+      "lesson_architecturediagram_architecturediagram",
+      "lesson_architecturediagram_architecturediagramprops"
+    ],
+    "15": [
+      "login_page",
+      "login_page_loginpage",
+      "login_page_useauthstore"
+    ],
+    "16": [
+      "notes_page",
+      "notes_page_notespage",
+      "notes_page_useprogressstore"
+    ],
+    "17": [
+      "opencode_opencode",
+      "opencode_opencode_plugin",
+      "opencode_opencode_schema"
+    ],
+    "18": [
+      "opencode_package",
+      "opencode_package_dependencies",
+      "opencode_package_dependencies_opencode_ai_plugin"
+    ],
+    "19": [
+      "app_not_found",
+      "app_not_found_notfoundpage"
+    ],
+    "20": [
+      "enrich",
+      "enrich_enrich_file"
+    ],
+    "21": [
+      "eslint_config",
+      "eslint_config_eslintconfig"
+    ],
+    "22": [
+      "goal_goal_md",
+      "readme_fastapi_academy"
+    ],
+    "23": [
+      "learn_page",
+      "learn_page_learnindexpage"
+    ],
+    "24": [
+      "modify",
+      "modify_replacer"
+    ],
+    "25": [
+      "next_config",
+      "next_config_nextconfig"
+    ],
+    "26": [
+      "plugins_graphify",
+      "plugins_graphify_graphifyplugin"
+    ],
+    "27": [
+      "postcss_config",
+      "postcss_config_config"
+    ],
+    "28": [
+      "tailwind_config",
+      "tailwind_config_config"
+    ],
+    "29": [
+      "generate_tools"
+    ],
+    "30": [
+      "generate_zips"
+    ],
+    "31": [
+      "lessons_gen_ch01"
+    ],
+    "32": [
+      "parse_projects"
+    ],
+    "33": [
+      "projects_to_replace"
+    ],
+    "34": [
+      "run_replacements"
+    ]
+  },
+  "cohesion": {
+    "0": 0.0776255707762557,
+    "1": 0.05142857142857143,
+    "2": 0.06072874493927125,
+    "3": 0.06451612903225806,
+    "4": 0.15263157894736842,
+    "5": 0.1,
+    "6": 0.21794871794871795,
+    "7": 0.2,
+    "8": 0.3111111111111111,
+    "9": 0.4,
+    "10": 0.5,
+    "11": 0.8333333333333334,
+    "12": 0.5,
+    "13": 1.0,
+    "14": 0.6666666666666666,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 0.6666666666666666,
+    "18": 0.6666666666666666,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0
+  },
+  "gods": [
+    {
+      "id": "content_technologies_technologies",
+      "label": "technologies",
+      "degree": 28
+    },
+    {
+      "id": "content_types_lesson",
+      "label": "Lesson",
+      "degree": 28
+    },
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 16
+    },
+    {
+      "id": "content_curriculum_curriculum",
+      "label": "curriculum",
+      "degree": 9
+    },
+    {
+      "id": "services_search_service_getchapter",
+      "label": "getChapter()",
+      "degree": 8
+    },
+    {
+      "id": "store_ui_store_useuistore",
+      "label": "useUIStore",
+      "degree": 7
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 5
+    },
+    {
+      "id": "services_search_service_getlesson",
+      "label": "getLesson()",
+      "degree": 5
+    },
+    {
+      "id": "content_types_chapter",
+      "label": "Chapter",
+      "degree": 4
+    },
+    {
+      "id": "services_search_service_searchcontent",
+      "label": "searchContent()",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "FastAPI Academy",
+      "target": "Project Goal",
+      "source_files": [
+        "README.md",
+        "goal.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Claude Guidelines",
+      "target": "Project Agents Rules",
+      "source_files": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Project Agents Rules",
+      "target": "Graphify Rules",
+      "source_files": [
+        "AGENTS.md",
+        ".agents/rules/graphify.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories"
+    },
+    {
+      "source": "generateMetadata()",
+      "target": "getChapter()",
+      "source_files": [
+        "src/app/learn/[chapter]/page.tsx",
+        "src/lib/services/search.service.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `generateMetadata()` unexpectedly reaches hub `getChapter()`"
+    },
+    {
+      "source": "ChapterPage()",
+      "target": "getChapter()",
+      "source_files": [
+        "src/app/learn/[chapter]/page.tsx",
+        "src/lib/services/search.service.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "peripheral node `ChapterPage()` unexpectedly reaches hub `getChapter()`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `curriculum` connect `Curriculum & Structure` to `Hands-on Projects`, `Technology Stack & Concepts`, `Lesson & Chapter Views`?",
+      "why": "High betweenness centrality (0.030) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `getChapter()` connect `Lesson & Chapter Views` to `Technology Stack & Concepts`?",
+      "why": "High betweenness centrality (0.007) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `$schema`, `plugin`, `@opencode-ai/plugin` to the rest of the system?",
+      "why": "108 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Technology Stack & Concepts` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.0776255707762557 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Lesson & Chapter Views` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.05142857142857143 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Curriculum & Structure` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06072874493927125 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Package Dependencies` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

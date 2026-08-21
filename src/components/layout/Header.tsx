@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { name: 'Curriculum', href: '/curriculum' },
   { name: 'Projects', href: '/projects' },
   { name: 'Roadmap', href: '/roadmap' },
+  { name: 'Labs', href: '/labs' },
   { name: 'Technologies', href: '/technologies' },
 ];
 

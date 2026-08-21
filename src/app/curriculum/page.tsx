@@ -24,8 +24,8 @@ export default function CurriculumPage() {
               The Complete <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">Curriculum</span>
             </h1>
             <p className="text-xl text-slate-600 mb-10 leading-relaxed font-light">
-              From absolute fundamentals to distributed systems and site reliability. 
-              Everything you need to master FastAPI and production backend engineering.
+              Assumes strong Python + FastAPI fundamentals. Master production engineering, distributed systems, and site reliability. 
+              Follow the complete path or jump directly to advanced topics.
             </p>
             
             <div className="flex flex-wrap items-center gap-8">

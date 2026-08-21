@@ -13,6 +13,10 @@ import LessonNavigation from '@/components/lesson/LessonNavigation';
 import BookmarkButton from '@/components/lesson/BookmarkButton';
 import CurriculumSidebar from '@/components/layout/CurriculumSidebar';
 import TableOfContents from '@/components/layout/TableOfContents';
+import LabView from '@/components/lesson/LabView';
+import SystemDesignView from '@/components/lesson/SystemDesignView';
+import ProductionChecklist from '@/components/lesson/ProductionChecklist';
+import MultiFileCodeViewer from '@/components/lesson/MultiFileCodeViewer';
 
 export async function generateMetadata({
   params,
@@ -68,6 +72,15 @@ export default async function LessonPage({
     ...(lesson.challenges.length > 0
       ? [{ id: 'challenges', title: 'Challenges', level: 1 }]
       : []),
+    ...(lesson.systemDesign
+      ? [{ id: 'system-design', title: 'System Design Trade-offs', level: 1 }]
+      : []),
+    ...(lesson.labs && lesson.labs.length > 0
+      ? [{ id: 'labs', title: 'Engineering Labs', level: 1 }]
+      : []),
+    ...(lesson.productionChecklist && lesson.productionChecklist.length > 0
+      ? [{ id: 'production-checklist', title: 'Production Checklist', level: 1 }]
+      : []),
   ];
 
   return (
@@ -102,8 +115,8 @@ export default async function LessonPage({
               </div>
               {section.codeExample && (
                 <CodeBlock
-                  code={section.codeExample.code}
-                  language={section.codeExample.language}
+                  code={section.codeExample.code || ''}
+                  language={section.codeExample.language || 'text'}
                   filename={section.codeExample.filename}
                   title={section.codeExample.title}
                   showLineNumbers
@@ -119,14 +132,18 @@ export default async function LessonPage({
                 Implementation
               </h2>
               {lesson.codeExamples.map((ex) => (
-                <CodeBlock
-                  key={ex.id}
-                  code={ex.code}
-                  language={ex.language}
-                  title={ex.title}
-                  filename={ex.filename}
-                  showLineNumbers
-                />
+                ex.files ? (
+                  <MultiFileCodeViewer key={ex.id} example={ex} />
+                ) : (
+                  <CodeBlock
+                    key={ex.id}
+                    code={ex.code || ''}
+                    language={ex.language || 'text'}
+                    title={ex.title}
+                    filename={ex.filename}
+                    showLineNumbers
+                  />
+                )
               ))}
             </section>
           )}
@@ -161,21 +178,22 @@ export default async function LessonPage({
             </section>
           )}
 
-          {/* Common Mistakes */}
+          {/* Common Mistakes (Minimal Note) */}
           {lesson.commonMistakes.length > 0 && (
             <section id="common-mistakes" className="mb-10">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                Common Mistakes
-              </h2>
-              {lesson.commonMistakes.map((mistake) => (
-                <CommonMistake
-                  key={mistake.id}
-                  title={mistake.title}
-                  description={mistake.description}
-                  badCode={mistake.badCode}
-                  goodCode={mistake.goodCode}
-                />
-              ))}
+              <div className="bg-amber-50/50 border border-amber-200 rounded-lg p-5">
+                <h4 className="text-amber-800 font-bold mb-2 flex items-center text-sm">
+                  <span className="w-4 h-4 mr-2 inline-flex items-center justify-center bg-amber-200 text-amber-700 rounded-full text-xs font-bold">!</span>
+                  Common Pitfalls
+                </h4>
+                <ul className="list-disc pl-8 space-y-1 text-amber-900/80 text-sm">
+                  {lesson.commonMistakes.map((mistake) => (
+                    <li key={mistake.id}>
+                      <strong className="font-semibold text-amber-900">{mistake.title}:</strong> {mistake.description}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </section>
           )}
 
@@ -213,6 +231,38 @@ export default async function LessonPage({
                   solutionCode={challenge.solutionCode}
                 />
               ))}
+            </section>
+          )}
+
+          {/* System Design */}
+          {lesson.systemDesign && (
+            <section id="system-design" className="mb-10">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                System Design Trade-offs
+              </h2>
+              <SystemDesignView design={lesson.systemDesign} />
+            </section>
+          )}
+
+          {/* Labs */}
+          {lesson.labs && lesson.labs.length > 0 && (
+            <section id="labs" className="mb-10">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                Engineering Labs
+              </h2>
+              {lesson.labs.map((lab) => (
+                <LabView key={lab.id} lab={lab} />
+              ))}
+            </section>
+          )}
+
+          {/* Production Checklist */}
+          {lesson.productionChecklist && lesson.productionChecklist.length > 0 && (
+            <section id="production-checklist" className="mb-10">
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                Launch Checklist
+              </h2>
+              <ProductionChecklist items={lesson.productionChecklist} />
             </section>
           )}
 

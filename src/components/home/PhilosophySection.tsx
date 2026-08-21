@@ -27,13 +27,13 @@ export default function PhilosophySection() {
             </h2>
             <div className="space-y-6 text-lg text-slate-600">
               <p>
-                We don't believe in passive video watching. This is an active engineering apprenticeship designed to transform you from a developer into a senior systems engineer.
+                We don't believe in passive video watching. This is an active engineering curriculum designed to build practical, production-grade backend skills.
               </p>
               <p>
                 Our philosophy is simple: <strong className="text-orange-600">you don't understand a system until you've broken it.</strong>
               </p>
               <p>
-                Throughout the curriculum, you will follow a rigorous 8-step cycle. You won't just build the happy path; you will subject your APIs to massive load, induce race conditions, simulate network partitions, and learn how to engineer resilient solutions.
+                Throughout the curriculum, you will follow a rigorous 8-step cycle. You won't just build the happy path; you will induce network partitions, test failure recovery, benchmark latency percentiles, and learn how to engineer resilient solutions.
               </p>
             </div>
           </div>

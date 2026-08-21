@@ -1,15 +1,19 @@
 import HeroSection from '@/components/home/HeroSection'
 import WhySection from '@/components/home/WhySection'
+import TargetAudience from '@/components/home/TargetAudience'
 import PhilosophySection from '@/components/home/PhilosophySection'
 import CurriculumPreview from '@/components/home/CurriculumPreview'
 import ProjectsSection from '@/components/home/ProjectsSection'
 import SkillsSection from '@/components/home/SkillsSection'
+import { getCurriculumStats } from '@/lib/content/curriculum'
 
 export default function HomePage() {
+  const stats = getCurriculumStats()
   return (
     <main className="min-h-screen bg-slate-50 selection:bg-orange-200 selection:text-orange-900">
-      <HeroSection />
+      <HeroSection stats={stats} />
       <WhySection />
+      <TargetAudience />
       <CurriculumPreview />
       <PhilosophySection />
       <ProjectsSection />

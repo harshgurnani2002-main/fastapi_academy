@@ -14,16 +14,16 @@ interface RoadmapNode {
 }
 
 const roadmapData: RoadmapNode[] = [
-  { id: '1', category: 'FOUNDATIONS', title: 'FastAPI Internals & Project Standards', subtitle: 'Ch 01-02 | 14h', status: 'completed', color: 'gray', link: '/learn/fastapi-internals' },
-  { id: '2', category: 'DATABASE ENGINEERING', title: 'PostgreSQL, Transactions, Concurrency', subtitle: 'Ch 03-04 | 19h', status: 'completed', color: 'blue', link: '/learn/database-engineering' },
-  { id: '3', category: 'AUTHENTICATION & SECURITY', title: 'OAuth, JWT, OWASP, Hardening', subtitle: 'Ch 05-06 | 18h', status: 'current', color: 'red', link: '/learn/auth-security' },
-  { id: '4', category: 'REDIS & CACHING', title: 'Redis Internals, Production Caching, Rate Limiting', subtitle: 'Ch 07-09 | 21h', status: 'upcoming', color: 'orange', link: '/learn/redis-caching' },
-  { id: '5', category: 'ASYNC SYSTEMS', title: 'Celery, Event-Driven, WebSockets, Sessions', subtitle: 'Ch 10-13 | 29h', status: 'upcoming', color: 'green', link: '/learn/async-celery' },
+  { id: '1', category: 'FOUNDATIONS', title: 'FastAPI Internals & Project Standards', subtitle: 'Ch 01-02 | 14h', status: 'completed', color: 'gray', link: '/learn/fastapi-architecture' },
+  { id: '2', category: 'DATABASE ENGINEERING', title: 'PostgreSQL, Transactions, Concurrency', subtitle: 'Ch 03-04 | 19h', status: 'completed', color: 'blue', link: '/learn/postgresql-database-engineering' },
+  { id: '3', category: 'AUTHENTICATION & SECURITY', title: 'OAuth, JWT, OWASP, Hardening', subtitle: 'Ch 05-06 | 18h', status: 'current', color: 'red', link: '/learn/authentication-authorization' },
+  { id: '4', category: 'REDIS & CACHING', title: 'Redis Internals, Production Caching, Rate Limiting', subtitle: 'Ch 07-09 | 21h', status: 'upcoming', color: 'orange', link: '/learn/redis-deep-dive' },
+  { id: '5', category: 'ASYNC SYSTEMS', title: 'Celery, Event-Driven, WebSockets, Sessions', subtitle: 'Ch 10-13 | 29h', status: 'upcoming', color: 'green', link: '/learn/background-jobs-celery' },
   { id: '6', category: 'API & PERFORMANCE', title: 'API Design, Performance Engineering', subtitle: 'Ch 14-15 | 16h', status: 'upcoming', color: 'yellow', link: '/learn/api-design' },
   { id: '7', category: 'OBSERVABILITY & TESTING', title: 'Prometheus, OpenTelemetry, Production Testing', subtitle: 'Ch 16-17 | 18h', status: 'upcoming', color: 'yellow', link: '/learn/observability' },
-  { id: '8', category: 'INFRASTRUCTURE', title: 'Docker, CI/CD, Nginx, Kubernetes', subtitle: 'Ch 18-21 | 30h', status: 'upcoming', color: 'blue', link: '/learn/docker-containers' },
-  { id: '9', category: 'DISTRIBUTED SYSTEMS', title: 'CAP Theorem, Microservices, Circuit Breakers', subtitle: 'Ch 22-23 | 20h', status: 'upcoming', color: 'purple', link: '/learn/microservices' },
-  { id: '10', category: 'PRODUCTION MASTERY', title: 'Reliability Engineering + Capstone SaaS', subtitle: 'Ch 24-25 | 28h', status: 'upcoming', color: 'orange', link: '/learn/sre-practices' },
+  { id: '8', category: 'INFRASTRUCTURE', title: 'Docker, CI/CD, Nginx, Kubernetes', subtitle: 'Ch 18-21 | 30h', status: 'upcoming', color: 'blue', link: '/learn/docker-containerization' },
+  { id: '9', category: 'DISTRIBUTED SYSTEMS', title: 'CAP Theorem, Microservices, Circuit Breakers', subtitle: 'Ch 22-23 | 20h', status: 'upcoming', color: 'purple', link: '/learn/distributed-systems' },
+  { id: '10', category: 'PRODUCTION MASTERY', title: 'Reliability Engineering + Capstone SaaS', subtitle: 'Ch 24-25 | 28h', status: 'upcoming', color: 'orange', link: '/learn/capstone-production-saas' },
 ];
 
 const colorMap: Record<string, { border: string, bg: string, text: string, glow: string }> = {

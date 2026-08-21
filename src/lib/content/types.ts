@@ -13,11 +13,13 @@ export interface Technology {
 
 export interface CodeExample {
   id: string;
-  language: string;
   title: string;
-  code: string;
+  language?: string;
+  code?: string;
   highlightLines?: number[];
   filename?: string;
+  files?: Record<string, { code: string, language: string }>; // For multi-file structures
+  runnableUrl?: string; // For CodeSandbox / StackBlitz execution
 }
 
 export interface LessonSection {
@@ -66,6 +68,49 @@ export interface CommonMistake {
   goodCode?: CodeExample;
 }
 
+export interface Lab {
+  id: string;
+  title: string;
+  description: string;
+  durationMinutes?: number;
+  setupInstructions?: string;
+  tasks?: string[];
+  validation?: string;
+}
+
+export interface SystemDesign {
+  id: string;
+  context: string;
+  components?: string[];
+  challenges?: string[];
+  solutions?: string[];
+  options?: {
+    name: string;
+    pros: string[];
+    cons: string[];
+  }[];
+  recommended?: string;
+  justification?: string;
+}
+
+export interface FailureScenario {
+  id: string;
+  title: string;
+  description?: string;
+  resolution?: string;
+  trigger?: string;
+  symptom?: string;
+  diagnosis?: string;
+  mitigation?: string;
+}
+
+export interface ProductionChecklistItem {
+  id: string;
+  category: string;
+  item: string;
+  isRequired: boolean;
+}
+
 export interface Lesson {
   id: string;
   slug: string;
@@ -87,6 +132,9 @@ export interface Lesson {
   prerequisites?: string[];
   nextLesson?: string;
   prevLesson?: string;
+  labs?: Lab[];
+  systemDesign?: SystemDesign;
+  productionChecklist?: ProductionChecklistItem[];
 }
 
 export interface Project {
@@ -102,6 +150,10 @@ export interface Project {
   fileStructure?: string;
   chapterId: number;
   featured?: boolean;
+  failureScenarios?: FailureScenario[];
+  prerequisites?: string[];
+  milestones?: string[];
+  deploymentRequirements?: string[];
 }
 
 export interface Chapter {

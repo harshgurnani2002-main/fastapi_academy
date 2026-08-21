@@ -60,7 +60,7 @@ export default function SkillsSection() {
             Technologies You Will Master
           </h2>
           <p className="text-lg text-slate-600">
-            A modern, production-grade tech stack. No deprecated tools or legacy patterns.
+            Understand the trade-offs of the modern production stack. Learn when to use each technology, and more importantly, when not to.
           </p>
         </div>
 

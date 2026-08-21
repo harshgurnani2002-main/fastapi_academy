@@ -61,7 +61,7 @@ export default function ProjectsSection() {
             What You Will Build
           </h2>
           <p className="text-lg text-slate-600">
-            Theory is cheap. True engineering is learned through building. You will complete 12 rigorous projects, designing architectures that handle real-world scale and complexity.
+            A curriculum rooted in applied engineering. You will complete 12 rigorous projects, designing architectures that handle real-world scale and complexity.
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export default function ProjectsSection() {
               </div>
               
               <div className="border-t border-slate-100 p-4 bg-slate-50 flex justify-end">
-                <Link href={`/projects/${project.id}`} className="text-orange-600 font-semibold text-sm flex items-center hover:text-orange-700 transition-colors">
+                <Link href={`/projects`} className="text-orange-600 font-semibold text-sm flex items-center hover:text-orange-700 transition-colors">
                   View Specs <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
               </div>

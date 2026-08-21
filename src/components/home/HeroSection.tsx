@@ -4,7 +4,16 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight, Play } from 'lucide-react'
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  stats?: {
+    totalChapters: number;
+    totalLessons: number;
+    totalHours: number;
+    totalProjects: number;
+  }
+}
+
+export default function HeroSection({ stats }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden bg-slate-50 pt-24 pb-32">
       {/* Subtle dot grid pattern */}
@@ -25,7 +34,7 @@ export default function HeroSection() {
               <span className="text-orange-500">Build Production Systems.</span>
             </h1>
             <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-              Stop building toys. Learn to design, develop, and deploy secure, scalable, observable, and distributed backend systems with FastAPI.
+              Learn to design, develop, and deploy secure, scalable, observable, and distributed backend systems. Assumes strong Python + FastAPI fundamentals.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
@@ -41,19 +50,19 @@ export default function HeroSection() {
             
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-slate-200">
               <div>
-                <div className="text-3xl font-bold text-slate-900">25</div>
+                <div className="text-3xl font-bold text-slate-900">{stats?.totalChapters || 25}</div>
                 <div className="text-sm text-slate-500 font-medium">Chapters</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-slate-900">220+</div>
+                <div className="text-3xl font-bold text-slate-900">{stats?.totalLessons || 286}</div>
                 <div className="text-sm text-slate-500 font-medium">Lessons</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-slate-900">12</div>
+                <div className="text-3xl font-bold text-slate-900">{stats?.totalProjects || 12}</div>
                 <div className="text-sm text-slate-500 font-medium">Projects</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-slate-900">~180</div>
+                <div className="text-3xl font-bold text-slate-900">{stats?.totalHours || 213}</div>
                 <div className="text-sm text-slate-500 font-medium">Hours</div>
               </div>
             </div>

@@ -4,9 +4,10 @@ export interface Project {
   id: number;
   slug: string;
   title: string;
-  difficulty: 'beginner' | 'advanced' | 'expert' | 'production';
+  difficulty: 'intermediate' | 'advanced' | 'expert' | 'production';
   hours: number;
   chapter: number;
+  chapterSlug?: string;
   description: string;
   architecture: string;
   techs: string[];
@@ -15,7 +16,7 @@ export interface Project {
 
 export function ProjectCard({ project }: { project: Project }) {
   const diffColors = {
-    beginner: 'bg-green-500/10 text-green-500 border-green-500/20',
+    intermediate: 'bg-green-500/10 text-green-500 border-green-500/20',
     advanced: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
     expert: 'bg-purple-500/10 text-purple-500 border-purple-500/20',
     production: 'bg-red-500/10 text-red-500 border-red-500/20',
@@ -84,7 +85,7 @@ export function ProjectCard({ project }: { project: Project }) {
       {/* Footer */}
       <div className="p-6 pt-0 mt-auto">
         <div className="flex items-center justify-between">
-          <Link href={`/learn/chapter-${project.chapter}`} className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
+          <Link href={`/learn/${project.chapterSlug || `chapter-${project.chapter}`}`} className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">
             Part of Chapter {project.chapter}
           </Link>
           <Link href={`/projects/${project.slug}`} className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold rounded-xl transition-colors shadow-lg shadow-orange-500/20">

@@ -39,8 +39,7 @@ export default function TableOfContents({ sections }: TableOfContentsProps) {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      const y = element.getBoundingClientRect().top + window.scrollY - 100; // Offset for header
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
