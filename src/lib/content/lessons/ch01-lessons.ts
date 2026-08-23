@@ -668,12 +668,19 @@ import aiofiles
 app = FastAPI()
 
 async def file_chunk_generator(file_path: str, chunk_size: int = 65536):
-    async with aiofiles.open(file_path, mode="rb") as f:
-        while True:
-            chunk = await f.read(chunk_size)
-            if not chunk:
-                break
-            yield chunk
+    try:
+        async with aiofiles.open(file_path, mode="rb") as f:
+            while True:
+                chunk = await f.read(chunk_size)
+                if not chunk:
+                    break
+                yield chunk
+    except asyncio.CancelledError:
+        # Handle client abort/disconnect gracefully
+        pass
+    finally:
+        # Guarantee resources and handles are cleanly closed
+        pass
 
 @app.get("/videos/{video_id}/stream")
 async def stream_video(video_id: str):
@@ -1214,7 +1221,9 @@ async def run_with_savepoint(session: AsyncSession, operation, *args, **kwargs):
         id: "lifespan-context-manager",
         type: "concept",
         title: "Modern Async Lifespans (Replacing Deprecated @app.on_event)",
-        content: `In older FastAPI versions, \`@app.on_event("startup")\` and \`@app.on_event("shutdown")\` were used. These are deprecated because they cannot easily share state and have no unified error propagation.
+        content: `In older FastAPI versions, \`@app.on_event("startup")\` and \`@app.on_event("shutdown")\` were used.
+
+> ⚠️ **Deprecation Notice**: \`@app.on_event("startup")\` and \`@app.on_event("shutdown")\` are formally deprecated in Starlette and FastAPI. They cannot reliably share state across lifecycle hooks and lack unified exception propagation. Always use \`@asynccontextmanager async def lifespan(app: FastAPI):\`.
 
 The modern standard is the **Lifespan Async Context Manager**:
 \`\`\`python

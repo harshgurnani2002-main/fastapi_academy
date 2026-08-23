@@ -840,7 +840,7 @@ Without a rigorous architecture for JWT Access Tokens: Implementation & Security
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Preventing JWT Algorithm Confusion (RS256 Whitelisting)\nWhen decoding asymmetric RS256/ES256 JSON Web Tokens with PyJWT, always pass an explicit \`algorithms=["RS256"]\` parameter to protect against HMAC key confusion attacks (where attackers sign tokens using the public key as an HMAC secret):\n\`\`\`python\npayload = jwt.decode(\n    token,\n    public_key,\n    algorithms=["RS256"],\n    options={"verify_signature": True, "require": ["exp", "iat", "sub"]}\n)\n\`\`\``
       },
       {
         id: "jwt-implementation-implementation",
@@ -1042,7 +1042,7 @@ Without a rigorous architecture for Refresh Tokens & Token Rotation, backend ser
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Token Family Invalidation on Replay Detection\nWhen an already-rotated (used) refresh token is submitted by a client, it indicates potential token theft or replay attacks. Immediate compromise mitigation requires invalidating the entire active token family for that user session:\n\`\`\`python\nif token.is_already_used:\n    # Invalidate all downstream active tokens in this family\n    await session_store.revoke_token_family(user_id=token.user_id, family_id=token.family_id)\n    raise HTTPException(status_code=401, detail="Token reuse detected. All sessions in this family revoked.")\n\`\`\``
       },
       {
         id: "refresh-token-rotation-implementation",

@@ -46,7 +46,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
       {/* Content */}
       <div className="p-6 flex-grow flex flex-col">
-        <h3 className="text-2xl font-bold text-slate-900 mb-3 leading-tight">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 mb-3 leading-tight">
           {project.title}
         </h3>
         <p className="text-slate-600 text-sm mb-6 flex-grow">
@@ -54,7 +54,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </p>
 
         {/* Architecture Diagram */}
-        <div className="mb-6 rounded-xl bg-slate-900 border border-slate-800 p-4 font-mono text-xs text-emerald-400 overflow-x-auto whitespace-pre">
+        <div className="mb-6 rounded-xl bg-slate-900 border border-slate-800 p-4 font-mono text-xs text-emerald-400 overflow-x-auto whitespace-pre max-w-full">
           {project.architecture}
         </div>
 
@@ -76,7 +76,7 @@ export function ProjectCard({ project }: { project: Project }) {
         {/* Tech Stack */}
         <div className="flex flex-wrap gap-2 mb-6">
           {project.techs.map(tech => (
-            <span key={tech} className="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xs font-medium border border-slate-200">
+            <span key={tech} className="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-md text-xs font-semibold border border-slate-200">
               {tech}
             </span>
           ))}

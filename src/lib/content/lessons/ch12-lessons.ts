@@ -32,7 +32,7 @@ Without a rigorous architecture for WebSocket Protocol & ASGI Lifecycle, backend
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Resilient WebSocket Broadcast Loop with return_exceptions\nUsing \`asyncio.gather(*[ws.send_text(...)])\` without \`return_exceptions=True\` causes an unhandled disconnect on a single socket to abort deliveries to all other connected clients:\n\`\`\`python\nasync def broadcast(self, message: str) -> None:\n    results = await asyncio.gather(\n        *[ws.send_text(message) for ws in self.active_connections],\n        return_exceptions=True\n    )\n    for ws, res in zip(list(self.active_connections), results):\n        if isinstance(res, Exception):\n            self.disconnect(ws)\n\`\`\``
       },
       {
         id: "websocket-protocol-implementation",

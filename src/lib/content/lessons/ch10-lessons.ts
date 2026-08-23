@@ -32,7 +32,7 @@ Without a rigorous architecture for Celery Architecture Deep Dive, backend servi
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Non-Blocking Celery Task Dispatch with asyncio.to_thread\nCalling synchronous \`task.delay()\` directly inside an \`async def\` route handler can block the AsyncIO event loop during broker network latency. Offload publishing to worker threads:\n\`\`\`python\n@router.post("/reports/generate")\nasync def generate_report(payload: ReportRequest):\n    # Offload AMQP socket publishing to threadpool\n    task = await asyncio.to_thread(process_report_task.delay, report_id=payload.id)\n    return {"task_id": task.id, "status": "queued"}\n\`\`\``
       },
       {
         id: "celery-architecture-implementation",

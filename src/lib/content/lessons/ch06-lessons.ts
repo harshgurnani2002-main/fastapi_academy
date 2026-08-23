@@ -638,7 +638,7 @@ Without a rigorous architecture for CORS: Correct Configuration, backend service
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Strict CORS Configuration with Credentials\nUnder W3C and browser security standards, \`allow_origins=['*']\` combined with \`allow_credentials=True\` is strictly rejected by modern browsers. Always declare explicit allowed origins:\n\`\`\`python\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=["https://app.productiondomain.com", "https://admin.productiondomain.com"],\n    allow_credentials=True,\n    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],\n    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],\n)\n\`\`\``
       },
       {
         id: "cors-configuration-implementation",
@@ -1220,7 +1220,7 @@ Without a rigorous architecture for File Upload Security, backend services suffe
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Magic Bytes MIME Validation\nClient-supplied \`UploadFile.content_type\` headers can be easily forged by attackers. Always inspect actual magic bytes in the file header using \`python-magic\`:\n\`\`\`python\nimport magic\nfrom fastapi import UploadFile, HTTPException\n\nasync def validate_file_content(file: UploadFile):\n    header = await file.read(2048)\n    await file.seek(0)  # Reset stream position\n    mime = magic.from_buffer(header, mime=True)\n    if mime not in ["image/jpeg", "image/png", "application/pdf"]:\n        raise HTTPException(status_code=400, detail="Invalid file type detected by magic bytes signature.")\n\`\`\``
       },
       {
         id: "file-upload-security-implementation",

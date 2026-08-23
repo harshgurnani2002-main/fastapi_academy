@@ -32,7 +32,7 @@ Without a rigorous architecture for Redis Architecture & Internals, backend serv
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Redis Connection Pool Lifespan Cleanup\nTo prevent lingering TCP sockets or connection exhaustion during rolling deployments, always gracefully close Redis connections during application lifespan teardown:\n\`\`\`python\n@asynccontextmanager\nasync def lifespan(app: FastAPI):\n    redis_pool = ConnectionPool.from_url(settings.REDIS_URL, max_connections=50)\n    app.state.redis = Redis(connection_pool=redis_pool)\n    yield\n    # Gracefully drain and disconnect during shutdown\n    await app.state.redis.aclose()\n    await redis_pool.disconnect()\n\`\`\``
       },
       {
         id: "redis-architecture-implementation",

@@ -38,7 +38,7 @@ export default function HeroSection({ stats }: HeroSectionProps) {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link href="/learn" className="inline-flex justify-center items-center px-8 py-4 text-lg font-semibold rounded-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-sm hover:shadow-md">
+              <Link href="/curriculum" className="inline-flex justify-center items-center px-8 py-4 text-lg font-semibold rounded-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-sm hover:shadow-md">
                 <Play className="w-5 h-5 mr-2" />
                 Start Learning
               </Link>

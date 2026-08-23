@@ -32,7 +32,7 @@ Without a rigorous architecture for The Three Pillars: Logs, Metrics, Traces, ba
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### structlog contextvars Processor for Async Correlation IDs\nAlways include \`structlog.contextvars.merge_contextvars\` in your processor pipeline so request correlation IDs flow across async tasks:\n\`\`\`python\nimport structlog\n\nstructlog.configure(\n    processors=[\n        structlog.contextvars.merge_contextvars,\n        structlog.processors.add_log_level,\n        structlog.processors.TimeStamper(fmt="iso"),\n        structlog.processors.JSONRenderer(),\n    ],\n    logger_factory=structlog.PrintLoggerFactory(),\n)\n\`\`\``
       },
       {
         id: "observability-pillars-implementation",

@@ -32,7 +32,7 @@ Without a rigorous architecture for Why Rate Limiting Exists, backend services s
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Atomic Sliding Window with Redis Lua Script\nExecuting separate \`ZREMRANGEBYSCORE\`, \`ZCARD\`, and \`ZADD\` commands introduces concurrency race conditions. Always execute sliding window checks atomically inside a Redis Lua script:\n\`\`\`python\nLUA_SLIDING_WINDOW = """\nlocal key = KEYS[1]\nlocal now = tonumber(ARGV[1])\nlocal window = tonumber(ARGV[2])\nlocal max_requests = tonumber(ARGV[3])\n\nlocal clear_before = now - window\nredis.call('ZREMRANGEBYSCORE', key, 0, clear_before)\nlocal current_requests = redis.call('ZCARD', key)\n\nif current_requests < max_requests then\n    redis.call('ZADD', key, now, now)\n    redis.call('EXPIRE', key, math.ceil(window))\n    return 1\nelse\n    return 0\nend\n"""\n\`\`\``
       },
       {
         id: "why-rate-limiting-implementation",

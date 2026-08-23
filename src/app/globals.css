@@ -24,11 +24,49 @@ body {
   background: #F1F5F9; 
 }
 ::-webkit-scrollbar-thumb {
-  background: #F97316; 
+  background: #cbd5e1; 
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #EA580C; 
+  background: #94a3b8; 
+}
+
+/* Pre & Code block specific scrollbar styling with high contrast */
+pre::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+pre::-webkit-scrollbar-track,
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+pre::-webkit-scrollbar-thumb,
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+pre::-webkit-scrollbar-thumb:hover,
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Dark mode and dark containers scrollbars */
+.dark pre::-webkit-scrollbar-track,
+.bg-slate-900 pre::-webkit-scrollbar-track,
+.bg-slate-900::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+.dark pre::-webkit-scrollbar-thumb,
+.bg-slate-900 pre::-webkit-scrollbar-thumb,
+.bg-slate-900::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+.dark pre::-webkit-scrollbar-thumb:hover,
+.bg-slate-900 pre::-webkit-scrollbar-thumb:hover,
+.bg-slate-900::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 
 /* Code block styles */

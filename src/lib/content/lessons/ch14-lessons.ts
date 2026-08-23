@@ -32,7 +32,7 @@ Without a rigorous architecture for REST Design Principles, backend services suf
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Compound Keyset Cursor Pagination\nKeyset cursor queries sorting solely on \`created_at\` skip duplicate timestamp records. Always include a unique tie-breaker column (e.g. \`id\`):\n\`\`\`sql\nSELECT id, title, created_at\nFROM articles\nWHERE (created_at, id) < (:cursor_created_at, :cursor_id)\nORDER BY created_at DESC, id DESC\nLIMIT :limit;\n\`\`\``
       },
       {
         id: "rest-design-principles-implementation",

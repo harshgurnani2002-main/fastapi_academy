@@ -22,9 +22,18 @@ export default function SearchModal() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        useUIStore.getState().openSearch();
+      const target = e.target as HTMLElement | null;
+      const isTyping =
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable);
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        if (!isTyping) {
+          e.preventDefault();
+          useUIStore.getState().openSearch();
+        }
       }
       if (e.key === 'Escape' && isOpen) {
         closeSearch();

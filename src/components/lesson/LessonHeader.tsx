@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import DifficultyBadge from './DifficultyBadge';
 import TechBadge from './TechBadge';
 
@@ -18,10 +19,23 @@ export default function LessonHeader({ lesson, chapter }: any) {
   return (
     <div className="mb-10 border-b border-slate-200 pb-8">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-sm font-medium text-slate-500 mb-6">
-        <span className="hover:text-slate-900 transition-colors cursor-pointer">{chapter.title}</span>
-        <svg className="w-4 h-4 mx-2 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
-        <span className="text-slate-900">{lesson.title}</span>
+      <nav aria-label="Breadcrumb" className="flex items-center text-sm font-medium text-slate-500 mb-6 flex-wrap gap-1">
+        <Link href="/" className="hover:text-orange-600 transition-colors">
+          Home
+        </Link>
+        <svg className="w-4 h-4 mx-1 text-slate-300 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <Link 
+          href={`/curriculum#chapter-${chapter.id || chapter.slug}`} 
+          className="hover:text-orange-600 transition-colors font-medium text-slate-600"
+        >
+          {chapter.title}
+        </Link>
+        <svg className="w-4 h-4 mx-1 text-slate-300 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <span className="text-slate-900 font-semibold truncate max-w-md">{lesson.title}</span>
       </nav>
 
       {/* Title & Badges */}

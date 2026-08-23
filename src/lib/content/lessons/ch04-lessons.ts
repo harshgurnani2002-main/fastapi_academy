@@ -428,15 +428,18 @@ response = await client.get(url, timeout=5.0)`
         id: "select-for-update-core",
         type: "concept",
         title: "Architectural Mental Model: SELECT FOR UPDATE & Row-Level Locking",
-        content: `In modern distributed systems, **SELECT FOR UPDATE & Row-Level Locking** is a cornerstone of high availability, security, and low latency.
+        content: `### Deadlock Avoidance with nowait and skip_locked
+When utilizing row-level pessimistic locking in PostgreSQL, unconstrained locks can lead to thread exhaustion and deadlocks under heavy concurrent writes. Always use non-blocking options or lock timeouts:
+\`\`\`python
+# 1. Fail fast without waiting if row is currently locked (nowait=True)
+stmt = select(Account).where(Account.id == account_id).with_for_update(nowait=True)
 
-### The Problem It Solves
-Without a rigorous architecture for SELECT FOR UPDATE & Row-Level Locking, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+# 2. Skip locked rows for concurrent worker queue dequeueing (skip_locked=True)
+stmt = select(Job).where(Job.status == "pending").with_for_update(skip_locked=True).limit(10)
+\`\`\`
 
-### How It Works Internally
-1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
-2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+### Production Pattern
+Wrap \`nowait=True\` transactions in an application-level exponential backoff retry loop to handle transient row lock contention gracefully.`
       },
       {
         id: "select-for-update-implementation",

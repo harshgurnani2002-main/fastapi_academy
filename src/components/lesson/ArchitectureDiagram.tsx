@@ -25,10 +25,12 @@ export default function ArchitectureDiagram({ title, diagram, caption }: Archite
       </div>
       
       {/* Light-theme diagram container with high-contrast text */}
-      <div className="p-6 overflow-x-auto bg-slate-50 border-b border-slate-100">
-        <pre className="font-mono text-xs sm:text-sm leading-relaxed text-slate-800 font-medium whitespace-pre">
-          <code>{diagram}</code>
-        </pre>
+      <div className="p-4 sm:p-6 w-full max-w-full overflow-x-auto bg-slate-50 border-b border-slate-100">
+        <div className="min-w-fit">
+          <pre className="font-mono text-xs sm:text-sm leading-relaxed text-slate-800 font-medium whitespace-pre">
+            <code>{diagram}</code>
+          </pre>
+        </div>
       </div>
       
       {caption && (

@@ -117,11 +117,14 @@ export default function CodeBlock({
           </div>
           <button
             onClick={handleCopy}
-            className="text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-2 text-sm focus:outline-none"
-            aria-label="Copy code"
+            className="text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded px-1.5 py-0.5"
+            aria-label={copied ? "Code copied to clipboard" : "Copy code to clipboard"}
           >
+            <span role="status" aria-live="polite" className="sr-only">
+              {copied ? 'Code copied to clipboard' : ''}
+            </span>
             {copied ? (
-              <span className="text-green-600 flex items-center gap-1">
+              <span className="text-green-600 flex items-center gap-1 font-medium">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 Copied!
               </span>

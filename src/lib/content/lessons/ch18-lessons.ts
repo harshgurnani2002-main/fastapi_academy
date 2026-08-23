@@ -32,7 +32,7 @@ Without a rigorous architecture for Python Docker Image Fundamentals, backend se
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Production Container Hardening (Non-Root User & Tini Init)\nProduction Dockerfiles must drop root privileges and install \`tini\` as PID 1 init system for signal forwarding:\n\`\`\`dockerfile\nFROM python:3.12-alpine\nRUN apk add --no-cache tini\nRUN addgroup -S appgroup && adduser -S appuser -G appgroup\n\nWORKDIR /app\nCOPY --chown=appuser:appgroup . /app\nUSER appuser\n\nENTRYPOINT ["/sbin/tini", "--"]\nCMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]\n\`\`\``
       },
       {
         id: "python-docker-fundamentals-implementation",

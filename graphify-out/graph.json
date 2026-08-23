@@ -702,7 +702,7 @@
       "source_file": "projects/api-performance-optimization/src/api/v1/benchmarks.py",
       "source_location": "L19",
       "id": "v1_benchmarks_seed_data",
-      "community": 95,
+      "community": 14,
       "norm_label": "seed_data()"
     },
     {
@@ -882,7 +882,7 @@
       "source_file": "projects/api-performance-optimization/src/models/author_book.py",
       "source_location": "L1",
       "id": "models_author_book",
-      "community": 95,
+      "community": 14,
       "norm_label": "author_book.py"
     },
     {
@@ -891,7 +891,7 @@
       "source_file": "projects/api-performance-optimization/src/models/author_book.py",
       "source_location": "L6",
       "id": "models_author_book_authormodel",
-      "community": 95,
+      "community": 14,
       "norm_label": "authormodel"
     },
     {
@@ -900,7 +900,7 @@
       "source_file": "",
       "source_location": "",
       "id": "base",
-      "community": 56,
+      "community": 14,
       "norm_label": "base"
     },
     {
@@ -909,7 +909,7 @@
       "source_file": "projects/api-performance-optimization/src/models/author_book.py",
       "source_location": "L14",
       "id": "models_author_book_bookmodel",
-      "community": 95,
+      "community": 14,
       "norm_label": "bookmodel"
     },
     {
@@ -1341,7 +1341,7 @@
       "source_file": "",
       "source_location": "",
       "id": "exception",
-      "community": 107,
+      "community": 78,
       "norm_label": "exception"
     },
     {
@@ -1422,7 +1422,7 @@
       "source_file": "projects/async-document-processor/src/core/task_broker.py",
       "source_location": "L20",
       "id": "core_task_broker_taskstatus",
-      "community": 70,
+      "community": 61,
       "norm_label": "taskstatus"
     },
     {
@@ -1539,7 +1539,7 @@
       "source_file": "projects/async-document-processor/src/main.py",
       "source_location": "L1",
       "id": "projects_async_document_processor_src_main_py_src_main",
-      "community": 244,
+      "community": 73,
       "norm_label": "main.py"
     },
     {
@@ -1548,7 +1548,7 @@
       "source_file": "projects/async-document-processor/src/main.py",
       "source_location": "L10",
       "id": "projects_async_document_processor_src_main_py_src_main_create_application",
-      "community": 244,
+      "community": 73,
       "norm_label": "create_application()"
     },
     {
@@ -1557,7 +1557,7 @@
       "source_file": "projects/async-document-processor/src/main.py",
       "source_location": "L10",
       "id": "projects_async_document_processor_src_main_py_fastapi",
-      "community": 244,
+      "community": 73,
       "norm_label": "fastapi"
     },
     {
@@ -2718,7 +2718,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/core/exceptions.py",
       "source_location": "L57",
       "id": "core_exceptions_idempotencyconflictexception",
-      "community": 62,
+      "community": 54,
       "norm_label": "idempotencyconflictexception"
     },
     {
@@ -2754,7 +2754,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/core/exceptions.py",
       "source_location": "L79",
       "id": "projects_concurrent_ticket_booking_src_core_exceptions_py_core_exceptions_app_exception_handler",
-      "community": 54,
+      "community": 277,
       "norm_label": "app_exception_handler()"
     },
     {
@@ -2763,7 +2763,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/core/exceptions.py",
       "source_location": "L79",
       "id": "projects_concurrent_ticket_booking_src_core_exceptions_py_request",
-      "community": 54,
+      "community": 277,
       "norm_label": "request"
     },
     {
@@ -2772,7 +2772,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/core/exceptions.py",
       "source_location": "L79",
       "id": "projects_concurrent_ticket_booking_src_core_exceptions_py_jsonresponse",
-      "community": 54,
+      "community": 277,
       "norm_label": "jsonresponse"
     },
     {
@@ -2781,7 +2781,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/core/exceptions.py",
       "source_location": "L96",
       "id": "projects_concurrent_ticket_booking_src_core_exceptions_py_core_exceptions_validation_exception_handler",
-      "community": 54,
+      "community": 277,
       "norm_label": "validation_exception_handler()"
     },
     {
@@ -2790,7 +2790,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/core/exceptions.py",
       "source_location": "L96",
       "id": "projects_concurrent_ticket_booking_src_core_exceptions_py_requestvalidationerror",
-      "community": 54,
+      "community": 277,
       "norm_label": "requestvalidationerror"
     },
     {
@@ -2817,7 +2817,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/core/exceptions.py",
       "source_location": "L58",
       "id": "core_exceptions_rationale_58",
-      "community": 62,
+      "community": 54,
       "norm_label": "raised when an identical idempotency key is already actively being processed."
     },
     {
@@ -2853,7 +2853,7 @@
       "source_file": "",
       "source_location": "",
       "id": "basehttpmiddleware",
-      "community": 181,
+      "community": 104,
       "norm_label": "basehttpmiddleware"
     },
     {
@@ -2925,7 +2925,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/main.py",
       "source_location": "L1",
       "id": "projects_concurrent_ticket_booking_src_main_py_src_main",
-      "community": 213,
+      "community": 115,
       "norm_label": "main.py"
     },
     {
@@ -2934,7 +2934,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/main.py",
       "source_location": "L16",
       "id": "projects_concurrent_ticket_booking_src_main_py_src_main_lifespan",
-      "community": 213,
+      "community": 115,
       "norm_label": "lifespan()"
     },
     {
@@ -2943,7 +2943,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/main.py",
       "source_location": "L16",
       "id": "projects_concurrent_ticket_booking_src_main_py_fastapi",
-      "community": 213,
+      "community": 115,
       "norm_label": "fastapi"
     },
     {
@@ -2952,7 +2952,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/main.py",
       "source_location": "L22",
       "id": "projects_concurrent_ticket_booking_src_main_py_src_main_create_application",
-      "community": 213,
+      "community": 115,
       "norm_label": "create_application()"
     },
     {
@@ -3006,7 +3006,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/models/booking.py",
       "source_location": "L1",
       "id": "models_booking",
-      "community": 62,
+      "community": 61,
       "norm_label": "booking.py"
     },
     {
@@ -3015,7 +3015,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/models/booking.py",
       "source_location": "L15",
       "id": "models_booking_bookingstatus",
-      "community": 62,
+      "community": 61,
       "norm_label": "bookingstatus"
     },
     {
@@ -3024,7 +3024,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/models/booking.py",
       "source_location": "L21",
       "id": "models_booking_bookingmodel",
-      "community": 62,
+      "community": 54,
       "norm_label": "bookingmodel"
     },
     {
@@ -3033,7 +3033,7 @@
       "source_file": "",
       "source_location": "",
       "id": "timestampmixin",
-      "community": 56,
+      "community": 14,
       "norm_label": "timestampmixin"
     },
     {
@@ -3042,7 +3042,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/models/booking.py",
       "source_location": "L1",
       "id": "models_booking_rationale_1",
-      "community": 62,
+      "community": 61,
       "norm_label": "booking ledger model ==================== senior design note: unique constraint"
     },
     {
@@ -3087,7 +3087,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/models/idempotency.py",
       "source_location": "L14",
       "id": "models_idempotency_idempotencystate",
-      "community": 62,
+      "community": 230,
       "norm_label": "idempotencystate"
     },
     {
@@ -3096,7 +3096,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/models/idempotency.py",
       "source_location": "L20",
       "id": "models_idempotency_idempotencymodel",
-      "community": 230,
+      "community": 14,
       "norm_label": "idempotencymodel"
     },
     {
@@ -3159,7 +3159,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L1",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_repositories_base",
-      "community": 60,
+      "community": 215,
       "norm_label": "base.py"
     },
     {
@@ -3168,7 +3168,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L9",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_repositories_base_baserepository",
-      "community": 60,
+      "community": 215,
       "norm_label": "baserepository"
     },
     {
@@ -3177,7 +3177,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L10",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_repositories_base_baserepository_init",
-      "community": 60,
+      "community": 215,
       "norm_label": ".__init__()"
     },
     {
@@ -3186,7 +3186,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L10",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_modeltype",
-      "community": 60,
+      "community": 215,
       "norm_label": "modeltype"
     },
     {
@@ -3195,7 +3195,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L10",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_asyncsession",
-      "community": 60,
+      "community": 215,
       "norm_label": "asyncsession"
     },
     {
@@ -3204,7 +3204,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L14",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_repositories_base_baserepository_get_by_id",
-      "community": 60,
+      "community": 215,
       "norm_label": ".get_by_id()"
     },
     {
@@ -3213,7 +3213,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L19",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_repositories_base_baserepository_list",
-      "community": 60,
+      "community": 215,
       "norm_label": ".list()"
     },
     {
@@ -3222,7 +3222,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L24",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_repositories_base_baserepository_create",
-      "community": 60,
+      "community": 215,
       "norm_label": ".create()"
     },
     {
@@ -3231,7 +3231,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/base.py",
       "source_location": "L24",
       "id": "projects_concurrent_ticket_booking_src_repositories_base_py_any",
-      "community": 60,
+      "community": 215,
       "norm_label": "any"
     },
     {
@@ -3240,7 +3240,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/booking_repo.py",
       "source_location": "L1",
       "id": "repositories_booking_repo",
-      "community": 62,
+      "community": 54,
       "norm_label": "booking_repo.py"
     },
     {
@@ -3249,7 +3249,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/booking_repo.py",
       "source_location": "L8",
       "id": "repositories_booking_repo_bookingrepository",
-      "community": 62,
+      "community": 54,
       "norm_label": "bookingrepository"
     },
     {
@@ -3258,7 +3258,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/booking_repo.py",
       "source_location": "L9",
       "id": "repositories_booking_repo_bookingrepository_init",
-      "community": 62,
+      "community": 54,
       "norm_label": ".__init__()"
     },
     {
@@ -3267,7 +3267,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/booking_repo.py",
       "source_location": "L9",
       "id": "projects_concurrent_ticket_booking_src_repositories_booking_repo_py_asyncsession",
-      "community": 62,
+      "community": 54,
       "norm_label": "asyncsession"
     },
     {
@@ -3276,7 +3276,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/booking_repo.py",
       "source_location": "L12",
       "id": "repositories_booking_repo_bookingrepository_get_by_idempotency_key",
-      "community": 62,
+      "community": 54,
       "norm_label": ".get_by_idempotency_key()"
     },
     {
@@ -3285,7 +3285,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/booking_repo.py",
       "source_location": "L12",
       "id": "projects_concurrent_ticket_booking_src_repositories_booking_repo_py_bookingmodel",
-      "community": 62,
+      "community": 54,
       "norm_label": "bookingmodel"
     },
     {
@@ -3366,7 +3366,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/idempotency_repo.py",
       "source_location": "L1",
       "id": "repositories_idempotency_repo",
-      "community": 62,
+      "community": 230,
       "norm_label": "idempotency_repo.py"
     },
     {
@@ -3375,7 +3375,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/idempotency_repo.py",
       "source_location": "L8",
       "id": "repositories_idempotency_repo_idempotencyrepository",
-      "community": 62,
+      "community": 230,
       "norm_label": "idempotencyrepository"
     },
     {
@@ -3447,7 +3447,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/ticket_repo.py",
       "source_location": "L1",
       "id": "repositories_ticket_repo",
-      "community": 62,
+      "community": 230,
       "norm_label": "ticket_repo.py"
     },
     {
@@ -3519,7 +3519,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/repositories/ticket_repo.py",
       "source_location": "L1",
       "id": "repositories_ticket_repo_rationale_1",
-      "community": 62,
+      "community": 230,
       "norm_label": "ticket repository with pessimistic locking & skip locked queuing ==============="
     },
     {
@@ -3537,7 +3537,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/schemas/booking.py",
       "source_location": "L1",
       "id": "schemas_booking",
-      "community": 57,
+      "community": 61,
       "norm_label": "booking.py"
     },
     {
@@ -3546,7 +3546,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/schemas/booking.py",
       "source_location": "L7",
       "id": "schemas_booking_bookingcreaterequest",
-      "community": 57,
+      "community": 61,
       "norm_label": "bookingcreaterequest"
     },
     {
@@ -3555,7 +3555,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/schemas/booking.py",
       "source_location": "L13",
       "id": "schemas_booking_bookingout",
-      "community": 57,
+      "community": 61,
       "norm_label": "bookingout"
     },
     {
@@ -3636,7 +3636,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/schemas/ticket.py",
       "source_location": "L1",
       "id": "schemas_ticket",
-      "community": 57,
+      "community": 230,
       "norm_label": "ticket.py"
     },
     {
@@ -3645,7 +3645,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/schemas/ticket.py",
       "source_location": "L7",
       "id": "schemas_ticket_ticketout",
-      "community": 57,
+      "community": 230,
       "norm_label": "ticketout"
     },
     {
@@ -3654,7 +3654,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/schemas/ticket.py",
       "source_location": "L19",
       "id": "schemas_ticket_ticketholdrequest",
-      "community": 57,
+      "community": 230,
       "norm_label": "ticketholdrequest"
     },
     {
@@ -3672,7 +3672,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L1",
       "id": "services_booking_service",
-      "community": 62,
+      "community": 54,
       "norm_label": "booking_service.py"
     },
     {
@@ -3681,7 +3681,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L33",
       "id": "services_booking_service_to_utc",
-      "community": 62,
+      "community": 54,
       "norm_label": "to_utc()"
     },
     {
@@ -3690,7 +3690,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L33",
       "id": "datetime",
-      "community": 62,
+      "community": 230,
       "norm_label": "datetime"
     },
     {
@@ -3699,7 +3699,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L41",
       "id": "services_booking_service_bookingservice",
-      "community": 62,
+      "community": 54,
       "norm_label": "bookingservice"
     },
     {
@@ -3708,7 +3708,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L42",
       "id": "services_booking_service_bookingservice_init",
-      "community": 62,
+      "community": 54,
       "norm_label": ".__init__()"
     },
     {
@@ -3717,7 +3717,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L42",
       "id": "projects_concurrent_ticket_booking_src_services_booking_service_py_asyncsession",
-      "community": 62,
+      "community": 54,
       "norm_label": "asyncsession"
     },
     {
@@ -3726,7 +3726,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L49",
       "id": "services_booking_service_bookingservice_book_ticket_pessimistic",
-      "community": 62,
+      "community": 54,
       "norm_label": ".book_ticket_pessimistic()"
     },
     {
@@ -3735,7 +3735,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L49",
       "id": "projects_concurrent_ticket_booking_src_services_booking_service_py_bookingcreaterequest",
-      "community": 62,
+      "community": 54,
       "norm_label": "bookingcreaterequest"
     },
     {
@@ -3744,7 +3744,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L49",
       "id": "projects_concurrent_ticket_booking_src_services_booking_service_py_bookingmodel",
-      "community": 62,
+      "community": 54,
       "norm_label": "bookingmodel"
     },
     {
@@ -3753,7 +3753,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L119",
       "id": "services_booking_service_bookingservice_hold_ticket",
-      "community": 62,
+      "community": 54,
       "norm_label": ".hold_ticket()"
     },
     {
@@ -3762,7 +3762,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L148",
       "id": "services_booking_service_bookingservice_unsafe_book_ticket",
-      "community": 62,
+      "community": 54,
       "norm_label": ".unsafe_book_ticket()"
     },
     {
@@ -3771,7 +3771,7 @@
       "source_file": "projects/concurrent-ticket-booking/src/services/booking_service.py",
       "source_location": "L1",
       "id": "services_booking_service_rationale_1",
-      "community": 62,
+      "community": 54,
       "norm_label": "booking service with pessimistic locking & idempotency protection =============="
     },
     {
@@ -5769,7 +5769,7 @@
       "source_file": "projects/event-driven-order-system/src/schemas/common.py",
       "source_location": "L1",
       "id": "projects_event_driven_order_system_src_schemas_common_py_schemas_common",
-      "community": 57,
+      "community": 319,
       "norm_label": "common.py"
     },
     {
@@ -5778,7 +5778,7 @@
       "source_file": "projects/event-driven-order-system/src/schemas/common.py",
       "source_location": "L7",
       "id": "projects_event_driven_order_system_src_schemas_common_py_schemas_common_apiresponse",
-      "community": 57,
+      "community": 319,
       "norm_label": "apiresponse"
     },
     {
@@ -6399,7 +6399,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L1",
       "id": "v1_hardened",
-      "community": 158,
+      "community": 51,
       "norm_label": "hardened.py"
     },
     {
@@ -6408,7 +6408,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L35",
       "id": "v1_hardened_create_document",
-      "community": 158,
+      "community": 51,
       "norm_label": "create_document()"
     },
     {
@@ -6417,7 +6417,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L35",
       "id": "documentcreate",
-      "community": 158,
+      "community": 51,
       "norm_label": "documentcreate"
     },
     {
@@ -6426,7 +6426,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L35",
       "id": "projects_fastapi_security_hardening_src_api_v1_hardened_py_usermodel",
-      "community": 158,
+      "community": 51,
       "norm_label": "usermodel"
     },
     {
@@ -6435,7 +6435,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L35",
       "id": "projects_fastapi_security_hardening_src_api_v1_hardened_py_asyncsession",
-      "community": 158,
+      "community": 51,
       "norm_label": "asyncsession"
     },
     {
@@ -6444,7 +6444,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L51",
       "id": "v1_hardened_hardened_get_document",
-      "community": 158,
+      "community": 51,
       "norm_label": "hardened_get_document()"
     },
     {
@@ -6453,7 +6453,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L68",
       "id": "v1_hardened_hardened_create_user",
-      "community": 158,
+      "community": 51,
       "norm_label": "hardened_create_user()"
     },
     {
@@ -6471,7 +6471,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L88",
       "id": "v1_hardened_hardened_trigger_webhook",
-      "community": 228,
+      "community": 51,
       "norm_label": "hardened_trigger_webhook()"
     },
     {
@@ -6480,7 +6480,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L88",
       "id": "projects_fastapi_security_hardening_src_api_v1_hardened_py_webhooktriggerrequest",
-      "community": 228,
+      "community": 51,
       "norm_label": "webhooktriggerrequest"
     },
     {
@@ -6489,7 +6489,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L107",
       "id": "v1_hardened_hardened_sql_search",
-      "community": 158,
+      "community": 51,
       "norm_label": "hardened_sql_search()"
     },
     {
@@ -6498,7 +6498,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L121",
       "id": "v1_hardened_hardened_file_upload",
-      "community": 231,
+      "community": 51,
       "norm_label": "hardened_file_upload()"
     },
     {
@@ -6507,7 +6507,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L121",
       "id": "projects_fastapi_security_hardening_src_api_v1_hardened_py_uploadfile",
-      "community": 231,
+      "community": 51,
       "norm_label": "uploadfile"
     },
     {
@@ -6516,7 +6516,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L1",
       "id": "v1_hardened_rationale_1",
-      "community": 158,
+      "community": 51,
       "norm_label": "hardened production endpoints (owasp top 10 mitigated) ========================="
     },
     {
@@ -6525,7 +6525,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L56",
       "id": "v1_hardened_rationale_56",
-      "community": 158,
+      "community": 51,
       "norm_label": "bola mitigation:     enforces that documents can only be retrieved if owned by t"
     },
     {
@@ -6534,7 +6534,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L72",
       "id": "v1_hardened_rationale_72",
-      "community": 158,
+      "community": 51,
       "norm_label": "mass assignment mitigation:     strict pydantic dto (extra=\"forbid\"). privilege"
     },
     {
@@ -6543,7 +6543,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L89",
       "id": "v1_hardened_rationale_89",
-      "community": 228,
+      "community": 51,
       "norm_label": "ssrf mitigation:     validates scheme, resolves dns, blocks private/loopback/clo"
     },
     {
@@ -6552,7 +6552,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L111",
       "id": "v1_hardened_rationale_111",
-      "community": 158,
+      "community": 51,
       "norm_label": "sqli mitigation:     uses parameterized queries with sqlalchemy expression langu"
     },
     {
@@ -6561,7 +6561,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/hardened.py",
       "source_location": "L122",
       "id": "v1_hardened_rationale_122",
-      "community": 231,
+      "community": 51,
       "norm_label": "file security mitigation:     sanitizes filename into a clean uuid, validates ma"
     },
     {
@@ -6615,7 +6615,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/vulnerable.py",
       "source_location": "L67",
       "id": "v1_vulnerable_vulnerable_trigger_webhook",
-      "community": 228,
+      "community": 51,
       "norm_label": "vulnerable_trigger_webhook()"
     },
     {
@@ -6687,7 +6687,7 @@
       "source_file": "projects/fastapi-security-hardening/src/api/v1/vulnerable.py",
       "source_location": "L68",
       "id": "v1_vulnerable_rationale_68",
-      "community": 228,
+      "community": 51,
       "norm_label": "vulnerability: server-side request forgery (ssrf).     fetches arbitrary user-su"
     },
     {
@@ -6813,7 +6813,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/dependencies.py",
       "source_location": "L1",
       "id": "projects_fastapi_security_hardening_src_core_dependencies_py_core_dependencies",
-      "community": 69,
+      "community": 66,
       "norm_label": "dependencies.py"
     },
     {
@@ -6822,7 +6822,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/dependencies.py",
       "source_location": "L10",
       "id": "projects_fastapi_security_hardening_src_core_dependencies_py_core_dependencies_get_current_user",
-      "community": 69,
+      "community": 66,
       "norm_label": "get_current_user()"
     },
     {
@@ -6831,7 +6831,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/dependencies.py",
       "source_location": "L10",
       "id": "projects_fastapi_security_hardening_src_core_dependencies_py_asyncsession",
-      "community": 69,
+      "community": 66,
       "norm_label": "asyncsession"
     },
     {
@@ -6840,7 +6840,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/dependencies.py",
       "source_location": "L10",
       "id": "projects_fastapi_security_hardening_src_core_dependencies_py_usermodel",
-      "community": 69,
+      "community": 66,
       "norm_label": "usermodel"
     },
     {
@@ -6939,7 +6939,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/exceptions.py",
       "source_location": "L44",
       "id": "core_exceptions_ssrfblockedexception",
-      "community": 68,
+      "community": 51,
       "norm_label": "ssrfblockedexception"
     },
     {
@@ -6957,7 +6957,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/exceptions.py",
       "source_location": "L54",
       "id": "core_exceptions_fileuploadviolationexception",
-      "community": 231,
+      "community": 51,
       "norm_label": "fileuploadviolationexception"
     },
     {
@@ -7020,7 +7020,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/file_sanitizer.py",
       "source_location": "L1",
       "id": "core_file_sanitizer",
-      "community": 231,
+      "community": 51,
       "norm_label": "file_sanitizer.py"
     },
     {
@@ -7029,7 +7029,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/file_sanitizer.py",
       "source_location": "L26",
       "id": "core_file_sanitizer_sanitize_filename",
-      "community": 231,
+      "community": 51,
       "norm_label": "sanitize_filename()"
     },
     {
@@ -7038,7 +7038,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/file_sanitizer.py",
       "source_location": "L34",
       "id": "core_file_sanitizer_validate_file_content",
-      "community": 231,
+      "community": 51,
       "norm_label": "validate_file_content()"
     },
     {
@@ -7047,7 +7047,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/file_sanitizer.py",
       "source_location": "L1",
       "id": "core_file_sanitizer_rationale_1",
-      "community": 231,
+      "community": 51,
       "norm_label": "file upload sanitization & path traversal mitigator ============================"
     },
     {
@@ -7056,7 +7056,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/file_sanitizer.py",
       "source_location": "L27",
       "id": "core_file_sanitizer_rationale_27",
-      "community": 231,
+      "community": 51,
       "norm_label": "strip path traversal sequences (../, ../../, null bytes) and return safe uuid fi"
     },
     {
@@ -7254,7 +7254,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/ssrf_validator.py",
       "source_location": "L1",
       "id": "core_ssrf_validator",
-      "community": 228,
+      "community": 51,
       "norm_label": "ssrf_validator.py"
     },
     {
@@ -7263,7 +7263,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/ssrf_validator.py",
       "source_location": "L38",
       "id": "core_ssrf_validator_is_safe_external_url",
-      "community": 228,
+      "community": 51,
       "norm_label": "is_safe_external_url()"
     },
     {
@@ -7272,7 +7272,7 @@
       "source_file": "projects/fastapi-security-hardening/src/core/ssrf_validator.py",
       "source_location": "L1",
       "id": "core_ssrf_validator_rationale_1",
-      "community": 228,
+      "community": 51,
       "norm_label": "ssrf defense engine & ip blocklist validator ==================================="
     },
     {
@@ -7281,7 +7281,7 @@
       "source_file": "projects/fastapi-security-hardening/src/main.py",
       "source_location": "L1",
       "id": "projects_fastapi_security_hardening_src_main_py_src_main",
-      "community": 215,
+      "community": 181,
       "norm_label": "main.py"
     },
     {
@@ -7290,7 +7290,7 @@
       "source_file": "projects/fastapi-security-hardening/src/main.py",
       "source_location": "L16",
       "id": "projects_fastapi_security_hardening_src_main_py_src_main_lifespan",
-      "community": 215,
+      "community": 181,
       "norm_label": "lifespan()"
     },
     {
@@ -7299,7 +7299,7 @@
       "source_file": "projects/fastapi-security-hardening/src/main.py",
       "source_location": "L16",
       "id": "projects_fastapi_security_hardening_src_main_py_fastapi",
-      "community": 215,
+      "community": 181,
       "norm_label": "fastapi"
     },
     {
@@ -7308,7 +7308,7 @@
       "source_file": "projects/fastapi-security-hardening/src/main.py",
       "source_location": "L22",
       "id": "projects_fastapi_security_hardening_src_main_py_src_main_create_application",
-      "community": 215,
+      "community": 181,
       "norm_label": "create_application()"
     },
     {
@@ -7380,7 +7380,7 @@
       "source_file": "projects/fastapi-security-hardening/src/models/document.py",
       "source_location": "L14",
       "id": "models_document_documentmodel",
-      "community": 51,
+      "community": 14,
       "norm_label": "documentmodel"
     },
     {
@@ -7389,7 +7389,7 @@
       "source_file": "projects/fastapi-security-hardening/src/models/user.py",
       "source_location": "L1",
       "id": "projects_fastapi_security_hardening_src_models_user_py_models_user",
-      "community": 56,
+      "community": 14,
       "norm_label": "user.py"
     },
     {
@@ -7398,7 +7398,7 @@
       "source_file": "projects/fastapi-security-hardening/src/models/user.py",
       "source_location": "L6",
       "id": "projects_fastapi_security_hardening_src_models_user_py_models_user_usermodel",
-      "community": 56,
+      "community": 14,
       "norm_label": "usermodel"
     },
     {
@@ -7515,7 +7515,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L9",
       "id": "repositories_document_repo_documentrepository_init",
-      "community": 51,
+      "community": 14,
       "norm_label": ".__init__()"
     },
     {
@@ -7524,7 +7524,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L9",
       "id": "projects_fastapi_security_hardening_src_repositories_document_repo_py_asyncsession",
-      "community": 51,
+      "community": 14,
       "norm_label": "asyncsession"
     },
     {
@@ -7533,7 +7533,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L12",
       "id": "repositories_document_repo_documentrepository_get_by_owner_and_id",
-      "community": 308,
+      "community": 51,
       "norm_label": ".get_by_owner_and_id()"
     },
     {
@@ -7542,7 +7542,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L12",
       "id": "documentmodel",
-      "community": 308,
+      "community": 51,
       "norm_label": "documentmodel"
     },
     {
@@ -7551,7 +7551,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L21",
       "id": "repositories_document_repo_documentrepository_vulnerable_raw_search",
-      "community": 308,
+      "community": 51,
       "norm_label": ".vulnerable_raw_search()"
     },
     {
@@ -7560,7 +7560,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L28",
       "id": "repositories_document_repo_documentrepository_hardened_parameterized_search",
-      "community": 308,
+      "community": 51,
       "norm_label": ".hardened_parameterized_search()"
     },
     {
@@ -7569,7 +7569,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L13",
       "id": "repositories_document_repo_rationale_13",
-      "community": 308,
+      "community": 51,
       "norm_label": "hardened query enforcing tenant / owner isolation (bola mitigation)."
     },
     {
@@ -7578,7 +7578,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L22",
       "id": "repositories_document_repo_rationale_22",
-      "community": 308,
+      "community": 51,
       "norm_label": "intentionally vulnerable sql query susceptible to sql injection."
     },
     {
@@ -7587,7 +7587,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/document_repo.py",
       "source_location": "L29",
       "id": "repositories_document_repo_rationale_29",
-      "community": 308,
+      "community": 51,
       "norm_label": "hardened query using parameterized sql."
     },
     {
@@ -7596,7 +7596,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/user_repo.py",
       "source_location": "L1",
       "id": "projects_fastapi_security_hardening_src_repositories_user_repo_py_repositories_user_repo",
-      "community": 69,
+      "community": 231,
       "norm_label": "user_repo.py"
     },
     {
@@ -7605,7 +7605,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/user_repo.py",
       "source_location": "L8",
       "id": "projects_fastapi_security_hardening_src_repositories_user_repo_py_repositories_user_repo_userrepository",
-      "community": 69,
+      "community": 231,
       "norm_label": "userrepository"
     },
     {
@@ -7614,7 +7614,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/user_repo.py",
       "source_location": "L9",
       "id": "projects_fastapi_security_hardening_src_repositories_user_repo_py_repositories_user_repo_userrepository_init",
-      "community": 69,
+      "community": 231,
       "norm_label": ".__init__()"
     },
     {
@@ -7623,7 +7623,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/user_repo.py",
       "source_location": "L9",
       "id": "projects_fastapi_security_hardening_src_repositories_user_repo_py_asyncsession",
-      "community": 69,
+      "community": 231,
       "norm_label": "asyncsession"
     },
     {
@@ -7632,7 +7632,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/user_repo.py",
       "source_location": "L12",
       "id": "projects_fastapi_security_hardening_src_repositories_user_repo_py_repositories_user_repo_userrepository_get_by_email",
-      "community": 69,
+      "community": 231,
       "norm_label": ".get_by_email()"
     },
     {
@@ -7641,7 +7641,7 @@
       "source_file": "projects/fastapi-security-hardening/src/repositories/user_repo.py",
       "source_location": "L12",
       "id": "projects_fastapi_security_hardening_src_repositories_user_repo_py_usermodel",
-      "community": 69,
+      "community": 231,
       "norm_label": "usermodel"
     },
     {
@@ -7659,7 +7659,7 @@
       "source_file": "projects/fastapi-security-hardening/src/schemas/common.py",
       "source_location": "L1",
       "id": "projects_fastapi_security_hardening_src_schemas_common_py_schemas_common",
-      "community": 547,
+      "community": 57,
       "norm_label": "common.py"
     },
     {
@@ -7668,7 +7668,7 @@
       "source_file": "projects/fastapi-security-hardening/src/schemas/common.py",
       "source_location": "L7",
       "id": "projects_fastapi_security_hardening_src_schemas_common_py_schemas_common_apiresponse",
-      "community": 547,
+      "community": 57,
       "norm_label": "apiresponse"
     },
     {
@@ -7740,7 +7740,7 @@
       "source_file": "projects/fastapi-security-hardening/src/schemas/webhook.py",
       "source_location": "L1",
       "id": "schemas_webhook",
-      "community": 228,
+      "community": 51,
       "norm_label": "webhook.py"
     },
     {
@@ -7758,7 +7758,7 @@
       "source_file": "projects/fastapi-security-hardening/src/schemas/webhook.py",
       "source_location": "L8",
       "id": "schemas_webhook_webhooktriggerresponse",
-      "community": 228,
+      "community": 51,
       "norm_label": "webhooktriggerresponse"
     },
     {
@@ -8667,7 +8667,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L56",
       "id": "projects_fastapi_starter_architecture_src_core_exceptions_py_core_exceptions_app_exception_handler",
-      "community": 277,
+      "community": 78,
       "norm_label": "app_exception_handler()"
     },
     {
@@ -8676,7 +8676,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L56",
       "id": "projects_fastapi_starter_architecture_src_core_exceptions_py_request",
-      "community": 277,
+      "community": 78,
       "norm_label": "request"
     },
     {
@@ -8685,7 +8685,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L56",
       "id": "projects_fastapi_starter_architecture_src_core_exceptions_py_jsonresponse",
-      "community": 277,
+      "community": 78,
       "norm_label": "jsonresponse"
     },
     {
@@ -8694,7 +8694,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L74",
       "id": "projects_fastapi_starter_architecture_src_core_exceptions_py_core_exceptions_validation_exception_handler",
-      "community": 277,
+      "community": 78,
       "norm_label": "validation_exception_handler()"
     },
     {
@@ -8703,7 +8703,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L74",
       "id": "projects_fastapi_starter_architecture_src_core_exceptions_py_requestvalidationerror",
-      "community": 277,
+      "community": 78,
       "norm_label": "requestvalidationerror"
     },
     {
@@ -8712,7 +8712,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L96",
       "id": "core_exceptions_generic_exception_handler",
-      "community": 277,
+      "community": 78,
       "norm_label": "generic_exception_handler()"
     },
     {
@@ -8730,7 +8730,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L57",
       "id": "core_exceptions_rationale_57",
-      "community": 277,
+      "community": 78,
       "norm_label": "global handler for application exceptions returning standardized error payload."
     },
     {
@@ -8739,7 +8739,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L75",
       "id": "core_exceptions_rationale_75",
-      "community": 277,
+      "community": 78,
       "norm_label": "handler for fastapi request validation errors."
     },
     {
@@ -8748,7 +8748,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/core/exceptions.py",
       "source_location": "L97",
       "id": "core_exceptions_rationale_97",
-      "community": 277,
+      "community": 78,
       "norm_label": "catch-all unexpected error handler."
     },
     {
@@ -8955,7 +8955,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/db/models.py",
       "source_location": "L1",
       "id": "db_models",
-      "community": 60,
+      "community": 111,
       "norm_label": "models.py"
     },
     {
@@ -8964,7 +8964,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/db/models.py",
       "source_location": "L7",
       "id": "db_models_utc_now",
-      "community": 60,
+      "community": 111,
       "norm_label": "utc_now()"
     },
     {
@@ -8973,7 +8973,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/db/models.py",
       "source_location": "L11",
       "id": "db_models_usermodel",
-      "community": 60,
+      "community": 111,
       "norm_label": "usermodel"
     },
     {
@@ -8982,7 +8982,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/db/models.py",
       "source_location": "L28",
       "id": "db_models_itemmodel",
-      "community": 60,
+      "community": 111,
       "norm_label": "itemmodel"
     },
     {
@@ -8991,7 +8991,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/db/models.py",
       "source_location": "L12",
       "id": "db_models_rationale_12",
-      "community": 60,
+      "community": 111,
       "norm_label": "sqlalchemy model for users table."
     },
     {
@@ -9000,7 +9000,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/db/models.py",
       "source_location": "L29",
       "id": "db_models_rationale_29",
-      "community": 60,
+      "community": 111,
       "norm_label": "sqlalchemy model for items table."
     },
     {
@@ -10008,7 +10008,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/services/user_service.py",
       "source_location": "L16",
       "id": "projects_fastapi_starter_architecture_src_services_user_service_py_userrepository",
-      "community": 58,
+      "community": 91,
       "norm_label": "userrepository"
     },
     {
@@ -10026,7 +10026,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/services/user_service.py",
       "source_location": "L19",
       "id": "projects_fastapi_starter_architecture_src_services_user_service_py_usercreate",
-      "community": 58,
+      "community": 91,
       "norm_label": "usercreate"
     },
     {
@@ -10071,7 +10071,7 @@
       "source_file": "projects/fastapi-starter-architecture/src/services/user_service.py",
       "source_location": "L48",
       "id": "projects_fastapi_starter_architecture_src_services_user_service_py_userupdate",
-      "community": 58,
+      "community": 91,
       "norm_label": "userupdate"
     },
     {
@@ -11961,7 +11961,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L1",
       "id": "projects_production_api_design_src_core_exceptions_py_core_exceptions",
-      "community": 63,
+      "community": 154,
       "norm_label": "exceptions.py"
     },
     {
@@ -11970,7 +11970,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L10",
       "id": "core_exceptions_apierror",
-      "community": 63,
+      "community": 154,
       "norm_label": "apierror"
     },
     {
@@ -11979,7 +11979,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L11",
       "id": "core_exceptions_apierror_init",
-      "community": 63,
+      "community": 154,
       "norm_label": ".__init__()"
     },
     {
@@ -11988,7 +11988,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L11",
       "id": "projects_production_api_design_src_core_exceptions_py_any",
-      "community": 63,
+      "community": 154,
       "norm_label": "any"
     },
     {
@@ -12006,7 +12006,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L26",
       "id": "core_exceptions_resourcenotfoundexception_init",
-      "community": 63,
+      "community": 154,
       "norm_label": ".__init__()"
     },
     {
@@ -12015,7 +12015,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L35",
       "id": "core_exceptions_api_error_handler",
-      "community": 63,
+      "community": 154,
       "norm_label": "api_error_handler()"
     },
     {
@@ -12024,7 +12024,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L35",
       "id": "projects_production_api_design_src_core_exceptions_py_request",
-      "community": 63,
+      "community": 154,
       "norm_label": "request"
     },
     {
@@ -12033,7 +12033,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L35",
       "id": "projects_production_api_design_src_core_exceptions_py_jsonresponse",
-      "community": 63,
+      "community": 154,
       "norm_label": "jsonresponse"
     },
     {
@@ -12042,7 +12042,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L51",
       "id": "projects_production_api_design_src_core_exceptions_py_core_exceptions_validation_exception_handler",
-      "community": 63,
+      "community": 154,
       "norm_label": "validation_exception_handler()"
     },
     {
@@ -12051,7 +12051,7 @@
       "source_file": "projects/production-api-design/src/core/exceptions.py",
       "source_location": "L51",
       "id": "projects_production_api_design_src_core_exceptions_py_requestvalidationerror",
-      "community": 63,
+      "community": 154,
       "norm_label": "requestvalidationerror"
     },
     {
@@ -12105,7 +12105,7 @@
       "source_file": "projects/production-api-design/src/main.py",
       "source_location": "L1",
       "id": "projects_production_api_design_src_main_py_src_main",
-      "community": 63,
+      "community": 154,
       "norm_label": "main.py"
     },
     {
@@ -12114,7 +12114,7 @@
       "source_file": "projects/production-api-design/src/main.py",
       "source_location": "L11",
       "id": "projects_production_api_design_src_main_py_src_main_create_application",
-      "community": 63,
+      "community": 154,
       "norm_label": "create_application()"
     },
     {
@@ -12123,7 +12123,7 @@
       "source_file": "projects/production-api-design/src/main.py",
       "source_location": "L11",
       "id": "projects_production_api_design_src_main_py_fastapi",
-      "community": 63,
+      "community": 154,
       "norm_label": "fastapi"
     },
     {
@@ -12177,7 +12177,7 @@
       "source_file": "projects/production-api-design/src/schemas/v2/customer.py",
       "source_location": "L1",
       "id": "v2_customer",
-      "community": 57,
+      "community": 318,
       "norm_label": "customer.py"
     },
     {
@@ -12186,7 +12186,7 @@
       "source_file": "projects/production-api-design/src/schemas/v2/customer.py",
       "source_location": "L5",
       "id": "v2_customer_customerv2create",
-      "community": 57,
+      "community": 318,
       "norm_label": "customerv2create"
     },
     {
@@ -12195,7 +12195,7 @@
       "source_file": "projects/production-api-design/src/schemas/v2/customer.py",
       "source_location": "L13",
       "id": "v2_customer_customerv2update",
-      "community": 57,
+      "community": 318,
       "norm_label": "customerv2update"
     },
     {
@@ -12402,7 +12402,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/api_keys.py",
       "source_location": "L1",
       "id": "v1_api_keys",
-      "community": 69,
+      "community": 244,
       "norm_label": "api_keys.py"
     },
     {
@@ -12411,7 +12411,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/api_keys.py",
       "source_location": "L13",
       "id": "v1_api_keys_create_api_key",
-      "community": 69,
+      "community": 244,
       "norm_label": "create_api_key()"
     },
     {
@@ -12420,7 +12420,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/api_keys.py",
       "source_location": "L13",
       "id": "projects_production_auth_platform_src_api_v1_api_keys_py_apikeycreaterequest",
-      "community": 69,
+      "community": 244,
       "norm_label": "apikeycreaterequest"
     },
     {
@@ -12429,7 +12429,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/api_keys.py",
       "source_location": "L13",
       "id": "projects_production_auth_platform_src_api_v1_api_keys_py_usermodel",
-      "community": 69,
+      "community": 244,
       "norm_label": "usermodel"
     },
     {
@@ -12438,7 +12438,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/api_keys.py",
       "source_location": "L13",
       "id": "projects_production_auth_platform_src_api_v1_api_keys_py_apikeyservice",
-      "community": 69,
+      "community": 244,
       "norm_label": "apikeyservice"
     },
     {
@@ -12447,7 +12447,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/api_keys.py",
       "source_location": "L23",
       "id": "v1_api_keys_list_api_keys",
-      "community": 69,
+      "community": 244,
       "norm_label": "list_api_keys()"
     },
     {
@@ -12456,7 +12456,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L1",
       "id": "projects_production_auth_platform_src_api_v1_auth_py_v1_auth",
-      "community": 109,
+      "community": 58,
       "norm_label": "auth.py"
     },
     {
@@ -12465,7 +12465,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L13",
       "id": "v1_auth_register",
-      "community": 109,
+      "community": 58,
       "norm_label": "register()"
     },
     {
@@ -12474,7 +12474,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L13",
       "id": "projects_production_auth_platform_src_api_v1_auth_py_registerrequest",
-      "community": 109,
+      "community": 58,
       "norm_label": "registerrequest"
     },
     {
@@ -12483,7 +12483,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L13",
       "id": "projects_production_auth_platform_src_api_v1_auth_py_authservice",
-      "community": 109,
+      "community": 58,
       "norm_label": "authservice"
     },
     {
@@ -12492,7 +12492,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L22",
       "id": "projects_production_auth_platform_src_api_v1_auth_py_v1_auth_login",
-      "community": 109,
+      "community": 58,
       "norm_label": "login()"
     },
     {
@@ -12501,7 +12501,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L22",
       "id": "projects_production_auth_platform_src_api_v1_auth_py_loginrequest",
-      "community": 109,
+      "community": 58,
       "norm_label": "loginrequest"
     },
     {
@@ -12510,7 +12510,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L31",
       "id": "v1_auth_refresh_tokens",
-      "community": 109,
+      "community": 58,
       "norm_label": "refresh_tokens()"
     },
     {
@@ -12519,7 +12519,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L31",
       "id": "projects_production_auth_platform_src_api_v1_auth_py_refreshtokenrequest",
-      "community": 109,
+      "community": 58,
       "norm_label": "refreshtokenrequest"
     },
     {
@@ -12528,7 +12528,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L40",
       "id": "v1_auth_logout",
-      "community": 109,
+      "community": 58,
       "norm_label": "logout()"
     },
     {
@@ -12537,7 +12537,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L40",
       "id": "projects_production_auth_platform_src_api_v1_auth_py_usermodel",
-      "community": 109,
+      "community": 58,
       "norm_label": "usermodel"
     },
     {
@@ -12546,7 +12546,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L51",
       "id": "v1_auth_logout_all",
-      "community": 109,
+      "community": 58,
       "norm_label": "logout_all()"
     },
     {
@@ -12555,7 +12555,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/auth.py",
       "source_location": "L60",
       "id": "v1_auth_get_me",
-      "community": 109,
+      "community": 58,
       "norm_label": "get_me()"
     },
     {
@@ -12636,7 +12636,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/oauth.py",
       "source_location": "L48",
       "id": "v1_oauth_oauth_callback",
-      "community": 109,
+      "community": 66,
       "norm_label": "oauth_callback()"
     },
     {
@@ -12645,7 +12645,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/oauth.py",
       "source_location": "L48",
       "id": "oauthcallbackrequest",
-      "community": 109,
+      "community": 66,
       "norm_label": "oauthcallbackrequest"
     },
     {
@@ -12654,7 +12654,7 @@
       "source_file": "projects/production-auth-platform/src/api/v1/oauth.py",
       "source_location": "L48",
       "id": "projects_production_auth_platform_src_api_v1_oauth_py_authservice",
-      "community": 109,
+      "community": 66,
       "norm_label": "authservice"
     },
     {
@@ -13176,7 +13176,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L1",
       "id": "core_redis",
-      "community": 66,
+      "community": 158,
       "norm_label": "redis.py"
     },
     {
@@ -13185,7 +13185,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L13",
       "id": "core_redis_asyncredisstore",
-      "community": 66,
+      "community": 158,
       "norm_label": "asyncredisstore"
     },
     {
@@ -13194,7 +13194,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L14",
       "id": "core_redis_asyncredisstore_init",
-      "community": 66,
+      "community": 158,
       "norm_label": ".__init__()"
     },
     {
@@ -13203,7 +13203,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L19",
       "id": "core_redis_asyncredisstore_get",
-      "community": 66,
+      "community": 158,
       "norm_label": ".get()"
     },
     {
@@ -13212,7 +13212,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L23",
       "id": "core_redis_asyncredisstore_set",
-      "community": 66,
+      "community": 158,
       "norm_label": ".set()"
     },
     {
@@ -13221,7 +13221,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L30",
       "id": "core_redis_asyncredisstore_delete",
-      "community": 66,
+      "community": 158,
       "norm_label": ".delete()"
     },
     {
@@ -13230,7 +13230,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L35",
       "id": "core_redis_asyncredisstore_sadd",
-      "community": 66,
+      "community": 158,
       "norm_label": ".sadd()"
     },
     {
@@ -13239,7 +13239,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L40",
       "id": "core_redis_asyncredisstore_sismember",
-      "community": 66,
+      "community": 158,
       "norm_label": ".sismember()"
     },
     {
@@ -13248,7 +13248,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L43",
       "id": "core_redis_asyncredisstore_smembers",
-      "community": 66,
+      "community": 158,
       "norm_label": ".smembers()"
     },
     {
@@ -13257,7 +13257,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L46",
       "id": "core_redis_asyncredisstore_purge_expired",
-      "community": 66,
+      "community": 158,
       "norm_label": "._purge_expired()"
     },
     {
@@ -13266,7 +13266,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L57",
       "id": "core_redis_get_redis_client",
-      "community": 66,
+      "community": 158,
       "norm_label": "get_redis_client()"
     },
     {
@@ -13275,7 +13275,7 @@
       "source_file": "projects/production-auth-platform/src/core/redis.py",
       "source_location": "L1",
       "id": "core_redis_rationale_1",
-      "community": 66,
+      "community": 158,
       "norm_label": "async redis session & token blacklist provider ================================="
     },
     {
@@ -13437,7 +13437,7 @@
       "source_file": "projects/production-auth-platform/src/main.py",
       "source_location": "L1",
       "id": "projects_production_auth_platform_src_main_py_src_main",
-      "community": 222,
+      "community": 73,
       "norm_label": "main.py"
     },
     {
@@ -13446,7 +13446,7 @@
       "source_file": "projects/production-auth-platform/src/main.py",
       "source_location": "L15",
       "id": "projects_production_auth_platform_src_main_py_src_main_lifespan",
-      "community": 222,
+      "community": 73,
       "norm_label": "lifespan()"
     },
     {
@@ -13455,7 +13455,7 @@
       "source_file": "projects/production-auth-platform/src/main.py",
       "source_location": "L15",
       "id": "projects_production_auth_platform_src_main_py_fastapi",
-      "community": 222,
+      "community": 73,
       "norm_label": "fastapi"
     },
     {
@@ -13464,7 +13464,7 @@
       "source_file": "projects/production-auth-platform/src/main.py",
       "source_location": "L21",
       "id": "projects_production_auth_platform_src_main_py_src_main_create_application",
-      "community": 222,
+      "community": 73,
       "norm_label": "create_application()"
     },
     {
@@ -13536,7 +13536,7 @@
       "source_file": "projects/production-auth-platform/src/models/user.py",
       "source_location": "L1",
       "id": "projects_production_auth_platform_src_models_user_py_models_user",
-      "community": 61,
+      "community": 14,
       "norm_label": "user.py"
     },
     {
@@ -13545,7 +13545,7 @@
       "source_file": "projects/production-auth-platform/src/models/user.py",
       "source_location": "L7",
       "id": "projects_production_auth_platform_src_models_user_py_models_user_userrole",
-      "community": 61,
+      "community": 14,
       "norm_label": "userrole"
     },
     {
@@ -13554,7 +13554,7 @@
       "source_file": "projects/production-auth-platform/src/models/user.py",
       "source_location": "L15",
       "id": "projects_production_auth_platform_src_models_user_py_models_user_usermodel",
-      "community": 61,
+      "community": 14,
       "norm_label": "usermodel"
     },
     {
@@ -13914,7 +13914,7 @@
       "source_file": "projects/production-auth-platform/src/schemas/oauth.py",
       "source_location": "L1",
       "id": "schemas_oauth",
-      "community": 544,
+      "community": 57,
       "norm_label": "oauth.py"
     },
     {
@@ -13923,7 +13923,7 @@
       "source_file": "projects/production-auth-platform/src/schemas/oauth.py",
       "source_location": "L4",
       "id": "schemas_oauth_oauthauthorizeresponse",
-      "community": 544,
+      "community": 57,
       "norm_label": "oauthauthorizeresponse"
     },
     {
@@ -13932,7 +13932,7 @@
       "source_file": "projects/production-auth-platform/src/schemas/oauth.py",
       "source_location": "L11",
       "id": "schemas_oauth_oauthcallbackrequest",
-      "community": 544,
+      "community": 57,
       "norm_label": "oauthcallbackrequest"
     },
     {
@@ -13941,7 +13941,7 @@
       "source_file": "projects/production-auth-platform/src/schemas/user.py",
       "source_location": "L1",
       "id": "projects_production_auth_platform_src_schemas_user_py_schemas_user",
-      "community": 548,
+      "community": 57,
       "norm_label": "user.py"
     },
     {
@@ -13950,7 +13950,7 @@
       "source_file": "projects/production-auth-platform/src/schemas/user.py",
       "source_location": "L7",
       "id": "schemas_user_userprofileout",
-      "community": 548,
+      "community": 57,
       "norm_label": "userprofileout"
     },
     {
@@ -13968,7 +13968,7 @@
       "source_file": "projects/production-auth-platform/src/services/api_key_service.py",
       "source_location": "L1",
       "id": "services_api_key_service",
-      "community": 90,
+      "community": 66,
       "norm_label": "api_key_service.py"
     },
     {
@@ -13977,7 +13977,7 @@
       "source_file": "projects/production-auth-platform/src/services/api_key_service.py",
       "source_location": "L10",
       "id": "services_api_key_service_hash_api_key",
-      "community": 90,
+      "community": 66,
       "norm_label": "hash_api_key()"
     },
     {
@@ -14040,7 +14040,7 @@
       "source_file": "projects/production-auth-platform/src/services/api_key_service.py",
       "source_location": "L41",
       "id": "services_api_key_service_apikeyservice_verify_key",
-      "community": 90,
+      "community": 66,
       "norm_label": ".verify_key()"
     },
     {
@@ -14049,7 +14049,7 @@
       "source_file": "projects/production-auth-platform/src/services/api_key_service.py",
       "source_location": "L41",
       "id": "projects_production_auth_platform_src_services_api_key_service_py_apikeymodel",
-      "community": 90,
+      "community": 66,
       "norm_label": "apikeymodel"
     },
     {
@@ -14058,7 +14058,7 @@
       "source_file": "projects/production-auth-platform/src/services/api_key_service.py",
       "source_location": "L45",
       "id": "services_api_key_service_apikeyservice_list_keys",
-      "community": 90,
+      "community": 66,
       "norm_label": ".list_keys()"
     },
     {
@@ -14778,7 +14778,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L1",
       "id": "projects_production_caching_layer_src_core_exceptions_py_core_exceptions",
-      "community": 54,
+      "community": 109,
       "norm_label": "exceptions.py"
     },
     {
@@ -14787,7 +14787,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L10",
       "id": "projects_production_caching_layer_src_core_exceptions_py_core_exceptions_appexception",
-      "community": 54,
+      "community": 109,
       "norm_label": "appexception"
     },
     {
@@ -14796,7 +14796,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L11",
       "id": "projects_production_caching_layer_src_core_exceptions_py_core_exceptions_appexception_init",
-      "community": 54,
+      "community": 109,
       "norm_label": ".__init__()"
     },
     {
@@ -14805,7 +14805,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L11",
       "id": "projects_production_caching_layer_src_core_exceptions_py_any",
-      "community": 54,
+      "community": 109,
       "norm_label": "any"
     },
     {
@@ -14814,7 +14814,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L25",
       "id": "projects_production_caching_layer_src_core_exceptions_py_core_exceptions_notfoundexception",
-      "community": 54,
+      "community": 109,
       "norm_label": "notfoundexception"
     },
     {
@@ -14823,7 +14823,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L26",
       "id": "projects_production_caching_layer_src_core_exceptions_py_core_exceptions_notfoundexception_init",
-      "community": 54,
+      "community": 109,
       "norm_label": ".__init__()"
     },
     {
@@ -14832,7 +14832,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L34",
       "id": "projects_production_caching_layer_src_core_exceptions_py_core_exceptions_app_exception_handler",
-      "community": 54,
+      "community": 109,
       "norm_label": "app_exception_handler()"
     },
     {
@@ -14841,7 +14841,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L34",
       "id": "projects_production_caching_layer_src_core_exceptions_py_request",
-      "community": 54,
+      "community": 109,
       "norm_label": "request"
     },
     {
@@ -14850,7 +14850,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L34",
       "id": "projects_production_caching_layer_src_core_exceptions_py_jsonresponse",
-      "community": 54,
+      "community": 109,
       "norm_label": "jsonresponse"
     },
     {
@@ -14859,7 +14859,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L51",
       "id": "projects_production_caching_layer_src_core_exceptions_py_core_exceptions_validation_exception_handler",
-      "community": 54,
+      "community": 109,
       "norm_label": "validation_exception_handler()"
     },
     {
@@ -14868,7 +14868,7 @@
       "source_file": "projects/production-caching-layer/src/core/exceptions.py",
       "source_location": "L51",
       "id": "projects_production_caching_layer_src_core_exceptions_py_requestvalidationerror",
-      "community": 54,
+      "community": 109,
       "norm_label": "requestvalidationerror"
     },
     {
@@ -15228,7 +15228,7 @@
       "source_file": "projects/production-caching-layer/src/models/product.py",
       "source_location": "L1",
       "id": "models_product",
-      "community": 56,
+      "community": 14,
       "norm_label": "product.py"
     },
     {
@@ -15237,7 +15237,7 @@
       "source_file": "projects/production-caching-layer/src/models/product.py",
       "source_location": "L5",
       "id": "models_product_productmodel",
-      "community": 56,
+      "community": 14,
       "norm_label": "productmodel"
     },
     {
@@ -15255,7 +15255,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L1",
       "id": "projects_production_caching_layer_src_repositories_base_py_repositories_base",
-      "community": 60,
+      "community": 216,
       "norm_label": "base.py"
     },
     {
@@ -15264,7 +15264,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L9",
       "id": "projects_production_caching_layer_src_repositories_base_py_repositories_base_baserepository",
-      "community": 60,
+      "community": 216,
       "norm_label": "baserepository"
     },
     {
@@ -15273,7 +15273,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L10",
       "id": "projects_production_caching_layer_src_repositories_base_py_repositories_base_baserepository_init",
-      "community": 60,
+      "community": 216,
       "norm_label": ".__init__()"
     },
     {
@@ -15282,7 +15282,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L10",
       "id": "projects_production_caching_layer_src_repositories_base_py_modeltype",
-      "community": 60,
+      "community": 216,
       "norm_label": "modeltype"
     },
     {
@@ -15291,7 +15291,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L10",
       "id": "projects_production_caching_layer_src_repositories_base_py_asyncsession",
-      "community": 60,
+      "community": 216,
       "norm_label": "asyncsession"
     },
     {
@@ -15300,7 +15300,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L14",
       "id": "projects_production_caching_layer_src_repositories_base_py_repositories_base_baserepository_get_by_id",
-      "community": 60,
+      "community": 216,
       "norm_label": ".get_by_id()"
     },
     {
@@ -15309,7 +15309,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L19",
       "id": "projects_production_caching_layer_src_repositories_base_py_repositories_base_baserepository_list",
-      "community": 60,
+      "community": 216,
       "norm_label": ".list()"
     },
     {
@@ -15318,7 +15318,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L24",
       "id": "projects_production_caching_layer_src_repositories_base_py_repositories_base_baserepository_create",
-      "community": 60,
+      "community": 216,
       "norm_label": ".create()"
     },
     {
@@ -15327,7 +15327,7 @@
       "source_file": "projects/production-caching-layer/src/repositories/base.py",
       "source_location": "L24",
       "id": "projects_production_caching_layer_src_repositories_base_py_any",
-      "community": 60,
+      "community": 216,
       "norm_label": "any"
     },
     {
@@ -15417,7 +15417,7 @@
       "source_file": "projects/production-caching-layer/src/schemas/common.py",
       "source_location": "L1",
       "id": "projects_production_caching_layer_src_schemas_common_py_schemas_common",
-      "community": 549,
+      "community": 57,
       "norm_label": "common.py"
     },
     {
@@ -15426,7 +15426,7 @@
       "source_file": "projects/production-caching-layer/src/schemas/common.py",
       "source_location": "L7",
       "id": "projects_production_caching_layer_src_schemas_common_py_schemas_common_apiresponse",
-      "community": 549,
+      "community": 57,
       "norm_label": "apiresponse"
     },
     {
@@ -16479,7 +16479,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L1",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_auth_py_v1_auth",
-      "community": 109,
+      "community": 58,
       "norm_label": "auth.py"
     },
     {
@@ -16488,7 +16488,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_auth_py_v1_auth_login",
-      "community": 109,
+      "community": 58,
       "norm_label": "login()"
     },
     {
@@ -16497,7 +16497,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_auth_py_loginrequest",
-      "community": 109,
+      "community": 58,
       "norm_label": "loginrequest"
     },
     {
@@ -16506,7 +16506,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_auth_py_authservice",
-      "community": 109,
+      "community": 58,
       "norm_label": "authservice"
     },
     {
@@ -16515,7 +16515,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L22",
       "id": "v1_auth_refresh",
-      "community": 109,
+      "community": 58,
       "norm_label": "refresh()"
     },
     {
@@ -16524,7 +16524,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L22",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_auth_py_refreshtokenrequest",
-      "community": 109,
+      "community": 58,
       "norm_label": "refreshtokenrequest"
     },
     {
@@ -16533,7 +16533,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L31",
       "id": "v1_auth_me",
-      "community": 109,
+      "community": 58,
       "norm_label": "me()"
     },
     {
@@ -16542,7 +16542,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/auth.py",
       "source_location": "L31",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_auth_py_usermodel",
-      "community": 109,
+      "community": 58,
       "norm_label": "usermodel"
     },
     {
@@ -16551,7 +16551,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L1",
       "id": "v1_resources",
-      "community": 85,
+      "community": 55,
       "norm_label": "resources.py"
     },
     {
@@ -16560,7 +16560,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L15",
       "id": "v1_resources_create_resource",
-      "community": 85,
+      "community": 55,
       "norm_label": "create_resource()"
     },
     {
@@ -16569,7 +16569,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L15",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_resources_py_resourcecreate",
-      "community": 85,
+      "community": 55,
       "norm_label": "resourcecreate"
     },
     {
@@ -16578,7 +16578,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L15",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_resources_py_resourceservice",
-      "community": 85,
+      "community": 55,
       "norm_label": "resourceservice"
     },
     {
@@ -16587,7 +16587,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L15",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_resources_py_usermodel",
-      "community": 85,
+      "community": 55,
       "norm_label": "usermodel"
     },
     {
@@ -16596,7 +16596,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L25",
       "id": "v1_resources_list_resources",
-      "community": 85,
+      "community": 55,
       "norm_label": "list_resources()"
     },
     {
@@ -16605,7 +16605,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L25",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_resources_py_resourcestatus",
-      "community": 85,
+      "community": 55,
       "norm_label": "resourcestatus"
     },
     {
@@ -16614,7 +16614,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L44",
       "id": "v1_resources_get_resource",
-      "community": 85,
+      "community": 55,
       "norm_label": "get_resource()"
     },
     {
@@ -16623,7 +16623,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L53",
       "id": "v1_resources_update_resource",
-      "community": 85,
+      "community": 55,
       "norm_label": "update_resource()"
     },
     {
@@ -16632,7 +16632,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L53",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_resources_py_resourceupdate",
-      "community": 85,
+      "community": 55,
       "norm_label": "resourceupdate"
     },
     {
@@ -16641,7 +16641,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/resources.py",
       "source_location": "L64",
       "id": "v1_resources_delete_resource",
-      "community": 85,
+      "community": 55,
       "norm_label": "delete_resource()"
     },
     {
@@ -16650,7 +16650,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L1",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_v1_users",
-      "community": 91,
+      "community": 222,
       "norm_label": "users.py"
     },
     {
@@ -16659,7 +16659,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_v1_users_create_user",
-      "community": 91,
+      "community": 222,
       "norm_label": "create_user()"
     },
     {
@@ -16668,7 +16668,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_usercreate",
-      "community": 91,
+      "community": 222,
       "norm_label": "usercreate"
     },
     {
@@ -16677,7 +16677,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_userservice",
-      "community": 91,
+      "community": 222,
       "norm_label": "userservice"
     },
     {
@@ -16686,7 +16686,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L22",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_v1_users_list_users",
-      "community": 91,
+      "community": 222,
       "norm_label": "list_users()"
     },
     {
@@ -16695,7 +16695,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L22",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_usermodel",
-      "community": 91,
+      "community": 222,
       "norm_label": "usermodel"
     },
     {
@@ -16704,7 +16704,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L41",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_v1_users_get_user",
-      "community": 91,
+      "community": 222,
       "norm_label": "get_user()"
     },
     {
@@ -16713,7 +16713,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L51",
       "id": "v1_users_update_user_role",
-      "community": 91,
+      "community": 222,
       "norm_label": "update_user_role()"
     },
     {
@@ -16722,7 +16722,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v1/users.py",
       "source_location": "L51",
       "id": "projects_production_fastapi_boilerplate_src_api_v1_users_py_userupdate",
-      "community": 91,
+      "community": 222,
       "norm_label": "userupdate"
     },
     {
@@ -16740,7 +16740,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v2/resources.py",
       "source_location": "L1",
       "id": "v2_resources",
-      "community": 85,
+      "community": 55,
       "norm_label": "resources.py"
     },
     {
@@ -16749,7 +16749,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v2/resources.py",
       "source_location": "L14",
       "id": "v2_resources_list_resources_v2",
-      "community": 85,
+      "community": 55,
       "norm_label": "list_resources_v2()"
     },
     {
@@ -16758,7 +16758,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v2/resources.py",
       "source_location": "L14",
       "id": "projects_production_fastapi_boilerplate_src_api_v2_resources_py_resourcestatus",
-      "community": 85,
+      "community": 55,
       "norm_label": "resourcestatus"
     },
     {
@@ -16767,7 +16767,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v2/resources.py",
       "source_location": "L14",
       "id": "projects_production_fastapi_boilerplate_src_api_v2_resources_py_resourceservice",
-      "community": 85,
+      "community": 55,
       "norm_label": "resourceservice"
     },
     {
@@ -16776,7 +16776,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/api/v2/resources.py",
       "source_location": "L20",
       "id": "v2_resources_rationale_20",
-      "community": 85,
+      "community": 55,
       "norm_label": "api v2 endpoint demonstrating backward-compatible schema enhancements."
     },
     {
@@ -16839,7 +16839,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L1",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_core_dependencies",
-      "community": 55,
+      "community": 66,
       "norm_label": "dependencies.py"
     },
     {
@@ -16848,7 +16848,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L15",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_core_dependencies_get_user_repository",
-      "community": 55,
+      "community": 66,
       "norm_label": "get_user_repository()"
     },
     {
@@ -16857,7 +16857,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L15",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_asyncsession",
-      "community": 55,
+      "community": 66,
       "norm_label": "asyncsession"
     },
     {
@@ -16866,7 +16866,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L15",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_userrepository",
-      "community": 55,
+      "community": 66,
       "norm_label": "userrepository"
     },
     {
@@ -16875,7 +16875,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L19",
       "id": "core_dependencies_get_resource_repository",
-      "community": 55,
+      "community": 66,
       "norm_label": "get_resource_repository()"
     },
     {
@@ -16884,7 +16884,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L19",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_resourcerepository",
-      "community": 55,
+      "community": 66,
       "norm_label": "resourcerepository"
     },
     {
@@ -16893,7 +16893,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L23",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_core_dependencies_get_auth_service",
-      "community": 55,
+      "community": 66,
       "norm_label": "get_auth_service()"
     },
     {
@@ -16902,7 +16902,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L23",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_authservice",
-      "community": 55,
+      "community": 66,
       "norm_label": "authservice"
     },
     {
@@ -16911,7 +16911,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L27",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_core_dependencies_get_user_service",
-      "community": 55,
+      "community": 66,
       "norm_label": "get_user_service()"
     },
     {
@@ -16920,7 +16920,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L27",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_userservice",
-      "community": 55,
+      "community": 66,
       "norm_label": "userservice"
     },
     {
@@ -16929,7 +16929,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L31",
       "id": "core_dependencies_get_resource_service",
-      "community": 55,
+      "community": 66,
       "norm_label": "get_resource_service()"
     },
     {
@@ -16938,7 +16938,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L31",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_resourceservice",
-      "community": 55,
+      "community": 66,
       "norm_label": "resourceservice"
     },
     {
@@ -16947,7 +16947,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L35",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_core_dependencies_get_current_user",
-      "community": 55,
+      "community": 66,
       "norm_label": "get_current_user()"
     },
     {
@@ -16956,7 +16956,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L35",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_usermodel",
-      "community": 55,
+      "community": 66,
       "norm_label": "usermodel"
     },
     {
@@ -16965,7 +16965,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L56",
       "id": "core_dependencies_require_role",
-      "community": 55,
+      "community": 66,
       "norm_label": "require_role()"
     },
     {
@@ -16974,7 +16974,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L56",
       "id": "projects_production_fastapi_boilerplate_src_core_dependencies_py_userrole",
-      "community": 55,
+      "community": 66,
       "norm_label": "userrole"
     },
     {
@@ -16983,7 +16983,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L39",
       "id": "core_dependencies_rationale_39",
-      "community": 55,
+      "community": 66,
       "norm_label": "dependency ensuring caller provides a valid bearer jwt."
     },
     {
@@ -16992,7 +16992,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/dependencies.py",
       "source_location": "L57",
       "id": "core_dependencies_rationale_57",
-      "community": 55,
+      "community": 66,
       "norm_label": "dependency factory enforcing role-based authorization."
     },
     {
@@ -17073,7 +17073,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/core/exceptions.py",
       "source_location": "L44",
       "id": "projects_production_fastapi_boilerplate_src_core_exceptions_py_core_exceptions_forbiddenexception",
-      "community": 55,
+      "community": 66,
       "norm_label": "forbiddenexception"
     },
     {
@@ -17496,7 +17496,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/models/resource.py",
       "source_location": "L1",
       "id": "models_resource",
-      "community": 85,
+      "community": 55,
       "norm_label": "resource.py"
     },
     {
@@ -17505,7 +17505,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/models/resource.py",
       "source_location": "L7",
       "id": "models_resource_resourcestatus",
-      "community": 85,
+      "community": 55,
       "norm_label": "resourcestatus"
     },
     {
@@ -17523,7 +17523,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/models/user.py",
       "source_location": "L1",
       "id": "projects_production_fastapi_boilerplate_src_models_user_py_models_user",
-      "community": 69,
+      "community": 66,
       "norm_label": "user.py"
     },
     {
@@ -17532,7 +17532,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/models/user.py",
       "source_location": "L7",
       "id": "projects_production_fastapi_boilerplate_src_models_user_py_models_user_userrole",
-      "community": 55,
+      "community": 66,
       "norm_label": "userrole"
     },
     {
@@ -17541,7 +17541,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/models/user.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_models_user_py_models_user_usermodel",
-      "community": 69,
+      "community": 66,
       "norm_label": "usermodel"
     },
     {
@@ -17748,7 +17748,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/repositories/user_repo.py",
       "source_location": "L1",
       "id": "projects_production_fastapi_boilerplate_src_repositories_user_repo_py_repositories_user_repo",
-      "community": 58,
+      "community": 91,
       "norm_label": "user_repo.py"
     },
     {
@@ -17757,7 +17757,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/repositories/user_repo.py",
       "source_location": "L8",
       "id": "projects_production_fastapi_boilerplate_src_repositories_user_repo_py_repositories_user_repo_userrepository",
-      "community": 58,
+      "community": 91,
       "norm_label": "userrepository"
     },
     {
@@ -17766,7 +17766,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/repositories/user_repo.py",
       "source_location": "L9",
       "id": "projects_production_fastapi_boilerplate_src_repositories_user_repo_py_repositories_user_repo_userrepository_init",
-      "community": 69,
+      "community": 91,
       "norm_label": ".__init__()"
     },
     {
@@ -17775,7 +17775,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/repositories/user_repo.py",
       "source_location": "L9",
       "id": "projects_production_fastapi_boilerplate_src_repositories_user_repo_py_asyncsession",
-      "community": 69,
+      "community": 91,
       "norm_label": "asyncsession"
     },
     {
@@ -17784,7 +17784,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/repositories/user_repo.py",
       "source_location": "L12",
       "id": "projects_production_fastapi_boilerplate_src_repositories_user_repo_py_repositories_user_repo_userrepository_get_by_email",
-      "community": 58,
+      "community": 91,
       "norm_label": ".get_by_email()"
     },
     {
@@ -17793,7 +17793,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/repositories/user_repo.py",
       "source_location": "L12",
       "id": "projects_production_fastapi_boilerplate_src_repositories_user_repo_py_usermodel",
-      "community": 58,
+      "community": 91,
       "norm_label": "usermodel"
     },
     {
@@ -17802,7 +17802,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/repositories/user_repo.py",
       "source_location": "L17",
       "id": "projects_production_fastapi_boilerplate_src_repositories_user_repo_py_repositories_user_repo_userrepository_get_by_username",
-      "community": 58,
+      "community": 91,
       "norm_label": ".get_by_username()"
     },
     {
@@ -17874,7 +17874,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/schemas/common.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_schemas_common_py_schemas_common_paginatedresponse",
-      "community": 85,
+      "community": 55,
       "norm_label": "paginatedresponse"
     },
     {
@@ -17991,7 +17991,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L1",
       "id": "projects_production_fastapi_boilerplate_src_services_auth_service_py_services_auth_service",
-      "community": 109,
+      "community": 66,
       "norm_label": "auth_service.py"
     },
     {
@@ -18000,7 +18000,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L10",
       "id": "projects_production_fastapi_boilerplate_src_services_auth_service_py_services_auth_service_authservice",
-      "community": 109,
+      "community": 66,
       "norm_label": "authservice"
     },
     {
@@ -18009,7 +18009,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L11",
       "id": "projects_production_fastapi_boilerplate_src_services_auth_service_py_services_auth_service_authservice_init",
-      "community": 109,
+      "community": 66,
       "norm_label": ".__init__()"
     },
     {
@@ -18018,7 +18018,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L11",
       "id": "projects_production_fastapi_boilerplate_src_services_auth_service_py_userrepository",
-      "community": 109,
+      "community": 66,
       "norm_label": "userrepository"
     },
     {
@@ -18027,7 +18027,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L14",
       "id": "services_auth_service_authservice_authenticate",
-      "community": 93,
+      "community": 66,
       "norm_label": ".authenticate()"
     },
     {
@@ -18036,7 +18036,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L14",
       "id": "projects_production_fastapi_boilerplate_src_services_auth_service_py_loginrequest",
-      "community": 93,
+      "community": 66,
       "norm_label": "loginrequest"
     },
     {
@@ -18045,7 +18045,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L14",
       "id": "tokenresponse",
-      "community": 93,
+      "community": 66,
       "norm_label": "tokenresponse"
     },
     {
@@ -18054,7 +18054,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/auth_service.py",
       "source_location": "L43",
       "id": "services_auth_service_authservice_refresh",
-      "community": 93,
+      "community": 66,
       "norm_label": ".refresh()"
     },
     {
@@ -18216,7 +18216,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/user_service.py",
       "source_location": "L10",
       "id": "projects_production_fastapi_boilerplate_src_services_user_service_py_userrepository",
-      "community": 58,
+      "community": 91,
       "norm_label": "userrepository"
     },
     {
@@ -18234,7 +18234,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/user_service.py",
       "source_location": "L13",
       "id": "projects_production_fastapi_boilerplate_src_services_user_service_py_usercreate",
-      "community": 58,
+      "community": 91,
       "norm_label": "usercreate"
     },
     {
@@ -18279,7 +18279,7 @@
       "source_file": "projects/production-fastapi-boilerplate/src/services/user_service.py",
       "source_location": "L41",
       "id": "projects_production_fastapi_boilerplate_src_services_user_service_py_userupdate",
-      "community": 58,
+      "community": 91,
       "norm_label": "userupdate"
     },
     {
@@ -19422,7 +19422,7 @@
       "source_file": "projects/production-postgresql-api/src/models/base.py",
       "source_location": "L1",
       "id": "projects_production_postgresql_api_src_models_base_py_models_base",
-      "community": 61,
+      "community": 14,
       "norm_label": "base.py"
     },
     {
@@ -19431,7 +19431,7 @@
       "source_file": "projects/production-postgresql-api/src/models/base.py",
       "source_location": "L6",
       "id": "projects_production_postgresql_api_src_models_base_py_models_base_utc_now",
-      "community": 61,
+      "community": 14,
       "norm_label": "utc_now()"
     },
     {
@@ -19449,7 +19449,7 @@
       "source_file": "projects/production-postgresql-api/src/models/base.py",
       "source_location": "L14",
       "id": "projects_production_postgresql_api_src_models_base_py_models_base_timestampmixin",
-      "community": 61,
+      "community": 14,
       "norm_label": "timestampmixin"
     },
     {
@@ -19458,7 +19458,7 @@
       "source_file": "projects/production-postgresql-api/src/models/base.py",
       "source_location": "L20",
       "id": "models_base_softdeletemixin",
-      "community": 61,
+      "community": 14,
       "norm_label": "softdeletemixin"
     },
     {
@@ -19467,7 +19467,7 @@
       "source_file": "projects/production-postgresql-api/src/models/base.py",
       "source_location": "L15",
       "id": "models_base_rationale_15",
-      "community": 61,
+      "community": 14,
       "norm_label": "standard audit timestamps for production data governance."
     },
     {
@@ -19476,7 +19476,7 @@
       "source_file": "projects/production-postgresql-api/src/models/base.py",
       "source_location": "L21",
       "id": "models_base_rationale_21",
-      "community": 61,
+      "community": 14,
       "norm_label": "soft deletion support enabling non-destructive archiving and recovery."
     },
     {
@@ -19485,7 +19485,7 @@
       "source_file": "projects/production-postgresql-api/src/models/organization.py",
       "source_location": "L1",
       "id": "models_organization",
-      "community": 61,
+      "community": 228,
       "norm_label": "organization.py"
     },
     {
@@ -19494,7 +19494,7 @@
       "source_file": "projects/production-postgresql-api/src/models/organization.py",
       "source_location": "L7",
       "id": "models_organization_orgtier",
-      "community": 61,
+      "community": 228,
       "norm_label": "orgtier"
     },
     {
@@ -19539,7 +19539,7 @@
       "source_file": "projects/production-postgresql-api/src/models/project.py",
       "source_location": "L23",
       "id": "models_project_projectmodel",
-      "community": 71,
+      "community": 14,
       "norm_label": "projectmodel"
     },
     {
@@ -19557,7 +19557,7 @@
       "source_file": "projects/production-postgresql-api/src/models/task.py",
       "source_location": "L1",
       "id": "models_task",
-      "community": 61,
+      "community": 14,
       "norm_label": "task.py"
     },
     {
@@ -19566,7 +19566,7 @@
       "source_file": "projects/production-postgresql-api/src/models/task.py",
       "source_location": "L17",
       "id": "models_task_taskstatus",
-      "community": 61,
+      "community": 14,
       "norm_label": "taskstatus"
     },
     {
@@ -19575,7 +19575,7 @@
       "source_file": "projects/production-postgresql-api/src/models/task.py",
       "source_location": "L24",
       "id": "models_task_taskmodel",
-      "community": 61,
+      "community": 14,
       "norm_label": "taskmodel"
     },
     {
@@ -19584,7 +19584,7 @@
       "source_file": "projects/production-postgresql-api/src/models/task.py",
       "source_location": "L1",
       "id": "models_task_rationale_1",
-      "community": 61,
+      "community": 14,
       "norm_label": "task model with advanced index strategies ======================================"
     },
     {
@@ -19773,7 +19773,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L1",
       "id": "repositories_project_repo",
-      "community": 71,
+      "community": 213,
       "norm_label": "project_repo.py"
     },
     {
@@ -19782,7 +19782,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L18",
       "id": "repositories_project_repo_projectrepository",
-      "community": 71,
+      "community": 213,
       "norm_label": "projectrepository"
     },
     {
@@ -19791,7 +19791,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L19",
       "id": "repositories_project_repo_projectrepository_init",
-      "community": 71,
+      "community": 213,
       "norm_label": ".__init__()"
     },
     {
@@ -19800,7 +19800,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L19",
       "id": "projects_production_postgresql_api_src_repositories_project_repo_py_asyncsession",
-      "community": 71,
+      "community": 213,
       "norm_label": "asyncsession"
     },
     {
@@ -19809,7 +19809,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L22",
       "id": "repositories_project_repo_projectrepository_get_by_code",
-      "community": 71,
+      "community": 213,
       "norm_label": ".get_by_code()"
     },
     {
@@ -19818,7 +19818,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L22",
       "id": "projects_production_postgresql_api_src_repositories_project_repo_py_projectmodel",
-      "community": 71,
+      "community": 213,
       "norm_label": "projectmodel"
     },
     {
@@ -19827,7 +19827,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L30",
       "id": "repositories_project_repo_projectrepository_get_with_tasks_eager",
-      "community": 71,
+      "community": 213,
       "norm_label": ".get_with_tasks_eager()"
     },
     {
@@ -19836,7 +19836,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L39",
       "id": "repositories_project_repo_projectrepository_list_by_org",
-      "community": 71,
+      "community": 213,
       "norm_label": ".list_by_org()"
     },
     {
@@ -19845,7 +19845,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L1",
       "id": "repositories_project_repo_rationale_1",
-      "community": 71,
+      "community": 213,
       "norm_label": "project repository with eager loading (fixing n+1 queries) ====================="
     },
     {
@@ -19854,7 +19854,7 @@
       "source_file": "projects/production-postgresql-api/src/repositories/project_repo.py",
       "source_location": "L31",
       "id": "repositories_project_repo_rationale_31",
-      "community": 71,
+      "community": 213,
       "norm_label": "eagerly load project along with all associated tasks (n+1 query killer)."
     },
     {
@@ -19989,7 +19989,7 @@
       "source_file": "projects/production-postgresql-api/src/schemas/common.py",
       "source_location": "L1",
       "id": "projects_production_postgresql_api_src_schemas_common_py_schemas_common",
-      "community": 550,
+      "community": 57,
       "norm_label": "common.py"
     },
     {
@@ -19998,7 +19998,7 @@
       "source_file": "projects/production-postgresql-api/src/schemas/common.py",
       "source_location": "L7",
       "id": "projects_production_postgresql_api_src_schemas_common_py_schemas_common_apiresponse",
-      "community": 550,
+      "community": 57,
       "norm_label": "apiresponse"
     },
     {
@@ -20043,7 +20043,7 @@
       "source_file": "projects/production-postgresql-api/src/schemas/organization.py",
       "source_location": "L1",
       "id": "schemas_organization",
-      "community": 61,
+      "community": 228,
       "norm_label": "organization.py"
     },
     {
@@ -20052,7 +20052,7 @@
       "source_file": "projects/production-postgresql-api/src/schemas/organization.py",
       "source_location": "L7",
       "id": "schemas_organization_organizationcreate",
-      "community": 61,
+      "community": 228,
       "norm_label": "organizationcreate"
     },
     {
@@ -20061,7 +20061,7 @@
       "source_file": "projects/production-postgresql-api/src/schemas/organization.py",
       "source_location": "L14",
       "id": "schemas_organization_organizationupdate",
-      "community": 61,
+      "community": 228,
       "norm_label": "organizationupdate"
     },
     {
@@ -20070,7 +20070,7 @@
       "source_file": "projects/production-postgresql-api/src/schemas/organization.py",
       "source_location": "L20",
       "id": "schemas_organization_organizationout",
-      "community": 61,
+      "community": 228,
       "norm_label": "organizationout"
     },
     {
@@ -20151,7 +20151,7 @@
       "source_file": "projects/production-postgresql-api/src/schemas/task.py",
       "source_location": "L22",
       "id": "schemas_task_taskupdate",
-      "community": 72,
+      "community": 57,
       "norm_label": "taskupdate"
     },
     {
@@ -21384,7 +21384,7 @@
       "source_file": "projects/realtime-collaboration-platform/src/schemas/common.py",
       "source_location": "L1",
       "id": "projects_realtime_collaboration_platform_src_schemas_common_py_schemas_common",
-      "community": 57,
+      "community": 326,
       "norm_label": "common.py"
     },
     {
@@ -21393,7 +21393,7 @@
       "source_file": "projects/realtime-collaboration-platform/src/schemas/common.py",
       "source_location": "L7",
       "id": "projects_realtime_collaboration_platform_src_schemas_common_py_schemas_common_apiresponse",
-      "community": 57,
+      "community": 326,
       "norm_label": "apiresponse"
     },
     {
@@ -21726,7 +21726,7 @@
       "source_file": "projects/redis-production-toolkit/src/api/v1/diagnostics.py",
       "source_location": "L1",
       "id": "projects_redis_production_toolkit_src_api_v1_diagnostics_py_v1_diagnostics",
-      "community": 74,
+      "community": 308,
       "norm_label": "diagnostics.py"
     },
     {
@@ -21735,7 +21735,7 @@
       "source_file": "projects/redis-production-toolkit/src/api/v1/diagnostics.py",
       "source_location": "L10",
       "id": "v1_diagnostics_redis_health_probe",
-      "community": 74,
+      "community": 308,
       "norm_label": "redis_health_probe()"
     },
     {
@@ -21744,7 +21744,7 @@
       "source_file": "projects/redis-production-toolkit/src/api/v1/diagnostics.py",
       "source_location": "L10",
       "id": "projects_redis_production_toolkit_src_api_v1_diagnostics_py_asyncredisengine",
-      "community": 74,
+      "community": 308,
       "norm_label": "asyncredisengine"
     },
     {
@@ -22032,7 +22032,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L1",
       "id": "projects_redis_production_toolkit_src_core_dependencies_py_core_dependencies",
-      "community": 154,
+      "community": 76,
       "norm_label": "dependencies.py"
     },
     {
@@ -22041,7 +22041,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L8",
       "id": "core_dependencies_get_cache_service",
-      "community": 154,
+      "community": 76,
       "norm_label": "get_cache_service()"
     },
     {
@@ -22050,7 +22050,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L8",
       "id": "projects_redis_production_toolkit_src_core_dependencies_py_asyncredisengine",
-      "community": 154,
+      "community": 76,
       "norm_label": "asyncredisengine"
     },
     {
@@ -22059,7 +22059,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L8",
       "id": "projects_redis_production_toolkit_src_core_dependencies_py_cacheservice",
-      "community": 154,
+      "community": 76,
       "norm_label": "cacheservice"
     },
     {
@@ -22068,7 +22068,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L12",
       "id": "core_dependencies_get_lock_service",
-      "community": 154,
+      "community": 76,
       "norm_label": "get_lock_service()"
     },
     {
@@ -22077,7 +22077,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L12",
       "id": "projects_redis_production_toolkit_src_core_dependencies_py_lockservice",
-      "community": 154,
+      "community": 76,
       "norm_label": "lockservice"
     },
     {
@@ -22086,7 +22086,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L16",
       "id": "core_dependencies_get_stream_service",
-      "community": 154,
+      "community": 76,
       "norm_label": "get_stream_service()"
     },
     {
@@ -22095,7 +22095,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/dependencies.py",
       "source_location": "L16",
       "id": "projects_redis_production_toolkit_src_core_dependencies_py_streamservice",
-      "community": 154,
+      "community": 76,
       "norm_label": "streamservice"
     },
     {
@@ -22104,7 +22104,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L1",
       "id": "core_distributed_lock",
-      "community": 82,
+      "community": 65,
       "norm_label": "distributed_lock.py"
     },
     {
@@ -22113,7 +22113,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L20",
       "id": "core_distributed_lock_distributedlock",
-      "community": 82,
+      "community": 65,
       "norm_label": "distributedlock"
     },
     {
@@ -22122,7 +22122,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L21",
       "id": "core_distributed_lock_distributedlock_init",
-      "community": 82,
+      "community": 65,
       "norm_label": ".__init__()"
     },
     {
@@ -22131,7 +22131,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L21",
       "id": "projects_redis_production_toolkit_src_core_distributed_lock_py_asyncredisengine",
-      "community": 82,
+      "community": 65,
       "norm_label": "asyncredisengine"
     },
     {
@@ -22140,7 +22140,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L38",
       "id": "core_distributed_lock_distributedlock_acquire",
-      "community": 82,
+      "community": 65,
       "norm_label": ".acquire()"
     },
     {
@@ -22149,7 +22149,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L48",
       "id": "core_distributed_lock_distributedlock_release",
-      "community": 82,
+      "community": 65,
       "norm_label": ".release()"
     },
     {
@@ -22158,7 +22158,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L55",
       "id": "core_distributed_lock_distributedlock_aenter",
-      "community": 82,
+      "community": 65,
       "norm_label": ".__aenter__()"
     },
     {
@@ -22167,7 +22167,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L61",
       "id": "core_distributed_lock_distributedlock_aexit",
-      "community": 82,
+      "community": 65,
       "norm_label": ".__aexit__()"
     },
     {
@@ -22176,7 +22176,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/distributed_lock.py",
       "source_location": "L1",
       "id": "core_distributed_lock_rationale_1",
-      "community": 82,
+      "community": 65,
       "norm_label": "distributed mutex lock (set nx ex + atomic lua release) ========================"
     },
     {
@@ -22221,7 +22221,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/exceptions.py",
       "source_location": "L25",
       "id": "core_exceptions_lockacquisitionexception",
-      "community": 82,
+      "community": 65,
       "norm_label": "lockacquisitionexception"
     },
     {
@@ -22284,7 +22284,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/exceptions.py",
       "source_location": "L49",
       "id": "projects_redis_production_toolkit_src_core_exceptions_py_request",
-      "community": 73,
+      "community": 109,
       "norm_label": "request"
     },
     {
@@ -22293,7 +22293,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/exceptions.py",
       "source_location": "L49",
       "id": "projects_redis_production_toolkit_src_core_exceptions_py_jsonresponse",
-      "community": 73,
+      "community": 109,
       "norm_label": "jsonresponse"
     },
     {
@@ -22302,7 +22302,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/exceptions.py",
       "source_location": "L66",
       "id": "projects_redis_production_toolkit_src_core_exceptions_py_core_exceptions_validation_exception_handler",
-      "community": 73,
+      "community": 109,
       "norm_label": "validation_exception_handler()"
     },
     {
@@ -22311,7 +22311,7 @@
       "source_file": "projects/redis-production-toolkit/src/core/exceptions.py",
       "source_location": "L66",
       "id": "projects_redis_production_toolkit_src_core_exceptions_py_requestvalidationerror",
-      "community": 54,
+      "community": 109,
       "norm_label": "requestvalidationerror"
     },
     {
@@ -22554,7 +22554,7 @@
       "source_file": "projects/redis-production-toolkit/src/main.py",
       "source_location": "L1",
       "id": "projects_redis_production_toolkit_src_main_py_src_main",
-      "community": 541,
+      "community": 73,
       "norm_label": "main.py"
     },
     {
@@ -22563,7 +22563,7 @@
       "source_file": "projects/redis-production-toolkit/src/main.py",
       "source_location": "L12",
       "id": "projects_redis_production_toolkit_src_main_py_src_main_create_application",
-      "community": 541,
+      "community": 73,
       "norm_label": "create_application()"
     },
     {
@@ -22572,7 +22572,7 @@
       "source_file": "projects/redis-production-toolkit/src/main.py",
       "source_location": "L12",
       "id": "projects_redis_production_toolkit_src_main_py_fastapi",
-      "community": 541,
+      "community": 73,
       "norm_label": "fastapi"
     },
     {
@@ -22626,7 +22626,7 @@
       "source_file": "projects/redis-production-toolkit/src/schemas/common.py",
       "source_location": "L1",
       "id": "projects_redis_production_toolkit_src_schemas_common_py_schemas_common",
-      "community": 109,
+      "community": 51,
       "norm_label": "common.py"
     },
     {
@@ -22635,7 +22635,7 @@
       "source_file": "projects/redis-production-toolkit/src/schemas/common.py",
       "source_location": "L7",
       "id": "projects_redis_production_toolkit_src_schemas_common_py_schemas_common_apiresponse",
-      "community": 109,
+      "community": 51,
       "norm_label": "apiresponse"
     },
     {
@@ -22689,7 +22689,7 @@
       "source_file": "projects/redis-production-toolkit/src/schemas/pubsub.py",
       "source_location": "L1",
       "id": "schemas_pubsub",
-      "community": 319,
+      "community": 57,
       "norm_label": "pubsub.py"
     },
     {
@@ -22698,7 +22698,7 @@
       "source_file": "projects/redis-production-toolkit/src/schemas/pubsub.py",
       "source_location": "L5",
       "id": "schemas_pubsub_publishmessagerequest",
-      "community": 319,
+      "community": 57,
       "norm_label": "publishmessagerequest"
     },
     {
@@ -22707,7 +22707,7 @@
       "source_file": "projects/redis-production-toolkit/src/schemas/pubsub.py",
       "source_location": "L10",
       "id": "schemas_pubsub_publishmessageresponse",
-      "community": 319,
+      "community": 57,
       "norm_label": "publishmessageresponse"
     },
     {
@@ -22914,7 +22914,7 @@
       "source_file": "projects/redis-production-toolkit/src/services/lock_service.py",
       "source_location": "L1",
       "id": "services_lock_service",
-      "community": 154,
+      "community": 65,
       "norm_label": "lock_service.py"
     },
     {
@@ -22923,7 +22923,7 @@
       "source_file": "projects/redis-production-toolkit/src/services/lock_service.py",
       "source_location": "L7",
       "id": "services_lock_service_lockservice",
-      "community": 154,
+      "community": 65,
       "norm_label": "lockservice"
     },
     {
@@ -22932,7 +22932,7 @@
       "source_file": "projects/redis-production-toolkit/src/services/lock_service.py",
       "source_location": "L8",
       "id": "services_lock_service_lockservice_init",
-      "community": 154,
+      "community": 65,
       "norm_label": ".__init__()"
     },
     {
@@ -22941,7 +22941,7 @@
       "source_file": "projects/redis-production-toolkit/src/services/lock_service.py",
       "source_location": "L8",
       "id": "projects_redis_production_toolkit_src_services_lock_service_py_asyncredisengine",
-      "community": 82,
+      "community": 65,
       "norm_label": "asyncredisengine"
     },
     {
@@ -22950,7 +22950,7 @@
       "source_file": "projects/redis-production-toolkit/src/services/lock_service.py",
       "source_location": "L11",
       "id": "services_lock_service_lockservice_acquire_lock",
-      "community": 82,
+      "community": 65,
       "norm_label": ".acquire_lock()"
     },
     {
@@ -22959,7 +22959,7 @@
       "source_file": "projects/redis-production-toolkit/src/services/lock_service.py",
       "source_location": "L11",
       "id": "lockacquireresponse",
-      "community": 82,
+      "community": 65,
       "norm_label": "lockacquireresponse"
     },
     {
@@ -22968,7 +22968,7 @@
       "source_file": "projects/redis-production-toolkit/src/services/lock_service.py",
       "source_location": "L25",
       "id": "services_lock_service_lockservice_release_lock",
-      "community": 154,
+      "community": 65,
       "norm_label": ".release_lock()"
     },
     {
@@ -23670,7 +23670,7 @@
       "source_file": "src/app/labs/page.tsx",
       "source_location": "L1",
       "id": "labs_page",
-      "community": 77,
+      "community": 2,
       "norm_label": "page.tsx"
     },
     {
@@ -23679,7 +23679,7 @@
       "source_file": "src/app/labs/page.tsx",
       "source_location": "L5",
       "id": "labs_page_metadata",
-      "community": 77,
+      "community": 2,
       "norm_label": "metadata"
     },
     {
@@ -23688,7 +23688,7 @@
       "source_file": "src/app/labs/page.tsx",
       "source_location": "L10",
       "id": "labs_page_labspage",
-      "community": 77,
+      "community": 2,
       "norm_label": "labspage()"
     },
     {
@@ -23749,7 +23749,7 @@
       "label": "LessonPage()",
       "file_type": "code",
       "source_file": "src/app/learn/[chapter]/[lesson]/page.tsx",
-      "source_location": "L38",
+      "source_location": "L43",
       "id": "lesson_page_lessonpage",
       "community": 1,
       "norm_label": "lessonpage()"
@@ -23976,7 +23976,7 @@
       "source_file": "src/app/roadmap/page.tsx",
       "source_location": "L1",
       "id": "roadmap_page",
-      "community": 77,
+      "community": 2,
       "norm_label": "page.tsx"
     },
     {
@@ -23985,7 +23985,7 @@
       "source_file": "src/app/roadmap/page.tsx",
       "source_location": "L5",
       "id": "roadmap_page_metadata",
-      "community": 77,
+      "community": 2,
       "norm_label": "metadata"
     },
     {
@@ -23994,7 +23994,7 @@
       "source_file": "src/app/roadmap/page.tsx",
       "source_location": "L10",
       "id": "roadmap_page_roadmappage",
-      "community": 77,
+      "community": 2,
       "norm_label": "roadmappage()"
     },
     {
@@ -24039,7 +24039,7 @@
       "source_file": "src/components/curriculum/ChapterCard.tsx",
       "source_location": "L1",
       "id": "curriculum_chaptercard",
-      "community": 6,
+      "community": 77,
       "norm_label": "chaptercard.tsx"
     },
     {
@@ -24048,7 +24048,7 @@
       "source_file": "src/components/curriculum/ChapterCard.tsx",
       "source_location": "L4",
       "id": "curriculum_chaptercard_chaptercard",
-      "community": 6,
+      "community": 77,
       "norm_label": "chaptercard()"
     },
     {
@@ -24057,7 +24057,7 @@
       "source_file": "src/components/curriculum/CurriculumFilters.tsx",
       "source_location": "L1",
       "id": "curriculum_curriculumfilters",
-      "community": 6,
+      "community": 77,
       "norm_label": "curriculumfilters.tsx"
     },
     {
@@ -24066,7 +24066,7 @@
       "source_file": "src/components/curriculum/CurriculumFilters.tsx",
       "source_location": "L5",
       "id": "curriculum_curriculumfilters_difficultyfilter",
-      "community": 6,
+      "community": 77,
       "norm_label": "difficultyfilter"
     },
     {
@@ -24075,7 +24075,7 @@
       "source_file": "src/components/curriculum/CurriculumFilters.tsx",
       "source_location": "L7",
       "id": "curriculum_curriculumfilters_filtersprops",
-      "community": 6,
+      "community": 77,
       "norm_label": "filtersprops"
     },
     {
@@ -24084,7 +24084,7 @@
       "source_file": "src/components/curriculum/CurriculumFilters.tsx",
       "source_location": "L14",
       "id": "curriculum_curriculumfilters_curriculumfilters",
-      "community": 6,
+      "community": 77,
       "norm_label": "curriculumfilters()"
     },
     {
@@ -24093,14 +24093,14 @@
       "source_file": "src/components/curriculum/CurriculumList.tsx",
       "source_location": "L1",
       "id": "curriculum_curriculumlist",
-      "community": 6,
+      "community": 77,
       "norm_label": "curriculumlist.tsx"
     },
     {
       "label": "CurriculumList()",
       "file_type": "code",
       "source_file": "src/components/curriculum/CurriculumList.tsx",
-      "source_location": "L8",
+      "source_location": "L10",
       "id": "curriculum_curriculumlist_curriculumlist",
       "community": 77,
       "norm_label": "curriculumlist()"
@@ -24111,7 +24111,7 @@
       "source_file": "src/components/home/CurriculumPreview.tsx",
       "source_location": "L1",
       "id": "home_curriculumpreview",
-      "community": 77,
+      "community": 2,
       "norm_label": "curriculumpreview.tsx"
     },
     {
@@ -24120,7 +24120,7 @@
       "source_file": "src/components/home/CurriculumPreview.tsx",
       "source_location": "L9",
       "id": "home_curriculumpreview_curriculumpreview",
-      "community": 77,
+      "community": 2,
       "norm_label": "curriculumpreview()"
     },
     {
@@ -24372,7 +24372,7 @@
       "source_file": "src/components/layout/TableOfContents.tsx",
       "source_location": "L1",
       "id": "layout_tableofcontents",
-      "community": 355,
+      "community": 1,
       "norm_label": "tableofcontents.tsx"
     },
     {
@@ -24381,7 +24381,7 @@
       "source_file": "src/components/layout/TableOfContents.tsx",
       "source_location": "L5",
       "id": "layout_tableofcontents_tocsection",
-      "community": 355,
+      "community": 1,
       "norm_label": "tocsection"
     },
     {
@@ -24390,7 +24390,7 @@
       "source_file": "src/components/layout/TableOfContents.tsx",
       "source_location": "L11",
       "id": "layout_tableofcontents_tableofcontentsprops",
-      "community": 355,
+      "community": 1,
       "norm_label": "tableofcontentsprops"
     },
     {
@@ -24399,7 +24399,7 @@
       "source_file": "src/components/layout/TableOfContents.tsx",
       "source_location": "L15",
       "id": "layout_tableofcontents_tableofcontents",
-      "community": 355,
+      "community": 1,
       "norm_label": "tableofcontents()"
     },
     {
@@ -24408,7 +24408,7 @@
       "source_file": "src/components/lesson/ArchitectureDiagram.tsx",
       "source_location": "L1",
       "id": "lesson_architecturediagram",
-      "community": 14,
+      "community": 1,
       "norm_label": "architecturediagram.tsx"
     },
     {
@@ -24417,7 +24417,7 @@
       "source_file": "src/components/lesson/ArchitectureDiagram.tsx",
       "source_location": "L3",
       "id": "lesson_architecturediagram_architecturediagramprops",
-      "community": 14,
+      "community": 1,
       "norm_label": "architecturediagramprops"
     },
     {
@@ -24426,7 +24426,7 @@
       "source_file": "src/components/lesson/ArchitectureDiagram.tsx",
       "source_location": "L9",
       "id": "lesson_architecturediagram_architecturediagram",
-      "community": 14,
+      "community": 1,
       "norm_label": "architecturediagram()"
     },
     {
@@ -24453,7 +24453,7 @@
       "source_file": "src/components/lesson/Challenge.tsx",
       "source_location": "L1",
       "id": "lesson_challenge",
-      "community": 326,
+      "community": 1,
       "norm_label": "challenge.tsx"
     },
     {
@@ -24462,7 +24462,7 @@
       "source_file": "src/components/lesson/Challenge.tsx",
       "source_location": "L9",
       "id": "lesson_challenge_challengeprops",
-      "community": 326,
+      "community": 1,
       "norm_label": "challengeprops"
     },
     {
@@ -24471,7 +24471,7 @@
       "source_file": "src/components/lesson/Challenge.tsx",
       "source_location": "L18",
       "id": "lesson_challenge_challenge",
-      "community": 326,
+      "community": 1,
       "norm_label": "challenge()"
     },
     {
@@ -24480,7 +24480,7 @@
       "source_file": "src/components/lesson/CodeBlock.tsx",
       "source_location": "L1",
       "id": "lesson_codeblock",
-      "community": 216,
+      "community": 1,
       "norm_label": "codeblock.tsx"
     },
     {
@@ -24489,7 +24489,7 @@
       "source_file": "src/components/lesson/CodeBlock.tsx",
       "source_location": "L5",
       "id": "lesson_codeblock_codeblockprops",
-      "community": 216,
+      "community": 1,
       "norm_label": "codeblockprops"
     },
     {
@@ -24498,7 +24498,7 @@
       "source_file": "src/components/lesson/CodeBlock.tsx",
       "source_location": "L16",
       "id": "lesson_codeblock_codeblock",
-      "community": 216,
+      "community": 1,
       "norm_label": "codeblock()"
     },
     {
@@ -24507,7 +24507,7 @@
       "source_file": "src/components/lesson/CommonMistake.tsx",
       "source_location": "L1",
       "id": "lesson_commonmistake",
-      "community": 326,
+      "community": 1,
       "norm_label": "commonmistake.tsx"
     },
     {
@@ -24516,7 +24516,7 @@
       "source_file": "src/components/lesson/CommonMistake.tsx",
       "source_location": "L5",
       "id": "lesson_commonmistake_commonmistakeprops",
-      "community": 326,
+      "community": 1,
       "norm_label": "commonmistakeprops"
     },
     {
@@ -24525,7 +24525,7 @@
       "source_file": "src/components/lesson/CommonMistake.tsx",
       "source_location": "L12",
       "id": "lesson_commonmistake_commonmistake",
-      "community": 326,
+      "community": 1,
       "norm_label": "commonmistake()"
     },
     {
@@ -24552,7 +24552,7 @@
       "source_file": "src/components/lesson/InterviewQuestion.tsx",
       "source_location": "L1",
       "id": "lesson_interviewquestion",
-      "community": 318,
+      "community": 1,
       "norm_label": "interviewquestion.tsx"
     },
     {
@@ -24561,7 +24561,7 @@
       "source_file": "src/components/lesson/InterviewQuestion.tsx",
       "source_location": "L8",
       "id": "lesson_interviewquestion_interviewquestionprops",
-      "community": 318,
+      "community": 1,
       "norm_label": "interviewquestionprops"
     },
     {
@@ -24570,7 +24570,7 @@
       "source_file": "src/components/lesson/InterviewQuestion.tsx",
       "source_location": "L14",
       "id": "lesson_interviewquestion_interviewquestion",
-      "community": 318,
+      "community": 1,
       "norm_label": "interviewquestion()"
     },
     {
@@ -24613,7 +24613,7 @@
       "label": "LessonHeader()",
       "file_type": "code",
       "source_file": "src/components/lesson/LessonHeader.tsx",
-      "source_location": "L7",
+      "source_location": "L8",
       "id": "lesson_lessonheader_lessonheader",
       "community": 7,
       "norm_label": "lessonheader()"
@@ -24624,34 +24624,34 @@
       "source_file": "src/components/lesson/LessonNavigation.tsx",
       "source_location": "L1",
       "id": "lesson_lessonnavigation",
-      "community": 540,
+      "community": 77,
       "norm_label": "lessonnavigation.tsx"
     },
     {
       "label": "NavLink",
       "file_type": "code",
       "source_file": "src/components/lesson/LessonNavigation.tsx",
-      "source_location": "L4",
+      "source_location": "L7",
       "id": "lesson_lessonnavigation_navlink",
-      "community": 540,
+      "community": 77,
       "norm_label": "navlink"
     },
     {
       "label": "LessonNavigationProps",
       "file_type": "code",
       "source_file": "src/components/lesson/LessonNavigation.tsx",
-      "source_location": "L10",
+      "source_location": "L14",
       "id": "lesson_lessonnavigation_lessonnavigationprops",
-      "community": 540,
+      "community": 77,
       "norm_label": "lessonnavigationprops"
     },
     {
       "label": "LessonNavigation()",
       "file_type": "code",
       "source_file": "src/components/lesson/LessonNavigation.tsx",
-      "source_location": "L16",
+      "source_location": "L20",
       "id": "lesson_lessonnavigation_lessonnavigation",
-      "community": 540,
+      "community": 77,
       "norm_label": "lessonnavigation()"
     },
     {
@@ -24660,7 +24660,7 @@
       "source_file": "src/components/lesson/MarkdownContent.tsx",
       "source_location": "L1",
       "id": "lesson_markdowncontent",
-      "community": 318,
+      "community": 1,
       "norm_label": "markdowncontent.tsx"
     },
     {
@@ -24669,7 +24669,7 @@
       "source_file": "src/components/lesson/MarkdownContent.tsx",
       "source_location": "L6",
       "id": "lesson_markdowncontent_markdowncontentprops",
-      "community": 318,
+      "community": 1,
       "norm_label": "markdowncontentprops"
     },
     {
@@ -24678,7 +24678,7 @@
       "source_file": "src/components/lesson/MarkdownContent.tsx",
       "source_location": "L11",
       "id": "lesson_markdowncontent_markdowncontent",
-      "community": 318,
+      "community": 1,
       "norm_label": "markdowncontent()"
     },
     {
@@ -24687,7 +24687,7 @@
       "source_file": "src/components/lesson/MultiFileCodeViewer.tsx",
       "source_location": "L1",
       "id": "lesson_multifilecodeviewer",
-      "community": 216,
+      "community": 1,
       "norm_label": "multifilecodeviewer.tsx"
     },
     {
@@ -24696,7 +24696,7 @@
       "source_file": "src/components/lesson/MultiFileCodeViewer.tsx",
       "source_location": "L7",
       "id": "lesson_multifilecodeviewer_multifilecodeviewerprops",
-      "community": 216,
+      "community": 1,
       "norm_label": "multifilecodeviewerprops"
     },
     {
@@ -24705,7 +24705,7 @@
       "source_file": "src/components/lesson/MultiFileCodeViewer.tsx",
       "source_location": "L15",
       "id": "lesson_multifilecodeviewer_multifilecodeviewer",
-      "community": 216,
+      "community": 1,
       "norm_label": "multifilecodeviewer()"
     },
     {
@@ -24714,7 +24714,7 @@
       "source_file": "src/components/lesson/ProductionChecklist.tsx",
       "source_location": "L1",
       "id": "lesson_productionchecklist",
-      "community": 542,
+      "community": 1,
       "norm_label": "productionchecklist.tsx"
     },
     {
@@ -24723,7 +24723,7 @@
       "source_file": "src/components/lesson/ProductionChecklist.tsx",
       "source_location": "L6",
       "id": "lesson_productionchecklist_checklistprops",
-      "community": 542,
+      "community": 1,
       "norm_label": "checklistprops"
     },
     {
@@ -24732,7 +24732,7 @@
       "source_file": "src/components/lesson/ProductionChecklist.tsx",
       "source_location": "L15",
       "id": "lesson_productionchecklist_productionchecklist",
-      "community": 542,
+      "community": 1,
       "norm_label": "productionchecklist()"
     },
     {
@@ -24741,7 +24741,7 @@
       "source_file": "src/components/lesson/ProductionNote.tsx",
       "source_location": "L1",
       "id": "lesson_productionnote",
-      "community": 543,
+      "community": 1,
       "norm_label": "productionnote.tsx"
     },
     {
@@ -24750,7 +24750,7 @@
       "source_file": "src/components/lesson/ProductionNote.tsx",
       "source_location": "L3",
       "id": "lesson_productionnote_productionnoteprops",
-      "community": 543,
+      "community": 1,
       "norm_label": "productionnoteprops"
     },
     {
@@ -24759,7 +24759,7 @@
       "source_file": "src/components/lesson/ProductionNote.tsx",
       "source_location": "L9",
       "id": "lesson_productionnote_productionnote",
-      "community": 543,
+      "community": 1,
       "norm_label": "productionnote()"
     },
     {
@@ -24768,7 +24768,7 @@
       "source_file": "src/components/lesson/RealWorldScenario.tsx",
       "source_location": "L1",
       "id": "lesson_realworldscenario",
-      "community": 216,
+      "community": 1,
       "norm_label": "realworldscenario.tsx"
     },
     {
@@ -24777,7 +24777,7 @@
       "source_file": "src/components/lesson/RealWorldScenario.tsx",
       "source_location": "L4",
       "id": "lesson_realworldscenario_codeexample",
-      "community": 216,
+      "community": 1,
       "norm_label": "codeexample"
     },
     {
@@ -24786,7 +24786,7 @@
       "source_file": "src/components/lesson/RealWorldScenario.tsx",
       "source_location": "L10",
       "id": "lesson_realworldscenario_realworldscenarioprops",
-      "community": 216,
+      "community": 1,
       "norm_label": "realworldscenarioprops"
     },
     {
@@ -24795,7 +24795,7 @@
       "source_file": "src/components/lesson/RealWorldScenario.tsx",
       "source_location": "L17",
       "id": "lesson_realworldscenario_realworldscenario",
-      "community": 216,
+      "community": 1,
       "norm_label": "realworldscenario()"
     },
     {
@@ -25128,7 +25128,7 @@
       "source_file": "src/lib/content/curriculum.ts",
       "source_location": "L1",
       "id": "content_curriculum",
-      "community": 77,
+      "community": 2,
       "norm_label": "curriculum.ts"
     },
     {
@@ -25137,7 +25137,7 @@
       "source_file": "src/lib/content/curriculum.ts",
       "source_location": "L4",
       "id": "content_curriculum_mklesson",
-      "community": 77,
+      "community": 2,
       "norm_label": "mklesson()"
     },
     {
@@ -25146,7 +25146,7 @@
       "source_file": "src/lib/content/curriculum.ts",
       "source_location": "L36",
       "id": "content_curriculum_curriculum",
-      "community": 77,
+      "community": 2,
       "norm_label": "curriculum"
     },
     {
@@ -25713,7 +25713,7 @@
       "source_file": "src/lib/content/types.ts",
       "source_location": "L1",
       "id": "content_types_difficulty",
-      "community": 6,
+      "community": 77,
       "norm_label": "difficulty"
     },
     {
@@ -25740,7 +25740,7 @@
       "source_file": "src/lib/content/types.ts",
       "source_location": "L14",
       "id": "content_types_codeexample",
-      "community": 326,
+      "community": 1,
       "norm_label": "codeexample"
     },
     {
@@ -25857,7 +25857,7 @@
       "source_file": "src/lib/content/types.ts",
       "source_location": "L164",
       "id": "content_types_chapter",
-      "community": 6,
+      "community": 77,
       "norm_label": "chapter"
     },
     {
@@ -25938,7 +25938,7 @@
       "source_file": "src/lib/services/search.service.ts",
       "source_location": "L133",
       "id": "services_search_service_getallchapters",
-      "community": 0,
+      "community": 1,
       "norm_label": "getallchapters()"
     },
     {
@@ -25981,7 +25981,7 @@
       "label": "ProgressState",
       "file_type": "code",
       "source_file": "src/store/progress.store.ts",
-      "source_location": "L3",
+      "source_location": "L4",
       "id": "store_progress_store_progressstate",
       "community": 77,
       "norm_label": "progressstate"
@@ -25990,7 +25990,7 @@
       "label": "useProgressStore",
       "file_type": "code",
       "source_file": "src/store/progress.store.ts",
-      "source_location": "L8",
+      "source_location": "L14",
       "id": "store_progress_store_useprogressstore",
       "community": 77,
       "norm_label": "useprogressstore"
@@ -27706,11 +27706,254 @@
       "norm_label": "run pytest suite"
     },
     {
+      "label": "fastapi_academy_qa_summary.md",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L1",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary",
+      "community": 82,
+      "norm_label": "fastapi_academy_qa_summary.md"
+    },
+    {
+      "label": "EXHAUSTIVE QA AUDIT & TECHNICAL REVIEW: FASTAPI ACADEMY",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L1",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "community": 82,
+      "norm_label": "exhaustive qa audit & technical review: fastapi academy"
+    },
+    {
+      "label": "1. Executive Summary",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L13",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_1_executive_summary",
+      "community": 82,
+      "norm_label": "1. executive summary"
+    },
+    {
+      "label": "Core Audit Takeaways:",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L18",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_core_audit_takeaways",
+      "community": 82,
+      "norm_label": "core audit takeaways:"
+    },
+    {
+      "label": "2. Comprehensive Test Coverage Matrix",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L26",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_2_comprehensive_test_coverage_matrix",
+      "community": 82,
+      "norm_label": "2. comprehensive test coverage matrix"
+    },
+    {
+      "label": "3. Severity Breakdown & Bug Distribution",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L45",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_3_severity_breakdown_bug_distribution",
+      "community": 82,
+      "norm_label": "3. severity breakdown & bug distribution"
+    },
+    {
+      "label": "Severity Distribution",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L47",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_severity_distribution",
+      "community": 82,
+      "norm_label": "severity distribution"
+    },
+    {
+      "label": "Bug Distribution by Category",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L59",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_bug_distribution_by_category",
+      "community": 82,
+      "norm_label": "bug distribution by category"
+    },
+    {
+      "label": "4. Critical & High-Priority Technical Defects",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L74",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "community": 82,
+      "norm_label": "4. critical & high-priority technical defects"
+    },
+    {
+      "label": "1. [FA-0014] [P1 - CRITICAL] SQLAlchemy 2.0 AsyncSession Transaction Leaking",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L76",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_1_fa_0014_p1_critical_sqlalchemy_2_0_asyncsession_transaction_leaking",
+      "community": 82,
+      "norm_label": "1. [fa-0014] [p1 - critical] sqlalchemy 2.0 asyncsession transaction leaking"
+    },
+    {
+      "label": "2. [FA-0033] [P1 - CRITICAL] JWT Algorithm Confusion Vulnerability in RS256 Verification",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L94",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_2_fa_0033_p1_critical_jwt_algorithm_confusion_vulnerability_in_rs256_verification",
+      "community": 82,
+      "norm_label": "2. [fa-0033] [p1 - critical] jwt algorithm confusion vulnerability in rs256 verification"
+    },
+    {
+      "label": "3. [FA-0039] [P1 - CRITICAL] Stripe Webhook Signature Verification Failure",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L99",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_3_fa_0039_p1_critical_stripe_webhook_signature_verification_failure",
+      "community": 82,
+      "norm_label": "3. [fa-0039] [p1 - critical] stripe webhook signature verification failure"
+    },
+    {
+      "label": "4. [FA-0013] [P2 - HIGH] Legacy Pydantic v1 `@validator` Syntax in Pydantic v2 Module",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L104",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_fa_0013_p2_high_legacy_pydantic_v1_validator_syntax_in_pydantic_v2_module",
+      "community": 82,
+      "norm_label": "4. [fa-0013] [p2 - high] legacy pydantic v1 `@validator` syntax in pydantic v2 module"
+    },
+    {
+      "label": "5. [FA-0016] [P2 - HIGH] Missing Refresh Token Family Invalidation on Replay Detection",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L109",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_5_fa_0016_p2_high_missing_refresh_token_family_invalidation_on_replay_detection",
+      "community": 82,
+      "norm_label": "5. [fa-0016] [p2 - high] missing refresh token family invalidation on replay detection"
+    },
+    {
+      "label": "6. [FA-0017] [P2 - HIGH] Invalid Wildcard CORS with `allow_credentials=True`",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L114",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_6_fa_0017_p2_high_invalid_wildcard_cors_with_allow_credentials_true",
+      "community": 82,
+      "norm_label": "6. [fa-0017] [p2 - high] invalid wildcard cors with `allow_credentials=true`"
+    },
+    {
+      "label": "7. [FA-0020] [P2 - HIGH] WebSocket Broadcast Loop Crashing on Disconnected Clients",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L119",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_7_fa_0020_p2_high_websocket_broadcast_loop_crashing_on_disconnected_clients",
+      "community": 82,
+      "norm_label": "7. [fa-0020] [p2 - high] websocket broadcast loop crashing on disconnected clients"
+    },
+    {
+      "label": "8. [FA-0038] [P2 - HIGH] gRPC Channel Connection Leak in FastAPI Dependency",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L124",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_8_fa_0038_p2_high_grpc_channel_connection_leak_in_fastapi_dependency",
+      "community": 82,
+      "norm_label": "8. [fa-0038] [p2 - high] grpc channel connection leak in fastapi dependency"
+    },
+    {
+      "label": "5. UI, Visual, Responsive & Accessibility Analysis",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L131",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_5_ui_visual_responsive_accessibility_analysis",
+      "community": 82,
+      "norm_label": "5. ui, visual, responsive & accessibility analysis"
+    },
+    {
+      "label": "Accessibility (WCAG 2.1 AA Compliance)",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L133",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_accessibility_wcag_2_1_aa_compliance",
+      "community": 82,
+      "norm_label": "accessibility (wcag 2.1 aa compliance)"
+    },
+    {
+      "label": "Responsive & Layout Ergonomics",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L138",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_responsive_layout_ergonomics",
+      "community": 82,
+      "norm_label": "responsive & layout ergonomics"
+    },
+    {
+      "label": "6. Curriculum & Educational Progression Audit",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L145",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_6_curriculum_educational_progression_audit",
+      "community": 82,
+      "norm_label": "6. curriculum & educational progression audit"
+    },
+    {
+      "label": "Chapter Progression Highlights:",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L149",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_chapter_progression_highlights",
+      "community": 82,
+      "norm_label": "chapter progression highlights:"
+    },
+    {
+      "label": "7. Recommended Prioritized Fix Order",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L160",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_7_recommended_prioritized_fix_order",
+      "community": 82,
+      "norm_label": "7. recommended prioritized fix order"
+    },
+    {
+      "label": "8. Final Verdict & Quality Score",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L205",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_8_final_verdict_quality_score",
+      "community": 82,
+      "norm_label": "8. final verdict & quality score"
+    },
+    {
+      "label": "Official Quality Verdict:",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L217",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_official_quality_verdict",
+      "community": 82,
+      "norm_label": "official quality verdict:"
+    },
+    {
+      "label": "**READY WITH MINOR FIXES**",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L218",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_ready_with_minor_fixes",
+      "community": 82,
+      "norm_label": "**ready with minor fixes**"
+    },
+    {
+      "label": "Verdict Justification:",
+      "file_type": "document",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L220",
+      "id": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_verdict_justification",
+      "community": 82,
+      "norm_label": "verdict justification:"
+    },
+    {
       "label": "CodeExample",
       "file_type": "code",
       "source_file": "src/components/lesson/CommonMistake.tsx",
       "source_location": "L4",
-      "community": 326,
+      "community": 1,
       "norm_label": "codeexample",
       "id": "lesson_commonmistake_codeexample"
     },
@@ -27979,9 +28222,9 @@
       "source_file": "enrich_all_lessons_with_questions.py",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_all_lessons_with_questions",
-      "target": "build_batch_1",
-      "confidence_score": 1.0
+      "target": "build_batch_1"
     },
     {
       "relation": "imports_from",
@@ -28023,9 +28266,9 @@
       "source_file": "enrich_all_lessons_with_questions.py",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_all_lessons_with_questions",
-      "target": "build_batch_1_make_rich_lesson",
-      "confidence_score": 1.0
+      "target": "build_batch_1_make_rich_lesson"
     },
     {
       "relation": "imports",
@@ -28098,9 +28341,9 @@
       "source_file": "enrich_all_lessons_with_questions.py",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_all_lessons_with_questions",
-      "target": "enrich_all_lessons_with_questions_get_deep_interview_questions",
-      "confidence_score": 1.0
+      "target": "enrich_all_lessons_with_questions_get_deep_interview_questions"
     },
     {
       "relation": "imports_from",
@@ -28109,9 +28352,9 @@
       "source_file": "enrich_all_lessons_with_questions.py",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_all_lessons_with_questions",
-      "target": "generate_batch_1",
-      "confidence_score": 1.0
+      "target": "generate_batch_1"
     },
     {
       "relation": "imports_from",
@@ -28120,9 +28363,9 @@
       "source_file": "enrich_all_lessons_with_questions.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_all_lessons_with_questions",
-      "target": "scratch_gen_batch1",
-      "confidence_score": 1.0
+      "target": "scratch_gen_batch1"
     },
     {
       "relation": "imports",
@@ -28131,9 +28374,9 @@
       "source_file": "enrich_all_lessons_with_questions.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_all_lessons_with_questions",
-      "target": "scratch_gen_batch1_export_chapter_ts",
-      "confidence_score": 1.0
+      "target": "scratch_gen_batch1_export_chapter_ts"
     },
     {
       "relation": "imports_from",
@@ -28142,9 +28385,9 @@
       "source_file": "enrich_interview_questions.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_interview_questions",
-      "target": "scratch_gen_batch1",
-      "confidence_score": 1.0
+      "target": "scratch_gen_batch1"
     },
     {
       "relation": "imports",
@@ -28153,9 +28396,9 @@
       "source_file": "enrich_interview_questions.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "enrich_interview_questions",
-      "target": "scratch_gen_batch1_export_chapter_ts",
-      "confidence_score": 1.0
+      "target": "scratch_gen_batch1_export_chapter_ts"
     },
     {
       "relation": "contains",
@@ -73610,9 +73853,9 @@
       "source_file": "src/app/learn/[chapter]/[lesson]/page.tsx",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lesson_page",
-      "target": "lesson_markdowncontent",
-      "confidence_score": 1.0
+      "target": "lesson_markdowncontent"
     },
     {
       "relation": "imports_from",
@@ -73707,6 +73950,17 @@
       "source_file": "src/app/learn/[chapter]/[lesson]/page.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "source": "lesson_page",
+      "target": "services_search_service_getallchapters",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/learn/[chapter]/[lesson]/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "lesson_page",
       "target": "services_search_service_getchapter"
@@ -73743,6 +73997,17 @@
       "weight": 1.0,
       "source": "lesson_page_generatemetadata",
       "target": "services_search_service_getlesson"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/learn/[chapter]/[lesson]/page.tsx",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "lesson_page_lessonpage",
+      "target": "services_search_service_getallchapters"
     },
     {
       "relation": "calls",
@@ -74536,6 +74801,28 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/components/curriculum/CurriculumList.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "curriculum_curriculumlist",
+      "target": "store_progress_store",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/curriculum/CurriculumList.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "curriculum_curriculumlist",
+      "target": "store_progress_store_useprogressstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/components/home/CurriculumPreview.tsx",
       "source_location": "L7",
       "weight": 1.0,
@@ -75127,9 +75414,9 @@
       "source_file": "src/components/lesson/MarkdownContent.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lesson_markdowncontent",
-      "target": "lesson_codeblock",
-      "confidence_score": 1.0
+      "target": "lesson_codeblock"
     },
     {
       "relation": "imports_from",
@@ -75275,9 +75562,9 @@
       "source_file": "src/components/lesson/InterviewQuestion.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lesson_interviewquestion",
-      "target": "lesson_markdowncontent",
-      "confidence_score": 1.0
+      "target": "lesson_markdowncontent"
     },
     {
       "relation": "imports_from",
@@ -75384,14 +75671,36 @@
       "target": "lesson_lessonnavigation_navlink"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/lesson/LessonNavigation.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "lesson_lessonnavigation",
+      "target": "store_progress_store",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/lesson/LessonNavigation.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "lesson_lessonnavigation",
+      "target": "store_progress_store_useprogressstore",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/lesson/MarkdownContent.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lesson_markdowncontent",
-      "target": "lesson_markdowncontent_markdowncontent",
-      "confidence_score": 1.0
+      "target": "lesson_markdowncontent_markdowncontent"
     },
     {
       "relation": "contains",
@@ -75399,9 +75708,9 @@
       "source_file": "src/components/lesson/MarkdownContent.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lesson_markdowncontent",
-      "target": "lesson_markdowncontent_markdowncontentprops",
-      "confidence_score": 1.0
+      "target": "lesson_markdowncontent_markdowncontentprops"
     },
     {
       "relation": "contains",
@@ -80100,6 +80409,266 @@
       "target": "redis_production_toolkit_readme_run_pytest_suite"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L218",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_ready_with_minor_fixes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_1_executive_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_2_comprehensive_test_coverage_matrix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_3_severity_breakdown_bug_distribution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_5_ui_visual_responsive_accessibility_analysis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_6_curriculum_educational_progression_audit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_7_recommended_prioritized_fix_order",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L205",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_exhaustive_qa_audit_technical_review_fastapi_academy",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_8_final_verdict_quality_score",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_1_executive_summary",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_core_audit_takeaways",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_3_severity_breakdown_bug_distribution",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_bug_distribution_by_category",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_3_severity_breakdown_bug_distribution",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_severity_distribution",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_1_fa_0014_p1_critical_sqlalchemy_2_0_asyncsession_transaction_leaking",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_2_fa_0033_p1_critical_jwt_algorithm_confusion_vulnerability_in_rs256_verification",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_3_fa_0039_p1_critical_stripe_webhook_signature_verification_failure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_fa_0013_p2_high_legacy_pydantic_v1_validator_syntax_in_pydantic_v2_module",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_5_fa_0016_p2_high_missing_refresh_token_family_invalidation_on_replay_detection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_6_fa_0017_p2_high_invalid_wildcard_cors_with_allow_credentials_true",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_7_fa_0020_p2_high_websocket_broadcast_loop_crashing_on_disconnected_clients",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_4_critical_high_priority_technical_defects",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_8_fa_0038_p2_high_grpc_channel_connection_leak_in_fastapi_dependency",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_5_ui_visual_responsive_accessibility_analysis",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_accessibility_wcag_2_1_aa_compliance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_5_ui_visual_responsive_accessibility_analysis",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_responsive_layout_ergonomics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_6_curriculum_educational_progression_audit",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_chapter_progression_highlights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_8_final_verdict_quality_score",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_official_quality_verdict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test_results/fastapi_academy_qa_audit/fastapi_academy_qa_summary.md",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_ready_with_minor_fixes",
+      "target": "fastapi_academy_qa_audit_fastapi_academy_qa_summary_verdict_justification",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.85,
@@ -80141,5 +80710,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "06bd207bf4f9591faf880173a181079a7fd7aeb6"
+  "built_at_commit": "d7554a55a322a6703e399db2bb09fec2652cbbb8"
 }

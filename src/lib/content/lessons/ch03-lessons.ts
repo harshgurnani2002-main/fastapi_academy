@@ -24,15 +24,24 @@ export const ch03Lessons: Record<string, Lesson> = {
         id: "sqlalchemy-2x-async-core",
         type: "concept",
         title: "Architectural Mental Model: SQLAlchemy 2.x & AsyncSession",
-        content: `In modern distributed systems, **SQLAlchemy 2.x & AsyncSession** is a cornerstone of high availability, security, and low latency.
+        content: `In modern distributed systems, **SQLAlchemy 2.x & AsyncSession** requires explicit transaction boundary control to prevent connection leaks.
+
+### Correct AsyncSession get_db Dependency Pattern
+\`\`\`python
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_factory() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
+\`\`\`
 
 ### The Problem It Solves
-Without a rigorous architecture for SQLAlchemy 2.x & AsyncSession, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
-
-### How It Works Internally
-1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
-2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+Without explicit commit/rollback handling in \`get_db()\`, unhandled exceptions inside route handlers can leave database sessions in an uncommitted, dirty state before returning to the connection pool.`, 
       },
       {
         id: "sqlalchemy-2x-async-implementation",
@@ -1236,15 +1245,11 @@ response = await client.get(url, timeout=5.0)`
         id: "n-plus-one-queries-core",
         type: "concept",
         title: "Architectural Mental Model: Solving the N+1 Query Problem",
-        content: `In modern distributed systems, **Solving the N+1 Query Problem** is a cornerstone of high availability, security, and low latency.
+        content: `> ⚠️ **SQL Performance Warning (selectinload vs joinedload)**: For 1:N (one-to-many) collections, always use \`selectinload\` to issue separate parameterized SELECT queries and avoid Cartesian product row duplication in SQL. Reserve \`joinedload\` exclusively for 1:1 or N:1 foreign key relationships.
 
-### The Problem It Solves
-Without a rigorous architecture for Solving the N+1 Query Problem, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
-
-### How It Works Internally
-1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
-2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+### Eager Loading Comparison
+1. **selectinload (Recommended for 1:N Collections)**: Emits two separate queries: \`SELECT * FROM users\` followed by \`SELECT * FROM orders WHERE user_id IN (...)\`. No row multiplication.
+2. **joinedload (Recommended for 1:1 / N:1)**: Emits a single SQL \`LEFT OUTER JOIN\`. On 1:N relations, this duplicates parent rows N times over the wire.`
       },
       {
         id: "n-plus-one-queries-implementation",

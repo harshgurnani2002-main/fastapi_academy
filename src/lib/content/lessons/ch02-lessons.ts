@@ -32,7 +32,9 @@ Without a rigorous architecture for Large FastAPI Project Structure, backend ser
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.
+
+> **Architecture Note**: We use abstract Python Protocols and domain entities in this chapter to enforce clean boundaries. Full PostgreSQL asynchronous engine setup, pooling, and \`AsyncSession\` transaction boundaries are covered comprehensively in Chapter 3.`
       },
       {
         id: "large-project-structure-implementation",

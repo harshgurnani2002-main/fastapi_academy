@@ -32,7 +32,7 @@ Without a rigorous architecture for Caching Patterns: Cache-Aside, Read-Through,
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### XFetch Probabilistic Early Expiration Implementation\nThe XFetch optimal probabilistic algorithm prevents cache stampedes by recomputing hot values before expiration:\n\`\`\`python\nimport math\nimport random\nimport time\n\ndef should_recompute(val_ttl: float, compute_time_delta: float, beta: float = 1.0) -> bool:\n    """\n    XFetch formula: -beta * delta * ln(random()) >= val_ttl\n    Returns True if worker should recompute the cached value before expiration.\n    """\n    if val_ttl <= 0:\n        return True\n    return -(compute_time_delta * beta * math.log(random.random())) >= val_ttl\n\`\`\``
       },
       {
         id: "caching-patterns-overview-implementation",

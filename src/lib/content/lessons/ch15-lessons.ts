@@ -32,7 +32,7 @@ Without a rigorous architecture for The Python Async Event Loop, backend service
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n> **Platform Support**: Granian (Rust-based ASGI server) provides pre-compiled PyPI wheels for Linux (\`x86_64\`, \`aarch64\`) and macOS (Intel & Apple Silicon ARM64), requiring no local Rust compiler installation.`
       },
       {
         id: "async-event-loop-implementation",

@@ -32,7 +32,7 @@ Without a rigorous architecture for Kubernetes Architecture & Core Concepts, bac
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Separate Liveness and Readiness Probes\nNever share the same health endpoint for both probes. Liveness must only verify process execution, while readiness validates DB and dependency availability:\n\`\`\`yaml\nlivenessProbe:\n  httpGet:\n    path: /health/liveness\n    port: 8000\n  initialDelaySeconds: 5\n  periodSeconds: 10\nreadinessProbe:\n  httpGet:\n    path: /health/readiness\n    port: 8000\n  initialDelaySeconds: 10\n  periodSeconds: 5\n\`\`\``
       },
       {
         id: "kubernetes-fundamentals-implementation",

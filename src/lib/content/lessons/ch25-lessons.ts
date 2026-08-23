@@ -32,7 +32,7 @@ Without a rigorous architecture for SaaS Architecture Design & Planning, backend
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Stripe Webhook Raw Byte Stream Verification\nParsing JSON before signature verification modifies whitespace and breaks cryptographic HMAC checks. Always extract raw \`await request.body()\`:\n\`\`\`python\n@router.post("/webhook/stripe")\nasync def stripe_webhook(request: Request):\n    payload = await request.body()\n    sig_header = request.headers.get("stripe-signature")\n    try:\n        event = stripe.Webhook.construct_event(\n            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET\n        )\n    except (ValueError, stripe.error.SignatureVerificationError):\n        raise HTTPException(status_code=400, detail="Invalid webhook cryptographic signature")\n    return {"status": "success"}\n\`\`\``
       },
       {
         id: "saas-architecture-design-implementation",

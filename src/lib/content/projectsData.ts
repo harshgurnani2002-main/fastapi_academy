@@ -4610,6 +4610,12 @@ export const projectsCatalog: Record<string, ProjectData> = {
     "description": "Resilient Event-Driven Architecture utilizing the Transactional Outbox Pattern to guarantee atomic database updates and event publishing, paired with idempotent stream consumers achieving exactly-once processing.",
     "defaultFile": "src/main.py",
     "files": {
+      "schemas/order_created.avsc": {
+        "code": "{\n  \"type\": \"record\",\n  \"name\": \"OrderCreated\",\n  \"namespace\": \"com.fastapi.academy.events\",\n  \"doc\": \"Event emitted atomically via Transactional Outbox upon order creation.\",\n  \"fields\": [\n    { \"name\": \"order_id\", \"type\": \"string\", \"logicalType\": \"uuid\" },\n    { \"name\": \"user_id\", \"type\": \"string\", \"logicalType\": \"uuid\" },\n    { \"name\": \"total_amount_cents\", \"type\": \"long\" },\n    { \"name\": \"currency\", \"type\": \"string\", \"default\": \"USD\" },\n    { \"name\": \"created_at\", \"type\": \"long\", \"logicalType\": \"timestamp-millis\" }\n  ]\n}\n",
+        "language": "json",
+        "path": "schemas/order_created.avsc",
+        "name": "order_created.avsc"
+      },
       ".env.example": {
         "code": "APP_NAME=\"Event-Driven Order System\"\nAPP_VERSION=\"11.0.0\"\nENVIRONMENT=\"production\"\nDEBUG=false\nAPI_V1_PREFIX=\"/api/v1\"\nHOST=\"0.0.0.0\"\nPORT=8000\nALLOWED_ORIGINS=[\"*\"]\nDATABASE_URL=\"sqlite+aiosqlite:///./orders_event_db.db\"\n",
         "language": "shell",
@@ -7067,6 +7073,12 @@ export const projectsCatalog: Record<string, ProjectData> = {
     "description": "The Ultimate Full-Stack Production SaaS Platform Capstone unifying Multi-Tenant RBAC, Google OAuth 2.0 PKCE, Redis Caching, WebSockets, Celery Task Queues, Observability, and Kubernetes readiness.",
     "defaultFile": "src/main.py",
     "files": {
+      "docs/stripe_webhook_flow.mmd": {
+        "code": "sequenceDiagram\n    autonumber\n    actor Customer\n    participant Stripe as Stripe API / Webhooks\n    participant Gateway as FastAPI /webhook/stripe\n    participant DB as PostgreSQL (Outbox)\n    participant Worker as Celery Worker\n    \n    Customer->>Stripe: Submit Subscription Payment\n    Stripe->>Gateway: POST /webhook/stripe (Raw payload + Sig Header)\n    Gateway->>Gateway: Verify HMAC Signature (request.body())\n    alt Invalid Signature\n        Gateway-->>Stripe: 400 Bad Request\n    else Valid Signature\n        Gateway->>DB: Insert event into webhook_events (Idempotency Key)\n        alt Duplicate Event\n            Gateway-->>Stripe: 200 OK (Already Processed)\n        else Fresh Event\n            Gateway->>DB: Record Transactional Outbox Entry\n            Gateway-->>Stripe: 200 OK (Event Accepted)\n            DB->>Worker: Dequeue Outbox Provisioning Task\n            Worker->>DB: Update Tenant Subscription Status to Active\n            Worker->>Customer: Send Subscription Confirmation Email\n        end\n    end\n",
+        "language": "mermaid",
+        "path": "docs/stripe_webhook_flow.mmd",
+        "name": "stripe_webhook_flow.mmd"
+      },
       "pyproject.toml": {
         "code": "[tool.pytest.ini_options]\nasyncio_mode = \"auto\"\npythonpath = [\".\"]\n",
         "language": "toml",

@@ -32,7 +32,7 @@ Without a rigorous architecture for Microservices vs Monolith: The Real Trade-of
 ### How It Works Internally
 1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.\n\n### Persistent gRPC Client Channel in FastAPI Lifespan\nCreating a new gRPC channel on every incoming HTTP request causes socket churn and latency spikes. Manage a persistent singleton channel in \`app.state\`:\n\`\`\`python\n@asynccontextmanager\nasync def lifespan(app: FastAPI):\n    app.state.grpc_channel = grpc.aio.insecure_channel("order-service:50051")\n    yield\n    await app.state.grpc_channel.close()\n\`\`\``
       },
       {
         id: "microservices-vs-monolith-implementation",

@@ -1,6 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import { getLesson, getChapter } from '@/lib/services/search.service';
+import { getLesson, getChapter, getAllChapters } from '@/lib/services/search.service';
 
 import LessonHeader from '@/components/lesson/LessonHeader';
 import CodeBlock from '@/components/lesson/CodeBlock';
@@ -28,10 +28,15 @@ export async function generateMetadata({
   const { chapter: chapterSlug, lesson: lessonSlug } = await params;
   const lesson = getLesson(chapterSlug, lessonSlug);
   const chapter = getChapter(chapterSlug);
+  if (!chapter || !lesson) return { title: 'Lesson | FastAPI Academy' };
+
+  const lessonIndex = chapter.lessons.findIndex((l) => l.slug === lessonSlug);
+  const chNum = chapter.id;
+  const lNum = lessonIndex >= 0 ? lessonIndex + 1 : 1;
+
   return {
-    title: lesson
-      ? `${lesson.title} | ${chapter?.title} | FastAPI Mastery`
-      : 'Lesson | FastAPI Mastery',
+    title: `${chNum}.${lNum}: ${lesson.title} | ${chapter.title} | FastAPI Academy`,
+    description: lesson.description || `${lesson.title} - FastAPI Academy`,
   };
 }
 
@@ -47,12 +52,52 @@ export default async function LessonPage({
 
   if (!chapter || !lesson) return notFound();
 
+  const allChapters = getAllChapters();
+  const chapterIndex = allChapters.findIndex((c) => c.slug === chapterSlug);
   const lessonIndex = chapter.lessons.findIndex((l) => l.slug === lessonSlug);
-  const prevLesson = lessonIndex > 0 ? chapter.lessons[lessonIndex - 1] : null;
-  const nextLesson =
-    lessonIndex < chapter.lessons.length - 1
-      ? chapter.lessons[lessonIndex + 1]
-      : null;
+
+  let prevNav: { title: string; slug: string; chapterTitle: string; isNewChapter?: boolean } | null = null;
+  let nextNav: { title: string; slug: string; chapterTitle: string; isNewChapter?: boolean } | null = null;
+
+  if (lessonIndex > 0) {
+    const prevL = chapter.lessons[lessonIndex - 1];
+    prevNav = {
+      title: prevL.title,
+      slug: `/learn/${chapter.slug}/${prevL.slug}`,
+      chapterTitle: chapter.title,
+    };
+  } else if (chapterIndex > 0) {
+    const prevChap = allChapters[chapterIndex - 1];
+    if (prevChap.lessons.length > 0) {
+      const prevL = prevChap.lessons[prevChap.lessons.length - 1];
+      prevNav = {
+        title: prevL.title,
+        slug: `/learn/${prevChap.slug}/${prevL.slug}`,
+        chapterTitle: prevChap.title,
+        isNewChapter: true,
+      };
+    }
+  }
+
+  if (lessonIndex < chapter.lessons.length - 1) {
+    const nextL = chapter.lessons[lessonIndex + 1];
+    nextNav = {
+      title: nextL.title,
+      slug: `/learn/${chapter.slug}/${nextL.slug}`,
+      chapterTitle: chapter.title,
+    };
+  } else if (chapterIndex < allChapters.length - 1) {
+    const nextChap = allChapters[chapterIndex + 1];
+    if (nextChap.lessons.length > 0) {
+      const nextL = nextChap.lessons[0];
+      nextNav = {
+        title: nextL.title,
+        slug: `/learn/${nextChap.slug}/${nextL.slug}`,
+        chapterTitle: nextChap.title,
+        isNewChapter: true,
+      };
+    }
+  }
 
   const tocSections = [
     ...lesson.sections.map((s) => ({ id: s.id, title: s.title, level: 1 })),
@@ -278,24 +323,8 @@ export default async function LessonPage({
 
           {/* Navigation */}
           <LessonNavigation
-            prev={
-              prevLesson
-                ? {
-                    title: prevLesson.title,
-                    slug: `/learn/${chapter.slug}/${prevLesson.slug}`,
-                    chapterTitle: chapter.title,
-                  }
-                : undefined
-            }
-            next={
-              nextLesson
-                ? {
-                    title: nextLesson.title,
-                    slug: `/learn/${chapter.slug}/${nextLesson.slug}`,
-                    chapterTitle: chapter.title,
-                  }
-                : undefined
-            }
+            prev={prevNav || undefined}
+            next={nextNav || undefined}
             lessonId={lesson.id}
           />
         </div>
