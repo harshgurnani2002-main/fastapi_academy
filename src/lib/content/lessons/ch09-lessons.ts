@@ -24,15 +24,15 @@ export const ch09Lessons: Record<string, Lesson> = {
         id: "why-rate-limiting-core",
         type: "concept",
         title: "Architectural Mental Model: Why Rate Limiting Exists",
-        content: `In modern distributed systems, **Why Rate Limiting Exists** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Why Rate Limiting Exists** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Why Rate Limiting Exists, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Why Rate Limiting Exists, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "why-rate-limiting-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for Why Rate Limiting Exists, backend services suffer 
         content: "The following implementation demonstrates the correct production pattern for Why Rate Limiting Exists in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-why-rate-limiting",
-          title: "Production Why Rate Limiting Exists Implementation",
+          title: "Production Why Rate Limiting Exists Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.why_rate_limiting")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Why Rate Limiting Exists."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Why Rate Limiting Exists with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-why-rate-limiting",
-        title: "Challenge: Stress Testing & Hardening Why Rate Limiting Exists",
+        title: "Challenge: Hardening Why Rate Limiting Exists",
         description: "Extend the service implementation for Why Rate Limiting Exists to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-why-rate-limiting-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Why Rate Limiting Exists?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Why Rate Limiting Exists under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Why Rate Limiting Exists**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-why-rate-limiting-2",
+        question: "What failure modes and edge cases must be handled when deploying Why Rate Limiting Exists across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-why-rate-limiting-3",
+        question: "What security considerations and threat vectors apply to Why Rate Limiting Exists in a public API?",
+        answer: "Security considerations for **Why Rate Limiting Exists**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +214,15 @@ response = await client.get(url, timeout=5.0)`
         id: "fixed-window-algorithm-core",
         type: "concept",
         title: "Architectural Mental Model: Fixed Window Counter Algorithm",
-        content: `In modern distributed systems, **Fixed Window Counter Algorithm** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Fixed Window Counter Algorithm** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Fixed Window Counter Algorithm, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Fixed Window Counter Algorithm, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "fixed-window-algorithm-implementation",
@@ -220,7 +231,7 @@ Without a rigorous design for Fixed Window Counter Algorithm, backend services s
         content: "The following implementation demonstrates the correct production pattern for Fixed Window Counter Algorithm in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-fixed-window-algorithm",
-          title: "Production Fixed Window Counter Algorithm Implementation",
+          title: "Production Fixed Window Counter Algorithm Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +242,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.fixed_window_algorithm")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Fixed Window Counter Algorithm."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Fixed Window Counter Algorithm with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +293,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-fixed-window-algorithm",
-        title: "Challenge: Stress Testing & Hardening Fixed Window Counter Algorithm",
+        title: "Challenge: Hardening Fixed Window Counter Algorithm",
         description: "Extend the service implementation for Fixed Window Counter Algorithm to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +313,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-fixed-window-algorithm-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Fixed Window Counter Algorithm?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Fixed Window Counter Algorithm under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Fixed Window Counter Algorithm**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-fixed-window-algorithm-2",
+        question: "What failure modes and edge cases must be handled when deploying Fixed Window Counter Algorithm across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-fixed-window-algorithm-3",
+        question: "What security considerations and threat vectors apply to Fixed Window Counter Algorithm in a public API?",
+        answer: "Security considerations for **Fixed Window Counter Algorithm**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +404,15 @@ response = await client.get(url, timeout=5.0)`
         id: "sliding-window-algorithm-core",
         type: "concept",
         title: "Architectural Mental Model: Sliding Window Log & Counter",
-        content: `In modern distributed systems, **Sliding Window Log & Counter** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Sliding Window Log & Counter** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Sliding Window Log & Counter, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Sliding Window Log & Counter, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "sliding-window-algorithm-implementation",
@@ -399,7 +421,7 @@ Without a rigorous design for Sliding Window Log & Counter, backend services suf
         content: "The following implementation demonstrates the correct production pattern for Sliding Window Log & Counter in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-sliding-window-algorithm",
-          title: "Production Sliding Window Log & Counter Implementation",
+          title: "Production Sliding Window Log & Counter Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +432,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.sliding_window_algorithm")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Sliding Window Log & Counter."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Sliding Window Log & Counter with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +483,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-sliding-window-algorithm",
-        title: "Challenge: Stress Testing & Hardening Sliding Window Log & Counter",
+        title: "Challenge: Hardening Sliding Window Log & Counter",
         description: "Extend the service implementation for Sliding Window Log & Counter to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +503,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-sliding-window-algorithm-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Sliding Window Log & Counter?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Sliding Window Log & Counter under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Sliding Window Log & Counter**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-sliding-window-algorithm-2",
+        question: "What failure modes and edge cases must be handled when deploying Sliding Window Log & Counter across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-sliding-window-algorithm-3",
+        question: "What security considerations and threat vectors apply to Sliding Window Log & Counter in a public API?",
+        answer: "Security considerations for **Sliding Window Log & Counter**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +594,15 @@ response = await client.get(url, timeout=5.0)`
         id: "token-bucket-leaky-bucket-core",
         type: "concept",
         title: "Architectural Mental Model: Token Bucket & Leaky Bucket",
-        content: `In modern distributed systems, **Token Bucket & Leaky Bucket** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Token Bucket & Leaky Bucket** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Token Bucket & Leaky Bucket, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Token Bucket & Leaky Bucket, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "token-bucket-leaky-bucket-implementation",
@@ -578,7 +611,7 @@ Without a rigorous design for Token Bucket & Leaky Bucket, backend services suff
         content: "The following implementation demonstrates the correct production pattern for Token Bucket & Leaky Bucket in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-token-bucket-leaky-bucket",
-          title: "Production Token Bucket & Leaky Bucket Implementation",
+          title: "Production Token Bucket & Leaky Bucket Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +622,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.token_bucket_leaky_bucket")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Token Bucket & Leaky Bucket."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Token Bucket & Leaky Bucket with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +673,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-token-bucket-leaky-bucket",
-        title: "Challenge: Stress Testing & Hardening Token Bucket & Leaky Bucket",
+        title: "Challenge: Hardening Token Bucket & Leaky Bucket",
         description: "Extend the service implementation for Token Bucket & Leaky Bucket to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +693,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-token-bucket-leaky-bucket-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Token Bucket & Leaky Bucket?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Token Bucket & Leaky Bucket under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Token Bucket & Leaky Bucket**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-token-bucket-leaky-bucket-2",
+        question: "What failure modes and edge cases must be handled when deploying Token Bucket & Leaky Bucket across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-token-bucket-leaky-bucket-3",
+        question: "What security considerations and threat vectors apply to Token Bucket & Leaky Bucket in a public API?",
+        answer: "Security considerations for **Token Bucket & Leaky Bucket**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +784,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-rate-limiting-core",
         type: "concept",
         title: "Architectural Mental Model: Redis-Backed Rate Limiting in FastAPI",
-        content: `In modern distributed systems, **Redis-Backed Rate Limiting in FastAPI** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis-Backed Rate Limiting in FastAPI** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis-Backed Rate Limiting in FastAPI, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis-Backed Rate Limiting in FastAPI, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-rate-limiting-implementation",
@@ -757,7 +801,7 @@ Without a rigorous design for Redis-Backed Rate Limiting in FastAPI, backend ser
         content: "The following implementation demonstrates the correct production pattern for Redis-Backed Rate Limiting in FastAPI in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-rate-limiting",
-          title: "Production Redis-Backed Rate Limiting in FastAPI Implementation",
+          title: "Production Redis-Backed Rate Limiting in FastAPI Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +812,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_rate_limiting")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis-Backed Rate Limiting in FastAPI."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis-Backed Rate Limiting in FastAPI with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +863,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-rate-limiting",
-        title: "Challenge: Stress Testing & Hardening Redis-Backed Rate Limiting in FastAPI",
+        title: "Challenge: Hardening Redis-Backed Rate Limiting in FastAPI",
         description: "Extend the service implementation for Redis-Backed Rate Limiting in FastAPI to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +883,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-rate-limiting-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis-Backed Rate Limiting in FastAPI?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-rate-limiting-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-rate-limiting-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis-Backed Rate Limiting in FastAPI under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis-Backed Rate Limiting in FastAPI**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-rate-limiting-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis-Backed Rate Limiting in FastAPI across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-rate-limiting-5",
+        question: "What security considerations and threat vectors apply to Redis-Backed Rate Limiting in FastAPI in a public API?",
+        answer: "Security considerations for **Redis-Backed Rate Limiting in FastAPI**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +986,15 @@ response = await client.get(url, timeout=5.0)`
         id: "distributed-rate-limiting-core",
         type: "concept",
         title: "Architectural Mental Model: Distributed Rate Limiting",
-        content: `In modern distributed systems, **Distributed Rate Limiting** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Distributed Rate Limiting** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Distributed Rate Limiting, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Distributed Rate Limiting, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "distributed-rate-limiting-implementation",
@@ -936,7 +1003,7 @@ Without a rigorous design for Distributed Rate Limiting, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Distributed Rate Limiting in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-distributed-rate-limiting",
-          title: "Production Distributed Rate Limiting Implementation",
+          title: "Production Distributed Rate Limiting Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1014,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.distributed_rate_limiting")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Distributed Rate Limiting."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Distributed Rate Limiting with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1065,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-distributed-rate-limiting",
-        title: "Challenge: Stress Testing & Hardening Distributed Rate Limiting",
+        title: "Challenge: Hardening Distributed Rate Limiting",
         description: "Extend the service implementation for Distributed Rate Limiting to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1085,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-distributed-rate-limiting-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Distributed Rate Limiting?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Distributed Rate Limiting under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Distributed Rate Limiting**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-rate-limiting-2",
+        question: "What failure modes and edge cases must be handled when deploying Distributed Rate Limiting across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-rate-limiting-3",
+        question: "What security considerations and threat vectors apply to Distributed Rate Limiting in a public API?",
+        answer: "Security considerations for **Distributed Rate Limiting**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1176,15 @@ response = await client.get(url, timeout=5.0)`
         id: "tiered-rate-limits-core",
         type: "concept",
         title: "Architectural Mental Model: Tiered Rate Limits: IP, User, API Key",
-        content: `In modern distributed systems, **Tiered Rate Limits: IP, User, API Key** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Tiered Rate Limits: IP, User, API Key** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Tiered Rate Limits: IP, User, API Key, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Tiered Rate Limits: IP, User, API Key, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "tiered-rate-limits-implementation",
@@ -1115,7 +1193,7 @@ Without a rigorous design for Tiered Rate Limits: IP, User, API Key, backend ser
         content: "The following implementation demonstrates the correct production pattern for Tiered Rate Limits: IP, User, API Key in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-tiered-rate-limits",
-          title: "Production Tiered Rate Limits: IP, User, API Key Implementation",
+          title: "Production Tiered Rate Limits: IP, User, API Key Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1204,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.tiered_rate_limits")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Tiered Rate Limits: IP, User, API Key."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Tiered Rate Limits: IP, User, API Key with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1255,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-tiered-rate-limits",
-        title: "Challenge: Stress Testing & Hardening Tiered Rate Limits: IP, User, API Key",
+        title: "Challenge: Hardening Tiered Rate Limits: IP, User, API Key",
         description: "Extend the service implementation for Tiered Rate Limits: IP, User, API Key to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1275,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-tiered-rate-limits-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Tiered Rate Limits: IP, User, API Key?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Tiered Rate Limits: IP, User, API Key under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Tiered Rate Limits: IP, User, API Key**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-tiered-rate-limits-2",
+        question: "What failure modes and edge cases must be handled when deploying Tiered Rate Limits: IP, User, API Key across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-tiered-rate-limits-3",
+        question: "What security considerations and threat vectors apply to Tiered Rate Limits: IP, User, API Key in a public API?",
+        answer: "Security considerations for **Tiered Rate Limits: IP, User, API Key**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1366,15 @@ response = await client.get(url, timeout=5.0)`
         id: "burst-handling-strategy-core",
         type: "concept",
         title: "Architectural Mental Model: Burst Handling Strategy",
-        content: `In modern distributed systems, **Burst Handling Strategy** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Burst Handling Strategy** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Burst Handling Strategy, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Burst Handling Strategy, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "burst-handling-strategy-implementation",
@@ -1294,7 +1383,7 @@ Without a rigorous design for Burst Handling Strategy, backend services suffer f
         content: "The following implementation demonstrates the correct production pattern for Burst Handling Strategy in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-burst-handling-strategy",
-          title: "Production Burst Handling Strategy Implementation",
+          title: "Production Burst Handling Strategy Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1394,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.burst_handling_strategy")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Burst Handling Strategy."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Burst Handling Strategy with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1445,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-burst-handling-strategy",
-        title: "Challenge: Stress Testing & Hardening Burst Handling Strategy",
+        title: "Challenge: Hardening Burst Handling Strategy",
         description: "Extend the service implementation for Burst Handling Strategy to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1465,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-burst-handling-strategy-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Burst Handling Strategy?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Burst Handling Strategy under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Burst Handling Strategy**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-burst-handling-strategy-2",
+        question: "What failure modes and edge cases must be handled when deploying Burst Handling Strategy across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-burst-handling-strategy-3",
+        question: "What security considerations and threat vectors apply to Burst Handling Strategy in a public API?",
+        answer: "Security considerations for **Burst Handling Strategy**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1556,15 @@ response = await client.get(url, timeout=5.0)`
         id: "rate-limit-monitoring-core",
         type: "concept",
         title: "Architectural Mental Model: Rate Limit Monitoring & Analytics",
-        content: `In modern distributed systems, **Rate Limit Monitoring & Analytics** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Rate Limit Monitoring & Analytics** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Rate Limit Monitoring & Analytics, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Rate Limit Monitoring & Analytics, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "rate-limit-monitoring-implementation",
@@ -1473,7 +1573,7 @@ Without a rigorous design for Rate Limit Monitoring & Analytics, backend service
         content: "The following implementation demonstrates the correct production pattern for Rate Limit Monitoring & Analytics in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-rate-limit-monitoring",
-          title: "Production Rate Limit Monitoring & Analytics Implementation",
+          title: "Production Rate Limit Monitoring & Analytics Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1584,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.rate_limit_monitoring")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Rate Limit Monitoring & Analytics."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Rate Limit Monitoring & Analytics with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1635,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-rate-limit-monitoring",
-        title: "Challenge: Stress Testing & Hardening Rate Limit Monitoring & Analytics",
+        title: "Challenge: Hardening Rate Limit Monitoring & Analytics",
         description: "Extend the service implementation for Rate Limit Monitoring & Analytics to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1655,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-rate-limit-monitoring-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Rate Limit Monitoring & Analytics?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Rate Limit Monitoring & Analytics under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Rate Limit Monitoring & Analytics**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-rate-limit-monitoring-2",
+        question: "What failure modes and edge cases must be handled when deploying Rate Limit Monitoring & Analytics across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-rate-limit-monitoring-3",
+        question: "What security considerations and threat vectors apply to Rate Limit Monitoring & Analytics in a public API?",
+        answer: "Security considerations for **Rate Limit Monitoring & Analytics**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

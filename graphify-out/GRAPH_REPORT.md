@@ -1,16 +1,16 @@
 # Graph Report - fastapi-academy  (2026-08-23)
 
 ## Corpus Check
-- 735 files · ~419,372 words
+- 738 files · ~513,552 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3080 nodes · 5074 edges · 549 communities (384 shown, 165 thin omitted)
+- 3086 nodes · 5087 edges · 551 communities (386 shown, 165 thin omitted)
 - Extraction: 68% EXTRACTED · 32% INFERRED · 0% AMBIGUOUS · INFERRED: 1620 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `561caac7`
+- Built from commit: `06bd207b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -360,6 +360,8 @@
 - [[_COMMUNITY_Community 546|Community 546]]
 - [[_COMMUNITY_Community 547|Community 547]]
 - [[_COMMUNITY_Community 548|Community 548]]
+- [[_COMMUNITY_Community 549|Community 549]]
+- [[_COMMUNITY_Community 550|Community 550]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `APIResponse` - 102 edges
@@ -380,10 +382,10 @@
   projects/api-performance-optimization/tests/conftest.py → projects/production-postgresql-api/src/models/base.py
 - `AsyncSession` --uses--> `Base`  [INFERRED]
   projects/concurrent-ticket-booking/src/core/database.py → projects/production-postgresql-api/src/models/base.py
+- `AsyncClient` --uses--> `Base`  [INFERRED]
+  projects/concurrent-ticket-booking/tests/conftest.py → projects/production-postgresql-api/src/models/base.py
 - `AsyncSession` --uses--> `Base`  [INFERRED]
-  projects/concurrent-ticket-booking/src/repositories/base.py → projects/production-postgresql-api/src/models/base.py
-- `Any` --uses--> `Base`  [INFERRED]
-  projects/concurrent-ticket-booking/src/repositories/base.py → projects/production-postgresql-api/src/models/base.py
+  projects/event-driven-order-system/src/core/database.py → projects/production-postgresql-api/src/models/base.py
 
 ## Import Cycles
 - 1-file cycle: `projects/api-performance-optimization/src/main.py -> projects/api-performance-optimization/src/main.py`
@@ -405,7 +407,7 @@
 - 1-file cycle: `projects/realtime-collaboration-platform/src/main.py -> projects/realtime-collaboration-platform/src/main.py`
 - 1-file cycle: `projects/redis-production-toolkit/src/main.py -> projects/redis-production-toolkit/src/main.py`
 
-## Communities (549 total, 165 thin omitted)
+## Communities (551 total, 165 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.09
@@ -484,52 +486,52 @@ Cohesion: 0.67
 Nodes (3): 4. Main Pages, Hero, Home
 
 ### Community 51 - "Community 51"
-Cohesion: 0.07
-Nodes (54): FileUploadViolationException, SsrfBlockedException, File Upload Sanitization & Path Traversal Mitigator ============================, Strip path traversal sequences (../, ../../, null bytes) and return safe UUID fi, sanitize_filename(), validate_file_content(), is_safe_external_url(), SSRF Defense Engine & IP Blocklist Validator =================================== (+46 more)
+Cohesion: 0.17
+Nodes (19): DocumentModel, AsyncSession, UploadFile, WebhookTriggerRequest, AsyncSession, NotFoundException, DocumentRepository, WebhookTriggerRequest (+11 more)
 
 ### Community 52 - "Community 52"
 Cohesion: 0.07
-Nodes (42): get_item_repository(), get_item_service(), Dependency provider for UserRepository., Dependency provider for ItemRepository., Dependency provider for UserService with UserRepository injected., Dependency provider for ItemService with repositories injected., ItemEntity, ItemModel (+34 more)
+Nodes (37): ItemEntity, ItemModel, ItemCreate, ItemService, ItemUpdate, AsyncSession, ItemCreate, ItemRepository (+29 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.06
 Nodes (29): ABC, BurstSimulationRequest, AsyncRateLimitRedisEngine, get_redis(), Async Redis Engine & In-Memory Rate Limit Emulator =============================, RateLimitMiddleware, FastAPI Rate Limiting ASGI Middleware ===================================== Seni, Request (+21 more)
 
 ### Community 54 - "Community 54"
-Cohesion: 0.09
-Nodes (32): ExpiredHoldException, IdempotencyConflictException, Raised when an event or inventory category has zero remaining available tickets., Raised when a specific seat is already booked or held by another user., Raised when an identical idempotency key is already actively being processed., Raised when trying to confirm a ticket hold that has already expired., SeatUnavailableException, SoldOutException (+24 more)
+Cohesion: 0.12
+Nodes (23): ExpiredHoldException, Raised when an event or inventory category has zero remaining available tickets., Raised when a specific seat is already booked or held by another user., Raised when trying to confirm a ticket hold that has already expired., SeatUnavailableException, SoldOutException, Any, app_exception_handler() (+15 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.12
-Nodes (22): ResourceModel, ResourceStatus, ResourceService, ResourceStatus, AsyncSession, ResourceModel, ResourceStatus, ResourceCreate (+14 more)
+Nodes (31): get_resource_repository(), get_resource_service(), Dependency ensuring caller provides a valid Bearer JWT., Dependency factory enforcing role-based authorization., require_role(), ResourceModel, AsyncSession, AuthService (+23 more)
 
 ### Community 56 - "Community 56"
-Cohesion: 0.11
-Nodes (23): get_order_service(), get_event_bus(), InMemoryEventBus, In-Memory Event Bus & Stream Broker =================================== Senior D, InMemoryEventBus, OrderModel, OutboxEventModel, ProcessedEventModel (+15 more)
+Cohesion: 0.09
+Nodes (27): Base, get_order_service(), get_event_bus(), InMemoryEventBus, In-Memory Event Bus & Stream Broker =================================== Senior D, InMemoryEventBus, OrderModel, OutboxEventModel (+19 more)
 
 ### Community 57 - "Community 57"
 Cohesion: 0.06
-Nodes (27): BaseModel, APIResponse, APIResponse, UserOut, APIResponse, LoginRequest, RefreshTokenRequest, APIResponse (+19 more)
+Nodes (30): BaseModel, APIResponse, APIResponse, APIResponse, LoginRequest, RefreshTokenRequest, APIResponse, LoginRequest (+22 more)
 
 ### Community 58 - "Community 58"
-Cohesion: 0.10
-Nodes (41): MfaRequiredException, Raised when an already rotated refresh token is replayed (family theft detection, TokenTheftDetectedException, AsyncWorkerBroker, ApiKeyCreateRequest, ApiKeyService, UserModel, AuthService (+33 more)
+Cohesion: 0.12
+Nodes (25): MfaRequiredException, Raised when an already rotated refresh token is replayed (family theft detection, TokenTheftDetectedException, create_refresh_token(), UserCreate, UserRepository, UserUpdate, AsyncRedisStore (+17 more)
 
 ### Community 59 - "Community 59"
 Cohesion: 0.10
 Nodes (22): UnauthorizedSessionException, get_session_store(), InMemoryDistributedSessionStore, Distributed Redis Session Store Engine ====================================== Se, SessionRecord, InMemoryDistributedSessionStore, LoginRequest, Request (+14 more)
 
 ### Community 60 - "Community 60"
-Cohesion: 0.31
-Nodes (4): Any, AsyncSession, ModelType, BaseRepository
+Cohesion: 0.07
+Nodes (21): ItemModel, SQLAlchemy model for Users table., SQLAlchemy model for Items table., UserModel, Any, AsyncSession, ModelType, BaseRepository (+13 more)
 
 ### Community 61 - "Community 61"
 Cohesion: 0.09
-Nodes (30): Base, CircuitState, Three-State Circuit Breaker & Bulkhead Semaphore ===============================, TaskStatus, ItemModel, SQLAlchemy model for Users table., SQLAlchemy model for Items table., UserModel (+22 more)
+Nodes (22): CircuitBreaker, CircuitState, Three-State Circuit Breaker & Bulkhead Semaphore ===============================, Enum, Standard audit timestamps for production data governance., Soft deletion support enabling non-destructive archiving and recovery., SoftDeleteMixin, ClassificationLevel (+14 more)
 
 ### Community 62 - "Community 62"
-Cohesion: 0.12
-Nodes (19): EventModel, Event Model with Finite Capacity Counter =======================================, Ticket Model with Hold TTL & State Machine =====================================, TicketModel, TicketStatus, AsyncSession, EventModel, AsyncSession (+11 more)
+Cohesion: 0.08
+Nodes (36): IdempotencyConflictException, Raised when an identical idempotency key is already actively being processed., datetime, BookingModel, BookingStatus, Booking Ledger Model ==================== Senior Design Note: Unique constraint, EventModel, Event Model with Finite Capacity Counter ======================================= (+28 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.10
@@ -540,12 +542,12 @@ Cohesion: 0.09
 Nodes (19): ProjectData, ProjectFileInfo, projectsCatalog, CodeHighlighter(), CodeHighlighterProps, DOCKER_KEYWORDS, PYTHON_BUILTINS, PYTHON_KEYWORDS (+11 more)
 
 ### Community 65 - "Community 65"
-Cohesion: 0.30
-Nodes (13): CriticalWorkRequest, LockAcquireRequest, LockReleaseRequest, AsyncRedisEngine, LockService, CriticalWorkRequest, LockAcquireRequest, LockAcquireResponse (+5 more)
+Cohesion: 0.36
+Nodes (12): CriticalWorkRequest, LockAcquireRequest, LockReleaseRequest, AsyncRedisEngine, LockService, CriticalWorkRequest, LockAcquireRequest, LockAcquireResponse (+4 more)
 
 ### Community 66 - "Community 66"
-Cohesion: 0.08
-Nodes (48): get_api_key_service(), get_resource_repository(), get_resource_service(), Dependency ensuring caller provides a valid Bearer JWT., Dependency factory enforcing role-based authorization., require_role(), require_roles(), OAuthCallbackRequest (+40 more)
+Cohesion: 0.11
+Nodes (20): get_api_key_service(), require_roles(), AsyncRedisStore, get_redis_client(), Async Redis Session & Token Blacklist Provider =================================, ApiKeyService, UserModel, ApiKeyService (+12 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.07
@@ -553,15 +555,15 @@ Nodes (16): Base, SQLAlchemy Declarative Base for models., DeclarativeBase, Base
 
 ### Community 68 - "Community 68"
 Cohesion: 0.19
-Nodes (10): Any, app_exception_handler(), AppException, ForbiddenException, NotFoundException, UnauthorizedException, validation_exception_handler(), JSONResponse (+2 more)
+Nodes (11): SsrfBlockedException, Any, app_exception_handler(), AppException, ForbiddenException, NotFoundException, UnauthorizedException, validation_exception_handler() (+3 more)
 
 ### Community 69 - "Community 69"
-Cohesion: 0.33
-Nodes (3): AsyncSession, UserRepository, UserModel
+Cohesion: 0.12
+Nodes (18): MfaVerifyRequest, AsyncSession, get_current_user(), UserModel, AsyncSession, UserRepository, UserModel, ApiKeyCreateRequest (+10 more)
 
 ### Community 70 - "Community 70"
-Cohesion: 0.13
-Nodes (15): AsyncWorkerBroker, DocumentTask, get_broker(), In-Memory Async Task Broker & Worker Engine ====================================, DocumentProcessRequest, AsyncWorkerBroker, AsyncWorkerBroker, DocumentProcessRequest (+7 more)
+Cohesion: 0.12
+Nodes (17): AsyncWorkerBroker, DocumentTask, get_broker(), In-Memory Async Task Broker & Worker Engine ====================================, TaskStatus, DocumentProcessRequest, AsyncWorkerBroker, AsyncWorkerBroker (+9 more)
 
 ### Community 71 - "Community 71"
 Cohesion: 0.16
@@ -572,43 +574,43 @@ Cohesion: 0.16
 Nodes (16): TaskBatchCreate, TaskService, AsyncSession, ProjectRepository, TaskBatchCreate, TaskCreate, TaskModel, TaskStatus (+8 more)
 
 ### Community 73 - "Community 73"
-Cohesion: 0.15
-Nodes (17): app_exception_handler(), validation_exception_handler(), JSONResponse, Request, RequestValidationError, FastAPI, create_application(), Any (+9 more)
+Cohesion: 0.19
+Nodes (9): FastAPI, create_application(), Any, app_exception_handler(), AppException, RateLimitExceededException, validation_exception_handler(), JSONResponse (+1 more)
 
 ### Community 74 - "Community 74"
 Cohesion: 0.12
-Nodes (8): AsyncRedisEngine, get_redis(), High-Performance Async Redis Client Engine & Memory Fallback ===================, AsyncRedisEngine, Any, PublishMessageRequest, Queue, publish_message()
+Nodes (7): AsyncRedisEngine, get_redis(), High-Performance Async Redis Client Engine & Memory Fallback ===================, AsyncRedisEngine, Any, Queue, redis_health_probe()
 
 ### Community 75 - "Community 75"
 Cohesion: 0.16
 Nodes (14): get_connection_manager(), WebSocket Room Connection Manager & Presence Tracker ===========================, RoomConnectionManager, WebSocket, Any, WebSocket, RoomBroadcastRequest, RoomConnectionManager (+6 more)
 
 ### Community 76 - "Community 76"
-Cohesion: 0.13
-Nodes (13): CacheStatsResponse, get_cache_service(), get_lock_service(), get_stream_service(), AsyncRedisEngine, CacheService, LockService, StreamService (+5 more)
+Cohesion: 0.19
+Nodes (6): CacheStatsResponse, Any, AsyncRedisEngine, CacheService, Cache-Aside Pattern with Single-Flight Stampede Defense ========================, Single-flight cache-aside with mutex locking.
 
 ### Community 77 - "Community 77"
 Cohesion: 0.12
 Nodes (8): curriculum, CurriculumList(), metadata, metadata, CurriculumSidebarProps, metadata, ProgressState, useProgressStore
 
 ### Community 78 - "Community 78"
-Cohesion: 0.17
-Nodes (16): generic_exception_handler(), Base application exception., Global handler for application exceptions returning standardized error payload., Handler for FastAPI request validation errors., Catch-all unexpected error handler., Exception, Any, app_exception_handler() (+8 more)
+Cohesion: 0.35
+Nodes (6): Base application exception., Any, AppException, ConflictException, NotFoundException, ValidationException
 
 ### Community 79 - "Community 79"
 Cohesion: 0.15
 Nodes (11): AsyncRedisL2Store, CacheTelemetryResponse, Request Coalescing / Single-Flight Barrier =====================================, SingleFlightGroup, ProductModel, AsyncSession, Any, AsyncSession (+3 more)
 
 ### Community 80 - "Community 80"
-Cohesion: 0.17
-Nodes (7): AsyncSession, AsyncSession, Unit of Work (UoW) Pattern with Savepoints =====================================, Create a nested transaction savepoint., UnitOfWork, test_uow_atomic_rollback(), test_uow_savepoint_partial_rollback()
+Cohesion: 0.15
+Nodes (13): get_organization_service(), get_project_service(), get_task_service(), get_uow(), AsyncSession, OrganizationService, ProjectService, TaskService (+5 more)
 
 ### Community 81 - "Community 81"
-Cohesion: 0.14
-Nodes (17): get_organization_service(), get_project_service(), get_task_service(), get_uow(), AsyncSession, OrganizationService, ProjectService, TaskService (+9 more)
+Cohesion: 0.20
+Nodes (9): OrganizationModel, Tenant Organization Root Entity.     Indexed on slug for sub-millisecond subdoma, AsyncSession, OrganizationModel, OrganizationCreate, OrganizationModel, OrganizationRepository, OrganizationRepository (+1 more)
 
 ### Community 82 - "Community 82"
-Cohesion: 0.23
+Cohesion: 0.26
 Nodes (6): DistributedLock, Distributed Mutex Lock (SET NX EX + Atomic Lua Release) ========================, LockAcquisitionException, LockAcquireResponse, AsyncRedisEngine, AsyncRedisEngine
 
 ### Community 83 - "Community 83"
@@ -620,8 +622,8 @@ Cohesion: 0.19
 Nodes (10): Any, app_exception_handler(), AppException, ConflictException, ForbiddenException, UnauthorizedException, validation_exception_handler(), JSONResponse (+2 more)
 
 ### Community 85 - "Community 85"
-Cohesion: 0.18
-Nodes (19): ResourceCreate, ResourceService, ResourceStatus, ResourceUpdate, UserModel, UserCreate, UserModel, UserService (+11 more)
+Cohesion: 0.16
+Nodes (21): ResourceStatus, ResourceCreate, ResourceService, ResourceStatus, ResourceUpdate, UserModel, ResourceService, ResourceStatus (+13 more)
 
 ### Community 86 - "Community 86"
 Cohesion: 0.21
@@ -636,24 +638,24 @@ Cohesion: 0.25
 Nodes (10): StreamService, Any, AsyncRedisEngine, StreamService, StreamAckRequest, StreamConsumeRequest, StreamEventPublish, ack_stream_events() (+2 more)
 
 ### Community 89 - "Community 89"
-Cohesion: 0.25
-Nodes (9): TaskCreate, TaskService, TaskStatus, APIResponse, CursorPaginatedResponse, Keyset / Cursor-based Pagination Envelope.     Solves performance degradation an, create_task(), list_tasks_cursor() (+1 more)
+Cohesion: 0.33
+Nodes (8): TaskCreate, TaskService, TaskStatus, CursorPaginatedResponse, Keyset / Cursor-based Pagination Envelope.     Solves performance degradation an, create_task(), list_tasks_cursor(), Keyset pagination endpoint delivering constant O(log N) lookup time     irrespec
 
 ### Community 90 - "Community 90"
-Cohesion: 0.18
-Nodes (10): ApiKeyCreatedResponse, ApiKeyModel, ApiKeyModel, AsyncSession, ApiKeyCreateRequest, ApiKeyModel, AsyncSession, ApiKeyRepository (+2 more)
+Cohesion: 0.16
+Nodes (9): ApiKeyCreatedResponse, ApiKeyModel, ApiKeyModel, AsyncSession, ApiKeyCreateRequest, ApiKeyModel, AsyncSession, ApiKeyRepository (+1 more)
 
 ### Community 91 - "Community 91"
-Cohesion: 0.24
-Nodes (8): Any, app_exception_handler(), AppException, NotFoundException, validation_exception_handler(), JSONResponse, Request, RequestValidationError
+Cohesion: 0.11
+Nodes (23): get_item_repository(), get_item_service(), Dependency provider for UserRepository., Dependency provider for ItemRepository., Dependency provider for UserService with UserRepository injected., Dependency provider for ItemService with repositories injected., AsyncSession, get_user_repository() (+15 more)
 
 ### Community 92 - "Community 92"
 Cohesion: 0.21
 Nodes (9): DatabaseQueryTimerMiddleware, Measures total request processing time including database latency., CorrelationIdMiddleware, Request, RequestResponseEndpoint, Response, FastAPI, create_application() (+1 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.24
-Nodes (9): create_jwt_token(), decode_jwt_token(), Hash a password using salted PBKDF2 HMAC SHA-256., Verify password against hashed string using constant-time comparison., Generate a standard HMAC-SHA256 signed JWT token., Verify and decode a JWT token string. Returns payload or None if invalid/expired, Any, hash_password() (+1 more)
+Cohesion: 0.19
+Nodes (11): create_jwt_token(), decode_jwt_token(), Hash a password using salted PBKDF2 HMAC SHA-256., Verify password against hashed string using constant-time comparison., Generate a standard HMAC-SHA256 signed JWT token., Verify and decode a JWT token string. Returns payload or None if invalid/expired, Any, hash_password() (+3 more)
 
 ### Community 94 - "Community 94"
 Cohesion: 0.16
@@ -696,28 +698,28 @@ Cohesion: 0.27
 Nodes (4): Any, AsyncSession, ModelType, BaseRepository
 
 ### Community 104 - "Community 104"
-Cohesion: 0.36
-Nodes (6): Middleware enforcing production security headers., ProcessTimeMiddleware, SecurityHeadersMiddleware, FastAPI, create_application(), lifespan()
+Cohesion: 0.20
+Nodes (10): Middleware enforcing production security headers., CorrelationIdMiddleware, ProcessTimeMiddleware, SecurityHeadersMiddleware, Request, RequestResponseEndpoint, Response, FastAPI (+2 more)
 
 ### Community 105 - "Community 105"
 Cohesion: 0.24
 Nodes (7): Middleware to propagate or generate unique X-Correlation-ID for every request., Middleware to measure execution duration and inject X-Process-Time header., CorrelationIdMiddleware, ProcessTimeMiddleware, Request, RequestResponseEndpoint, Response
 
 ### Community 106 - "Community 106"
-Cohesion: 0.17
-Nodes (14): generate_totp_code(), generate_totp_secret(), RFC 6238 Time-Based One-Time Password (TOTP) Implementation ====================, Generate a random 32-character Base32 secret key., Calculate 6-digit numeric TOTP code for a given timestamp., Verify code against current time with ± window step drift tolerance., verify_totp_code(), MfaVerifyRequest (+6 more)
+Cohesion: 0.20
+Nodes (9): generate_totp_code(), generate_totp_secret(), RFC 6238 Time-Based One-Time Password (TOTP) Implementation ====================, Generate a random 32-character Base32 secret key., Calculate 6-digit numeric TOTP code for a given timestamp., Verify code against current time with ± window step drift tolerance., verify_totp_code(), AsyncClient (+1 more)
 
 ### Community 107 - "Community 107"
-Cohesion: 0.31
-Nodes (6): DomainException, InvalidItemPriceError, ItemNotFoundError, Base domain business logic exception., UserAlreadyExistsError, UserNotFoundError
+Cohesion: 0.27
+Nodes (7): DomainException, InvalidItemPriceError, ItemNotFoundError, Base domain business logic exception., UserAlreadyExistsError, UserNotFoundError, Exception
 
 ### Community 108 - "Community 108"
 Cohesion: 0.24
 Nodes (9): EventConsumeRequest, OrderEventService, EventConsumeRequest, EventConsumeResponse, EventReplayRequest, OutboxRelayResponse, consume_events(), inspect_stream() (+1 more)
 
 ### Community 109 - "Community 109"
-Cohesion: 0.29
-Nodes (8): Any, app_exception_handler(), AppException, NotFoundException, validation_exception_handler(), JSONResponse, Request, RequestValidationError
+Cohesion: 0.20
+Nodes (24): OAuthCallbackRequest, AuthService, LoginRequest, RefreshTokenRequest, RegisterRequest, UserModel, login(), AuthService (+16 more)
 
 ### Community 110 - "Community 110"
 Cohesion: 0.24
@@ -740,8 +742,8 @@ Cohesion: 0.25
 Nodes (3): L1LRUCache, L1 In-Memory LRU Cache with TTL ================================ Senior Design N, Any
 
 ### Community 115 - "Community 115"
-Cohesion: 0.29
-Nodes (6): BaseHTTPMiddleware, ExecutionTimerMiddleware, CorrelationIdMiddleware, Request, RequestResponseEndpoint, Response
+Cohesion: 0.31
+Nodes (5): ExecutionTimerMiddleware, CorrelationIdMiddleware, Request, RequestResponseEndpoint, Response
 
 ### Community 116 - "Community 116"
 Cohesion: 0.31
@@ -764,16 +766,16 @@ Cohesion: 0.25
 Nodes (8): AsyncClient, AsyncSession, client(), db_session(), event_loop(), Create an instance of the default event loop for each test case., Provide isolated in-memory test database session per test., Test client with database dependency overridden to test in-memory session.
 
 ### Community 121 - "Community 121"
-Cohesion: 0.33
-Nodes (8): create_refresh_token(), _encode_jwt(), Cryptographic Token Generator & Password Hasher ================================, Any, create_access_token(), decode_jwt(), hash_password(), verify_password()
+Cohesion: 0.36
+Nodes (7): _encode_jwt(), Cryptographic Token Generator & Password Hasher ================================, Any, create_access_token(), decode_jwt(), hash_password(), verify_password()
 
 ### Community 122 - "Community 122"
 Cohesion: 0.25
 Nodes (7): close_db(), get_db(), init_db(), Initialize database tables., Dispose of engine connection pool., Dependency provider for AsyncSession., AsyncSession
 
 ### Community 123 - "Community 123"
-Cohesion: 0.36
-Nodes (7): ProductCreate, ProductUpdate, CachingService, create_product(), delete_product(), get_product(), update_product()
+Cohesion: 0.31
+Nodes (8): ProductCreate, ProductUpdate, CachingService, ProductOut, create_product(), delete_product(), get_product(), update_product()
 
 ### Community 124 - "Community 124"
 Cohesion: 0.39
@@ -782,6 +784,10 @@ Nodes (6): AsyncSession, RaceConditionSimulationRequest, RaceConditionSimulation
 ### Community 125 - "Community 125"
 Cohesion: 0.29
 Nodes (6): TaskModel, TaskStatus, decode_cursor(), encode_cursor(), Task Repository with Keyset / Cursor Pagination & High-Throughput Bulk Operation, Keyset cursor-based pagination over composite index (project_id, id).
+
+### Community 126 - "Community 126"
+Cohesion: 0.38
+Nodes (5): BaseSettings, get_settings(), Settings, get_settings(), Settings
 
 ### Community 127 - "Community 127"
 Cohesion: 0.52
@@ -836,8 +842,8 @@ Cohesion: 0.40
 Nodes (4): do_run_migrations(), run_async_migrations(), run_migrations_online(), Connection
 
 ### Community 141 - "Community 141"
-Cohesion: 0.24
-Nodes (7): BaseSettings, Cached settings singleton., get_settings(), Application configuration loaded from environment variables., Settings, get_settings(), Settings
+Cohesion: 0.40
+Nodes (4): Cached settings singleton., get_settings(), Application configuration loaded from environment variables., Settings
 
 ### Community 142 - "Community 142"
 Cohesion: 0.40
@@ -852,7 +858,7 @@ Cohesion: 0.33
 Nodes (3): Probabilistic Early Expiration (XFetch Algorithm) ==============================, should_xfetch(), test_xfetch_probabilistic_early_expiration()
 
 ### Community 146 - "Community 146"
-Cohesion: 0.44
+Cohesion: 0.35
 Nodes (4): make_rich_lesson(), generate_chapter_batch(), build_chapter(), export_chapter_ts()
 
 ### Community 147 - "Community 147"
@@ -884,8 +890,8 @@ Cohesion: 0.47
 Nodes (4): checkout(), CheckoutRequest, replenish_stock(), ReplenishRequest
 
 ### Community 154 - "Community 154"
-Cohesion: 0.39
-Nodes (4): CorrelationIdMiddleware, Request, RequestResponseEndpoint, Response
+Cohesion: 0.24
+Nodes (8): get_cache_service(), get_lock_service(), get_stream_service(), AsyncRedisEngine, CacheService, LockService, StreamService, LockService
 
 ### Community 155 - "Community 155"
 Cohesion: 0.40
@@ -901,7 +907,7 @@ Nodes (4): AsyncClient, AsyncSession, client(), db_session()
 
 ### Community 158 - "Community 158"
 Cohesion: 0.23
-Nodes (3): AsyncRedisStore, get_redis_client(), Async Redis Session & Token Blacklist Provider =================================
+Nodes (11): DocumentCreate, AsyncSession, UserModel, create_document(), hardened_create_user(), hardened_get_document(), hardened_sql_search(), Hardened Production Endpoints (OWASP Top 10 Mitigated) ========================= (+3 more)
 
 ### Community 162 - "Community 162"
 Cohesion: 0.50
@@ -948,8 +954,8 @@ Cohesion: 0.50
 Nodes (3): get_settings(), Security Hardening Configuration ================================= Senior Design, Settings
 
 ### Community 181 - "Community 181"
-Cohesion: 0.31
-Nodes (6): RateLimitMiddleware, Comprehensive Security Headers & Rate Limit Middleware =========================, SecurityHeadersMiddleware, Request, RequestResponseEndpoint, Response
+Cohesion: 0.22
+Nodes (9): BaseHTTPMiddleware, FastAPI, create_application(), RateLimitMiddleware, Comprehensive Security Headers & Rate Limit Middleware =========================, SecurityHeadersMiddleware, Request, RequestResponseEndpoint (+1 more)
 
 ### Community 182 - "Community 182"
 Cohesion: 0.60
@@ -1092,55 +1098,59 @@ Cohesion: 0.42
 Nodes (7): ProjectStatus, Project Model with Composite Unique Constraint and Optimistic Locking ==========, ProjectCreate, ProjectDetailOut, ProjectOut, ProjectUpdate, TaskOut
 
 ### Community 228 - "Community 228"
-Cohesion: 0.31
-Nodes (4): Any, AsyncSession, ModelType, BaseRepository
+Cohesion: 0.22
+Nodes (8): is_safe_external_url(), SSRF Defense Engine & IP Blocklist Validator ===================================, WebhookTriggerRequest, WebhookTriggerResponse, hardened_trigger_webhook(), SSRF MITIGATION:     Validates scheme, resolves DNS, blocks private/loopback/clo, VULNERABILITY: Server-Side Request Forgery (SSRF).     Fetches arbitrary user-su, vulnerable_trigger_webhook()
 
 ### Community 229 - "Community 229"
 Cohesion: 0.50
 Nodes (3): AsyncClient, TestClient, test_rest_presence_and_broadcast()
 
 ### Community 230 - "Community 230"
-Cohesion: 0.31
-Nodes (4): Any, AsyncSession, ModelType, BaseRepository
+Cohesion: 0.22
+Nodes (5): IdempotencyModel, IdempotencyModel, Idempotency Ledger Table ======================== Stores cached API responses ke, Any, AsyncSession
 
 ### Community 231 - "Community 231"
-Cohesion: 0.50
-Nodes (3): CacheEntryResponse, CacheSetRequest, CacheStatsResponse
+Cohesion: 0.28
+Nodes (8): FileUploadViolationException, File Upload Sanitization & Path Traversal Mitigator ============================, Strip path traversal sequences (../, ../../, null bytes) and return safe UUID fi, sanitize_filename(), validate_file_content(), UploadFile, hardened_file_upload(), FILE SECURITY MITIGATION:     Sanitizes filename into a clean UUID, validates ma
 
-### Community 232 - "Community 232"
-Cohesion: 0.50
-Nodes (3): ProductCreate, ProductOut, ProductUpdate
+### Community 277 - "Community 277"
+Cohesion: 0.28
+Nodes (9): generic_exception_handler(), Global handler for application exceptions returning standardized error payload., Handler for FastAPI request validation errors., Catch-all unexpected error handler., app_exception_handler(), validation_exception_handler(), JSONResponse, Request (+1 more)
 
-### Community 318 - "Community 318"
-Cohesion: 0.31
-Nodes (4): Any, AsyncSession, ModelType, BaseRepository
+### Community 308 - "Community 308"
+Cohesion: 0.29
+Nodes (4): DocumentModel, Hardened query enforcing Tenant / Owner Isolation (BOLA Mitigation)., Intentionally VULNERABLE SQL query susceptible to SQL Injection., Hardened query using parameterized SQL.
+
+### Community 322 - "Community 322"
+Cohesion: 0.50
+Nodes (3): UserOut, UserCreateHardened, UserCreateVulnerable
 
 ### Community 326 - "Community 326"
 Cohesion: 0.32
 Nodes (4): CodeExample, ChallengeProps, CodeExample, CommonMistakeProps
 
 ### Community 336 - "Community 336"
-Cohesion: 0.40
-Nodes (5): ApiKeyService, UserModel, admin_protected_route(), billing_protected_route(), service_m2m_route()
+Cohesion: 0.67
+Nodes (3): AsyncSession, test_uow_atomic_rollback(), test_uow_savepoint_partial_rollback()
 
-### Community 541 - "Community 541"
-Cohesion: 0.50
-Nodes (3): OrganizationCreate, OrganizationOut, OrganizationUpdate
+### Community 344 - "Community 344"
+Cohesion: 0.83
+Nodes (3): AsyncRedisEngine, PublishMessageRequest, publish_message()
 
 ## Knowledge Gaps
-- **342 isolated node(s):** `$schema`, `plugin`, `@opencode-ai/plugin`, `eslintConfig`, `nextConfig` (+337 more)
+- **343 isolated node(s):** `$schema`, `plugin`, `@opencode-ai/plugin`, `eslintConfig`, `nextConfig` (+338 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **165 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Base` connect `Community 61` to `Community 131`, `Community 132`, `Community 134`, `Community 140`, `Community 148`, `Community 149`, `Community 152`, `Community 155`, `Community 157`, `Community 160`, `Community 161`, `Community 175`, `Community 51`, `Community 180`, `Community 54`, `Community 55`, `Community 56`, `Community 58`, `Community 60`, `Community 62`, `Community 190`, `Community 318`, `Community 193`, `Community 66`, `Community 67`, `Community 71`, `Community 208`, `Community 83`, `Community 90`, `Community 95`, `Community 98`, `Community 227`, `Community 228`, `Community 100`, `Community 230`, `Community 103`, `Community 120`, `Community 122`?**
-  _High betweenness centrality (0.082) - this node is a cross-community bridge._
-- **Why does `APIResponse` connect `Community 58` to `Community 129`, `Community 130`, `Community 135`, `Community 138`, `Community 156`, `Community 51`, `Community 52`, `Community 53`, `Community 308`, `Community 55`, `Community 56`, `Community 57`, `Community 59`, `Community 191`, `Community 65`, `Community 66`, `Community 70`, `Community 72`, `Community 74`, `Community 75`, `Community 336`, `Community 83`, `Community 85`, `Community 88`, `Community 89`, `Community 96`, `Community 106`, `Community 108`, `Community 123`, `Community 124`, `Community 127`?**
-  _High betweenness centrality (0.081) - this node is a cross-community bridge._
-- **Why does `RequestValidationError` connect `Community 73` to `Community 51`, `Community 52`, `Community 54`, `Community 58`, `Community 63`, `Community 66`, `Community 68`, `Community 71`, `Community 78`, `Community 81`, `Community 82`, `Community 84`, `Community 213`, `Community 86`, `Community 215`, `Community 91`, `Community 92`, `Community 222`, `Community 223`, `Community 97`, `Community 104`, `Community 109`?**
-  _High betweenness centrality (0.070) - this node is a cross-community bridge._
+- **Why does `Base` connect `Community 60` to `Community 131`, `Community 132`, `Community 134`, `Community 140`, `Community 148`, `Community 149`, `Community 152`, `Community 155`, `Community 157`, `Community 160`, `Community 161`, `Community 175`, `Community 51`, `Community 180`, `Community 55`, `Community 56`, `Community 61`, `Community 62`, `Community 190`, `Community 193`, `Community 67`, `Community 69`, `Community 71`, `Community 208`, `Community 81`, `Community 83`, `Community 85`, `Community 90`, `Community 95`, `Community 98`, `Community 227`, `Community 100`, `Community 230`, `Community 103`, `Community 120`, `Community 122`?**
+  _High betweenness centrality (0.098) - this node is a cross-community bridge._
+- **Why does `APIResponse` connect `Community 109` to `Community 129`, `Community 130`, `Community 135`, `Community 138`, `Community 156`, `Community 158`, `Community 51`, `Community 52`, `Community 53`, `Community 56`, `Community 57`, `Community 59`, `Community 191`, `Community 65`, `Community 66`, `Community 69`, `Community 70`, `Community 72`, `Community 74`, `Community 75`, `Community 83`, `Community 85`, `Community 344`, `Community 89`, `Community 88`, `Community 91`, `Community 96`, `Community 228`, `Community 231`, `Community 108`, `Community 123`, `Community 124`, `Community 127`?**
+  _High betweenness centrality (0.090) - this node is a cross-community bridge._
+- **Why does `RequestValidationError` connect `Community 54` to `Community 277`, `Community 541`, `Community 51`, `Community 52`, `Community 181`, `Community 55`, `Community 58`, `Community 62`, `Community 63`, `Community 66`, `Community 68`, `Community 71`, `Community 73`, `Community 78`, `Community 82`, `Community 84`, `Community 213`, `Community 86`, `Community 215`, `Community 92`, `Community 222`, `Community 223`, `Community 97`, `Community 231`, `Community 104`?**
+  _High betweenness centrality (0.072) - this node is a cross-community bridge._
 - **Are the 100 inferred relationships involving `APIResponse` (e.g. with `BurstSimulationRequest` and `CacheSetRequest`) actually correct?**
   _`APIResponse` has 100 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 87 inferred relationships involving `Base` (e.g. with `Connection` and `ItemModel`) actually correct?**

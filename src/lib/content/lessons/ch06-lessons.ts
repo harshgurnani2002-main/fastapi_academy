@@ -24,15 +24,15 @@ export const ch06Lessons: Record<string, Lesson> = {
         id: "owasp-api-security-top-10-core",
         type: "concept",
         title: "Architectural Mental Model: OWASP API Security Top 10",
-        content: `In modern distributed systems, **OWASP API Security Top 10** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **OWASP API Security Top 10** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for OWASP API Security Top 10, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for OWASP API Security Top 10, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "owasp-api-security-top-10-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for OWASP API Security Top 10, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for OWASP API Security Top 10 in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-owasp-api-security-top-10",
-          title: "Production OWASP API Security Top 10 Implementation",
+          title: "Production OWASP API Security Top 10 Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.owasp_api_security_top_10")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for OWASP API Security Top 10."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing OWASP API Security Top 10 with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-owasp-api-security-top-10",
-        title: "Challenge: Stress Testing & Hardening OWASP API Security Top 10",
+        title: "Challenge: Hardening OWASP API Security Top 10",
         description: "Extend the service implementation for OWASP API Security Top 10 to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-owasp-api-security-top-10-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with OWASP API Security Top 10?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-owasp-api-security-top-10-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-owasp-api-security-top-10-3",
+        question: "How do you profile, identify, and resolve bottlenecks in OWASP API Security Top 10 under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **OWASP API Security Top 10**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-owasp-api-security-top-10-4",
+        question: "What failure modes and edge cases must be handled when deploying OWASP API Security Top 10 across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-owasp-api-security-top-10-5",
+        question: "What security considerations and threat vectors apply to OWASP API Security Top 10 in a public API?",
+        answer: "Security considerations for **OWASP API Security Top 10**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +226,15 @@ response = await client.get(url, timeout=5.0)`
         id: "sql-injection-core",
         type: "concept",
         title: "Architectural Mental Model: SQL Injection: Attacks & Defenses",
-        content: `In modern distributed systems, **SQL Injection: Attacks & Defenses** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **SQL Injection: Attacks & Defenses** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for SQL Injection: Attacks & Defenses, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for SQL Injection: Attacks & Defenses, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "sql-injection-implementation",
@@ -220,7 +243,7 @@ Without a rigorous design for SQL Injection: Attacks & Defenses, backend service
         content: "The following implementation demonstrates the correct production pattern for SQL Injection: Attacks & Defenses in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-sql-injection",
-          title: "Production SQL Injection: Attacks & Defenses Implementation",
+          title: "Production SQL Injection: Attacks & Defenses Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +254,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.sql_injection")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for SQL Injection: Attacks & Defenses."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing SQL Injection: Attacks & Defenses with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +305,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-sql-injection",
-        title: "Challenge: Stress Testing & Hardening SQL Injection: Attacks & Defenses",
+        title: "Challenge: Hardening SQL Injection: Attacks & Defenses",
         description: "Extend the service implementation for SQL Injection: Attacks & Defenses to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +325,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-sql-injection-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with SQL Injection: Attacks & Defenses?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-sql-injection-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-sql-injection-3",
+        question: "How do you profile, identify, and resolve bottlenecks in SQL Injection: Attacks & Defenses under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **SQL Injection: Attacks & Defenses**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-sql-injection-4",
+        question: "What failure modes and edge cases must be handled when deploying SQL Injection: Attacks & Defenses across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-sql-injection-5",
+        question: "What security considerations and threat vectors apply to SQL Injection: Attacks & Defenses in a public API?",
+        answer: "Security considerations for **SQL Injection: Attacks & Defenses**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +428,15 @@ response = await client.get(url, timeout=5.0)`
         id: "ssrf-protection-core",
         type: "concept",
         title: "Architectural Mental Model: SSRF: Server-Side Request Forgery",
-        content: `In modern distributed systems, **SSRF: Server-Side Request Forgery** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **SSRF: Server-Side Request Forgery** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for SSRF: Server-Side Request Forgery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for SSRF: Server-Side Request Forgery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "ssrf-protection-implementation",
@@ -399,7 +445,7 @@ Without a rigorous design for SSRF: Server-Side Request Forgery, backend service
         content: "The following implementation demonstrates the correct production pattern for SSRF: Server-Side Request Forgery in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-ssrf-protection",
-          title: "Production SSRF: Server-Side Request Forgery Implementation",
+          title: "Production SSRF: Server-Side Request Forgery Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +456,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.ssrf_protection")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for SSRF: Server-Side Request Forgery."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing SSRF: Server-Side Request Forgery with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +507,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-ssrf-protection",
-        title: "Challenge: Stress Testing & Hardening SSRF: Server-Side Request Forgery",
+        title: "Challenge: Hardening SSRF: Server-Side Request Forgery",
         description: "Extend the service implementation for SSRF: Server-Side Request Forgery to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +527,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-ssrf-protection-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with SSRF: Server-Side Request Forgery?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-ssrf-protection-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-ssrf-protection-3",
+        question: "How do you profile, identify, and resolve bottlenecks in SSRF: Server-Side Request Forgery under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **SSRF: Server-Side Request Forgery**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-ssrf-protection-4",
+        question: "What failure modes and edge cases must be handled when deploying SSRF: Server-Side Request Forgery across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-ssrf-protection-5",
+        question: "What security considerations and threat vectors apply to SSRF: Server-Side Request Forgery in a public API?",
+        answer: "Security considerations for **SSRF: Server-Side Request Forgery**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +630,15 @@ response = await client.get(url, timeout=5.0)`
         id: "cors-configuration-core",
         type: "concept",
         title: "Architectural Mental Model: CORS: Correct Configuration",
-        content: `In modern distributed systems, **CORS: Correct Configuration** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **CORS: Correct Configuration** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for CORS: Correct Configuration, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for CORS: Correct Configuration, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "cors-configuration-implementation",
@@ -578,7 +647,7 @@ Without a rigorous design for CORS: Correct Configuration, backend services suff
         content: "The following implementation demonstrates the correct production pattern for CORS: Correct Configuration in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-cors-configuration",
-          title: "Production CORS: Correct Configuration Implementation",
+          title: "Production CORS: Correct Configuration Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +658,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.cors_configuration")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for CORS: Correct Configuration."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing CORS: Correct Configuration with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +709,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-cors-configuration",
-        title: "Challenge: Stress Testing & Hardening CORS: Correct Configuration",
+        title: "Challenge: Hardening CORS: Correct Configuration",
         description: "Extend the service implementation for CORS: Correct Configuration to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +729,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-cors-configuration-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with CORS: Correct Configuration?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in CORS: Correct Configuration under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **CORS: Correct Configuration**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-cors-configuration-2",
+        question: "What failure modes and edge cases must be handled when deploying CORS: Correct Configuration across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cors-configuration-3",
+        question: "What security considerations and threat vectors apply to CORS: Correct Configuration in a public API?",
+        answer: "Security considerations for **CORS: Correct Configuration**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +820,15 @@ response = await client.get(url, timeout=5.0)`
         id: "password-hashing-argon2-core",
         type: "concept",
         title: "Architectural Mental Model: Password Hashing with Argon2",
-        content: `In modern distributed systems, **Password Hashing with Argon2** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Password Hashing with Argon2** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Password Hashing with Argon2, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Password Hashing with Argon2, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "password-hashing-argon2-implementation",
@@ -757,7 +837,7 @@ Without a rigorous design for Password Hashing with Argon2, backend services suf
         content: "The following implementation demonstrates the correct production pattern for Password Hashing with Argon2 in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-password-hashing-argon2",
-          title: "Production Password Hashing with Argon2 Implementation",
+          title: "Production Password Hashing with Argon2 Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +848,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.password_hashing_argon2")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Password Hashing with Argon2."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Password Hashing with Argon2 with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +899,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-password-hashing-argon2",
-        title: "Challenge: Stress Testing & Hardening Password Hashing with Argon2",
+        title: "Challenge: Hardening Password Hashing with Argon2",
         description: "Extend the service implementation for Password Hashing with Argon2 to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +919,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-password-hashing-argon2-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Password Hashing with Argon2?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Password Hashing with Argon2 under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Password Hashing with Argon2**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-password-hashing-argon2-2",
+        question: "What failure modes and edge cases must be handled when deploying Password Hashing with Argon2 across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-password-hashing-argon2-3",
+        question: "What security considerations and threat vectors apply to Password Hashing with Argon2 in a public API?",
+        answer: "Security considerations for **Password Hashing with Argon2**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +1010,15 @@ response = await client.get(url, timeout=5.0)`
         id: "security-headers-core",
         type: "concept",
         title: "Architectural Mental Model: Security Headers",
-        content: `In modern distributed systems, **Security Headers** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Security Headers** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Security Headers, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Security Headers, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "security-headers-implementation",
@@ -936,7 +1027,7 @@ Without a rigorous design for Security Headers, backend services suffer from res
         content: "The following implementation demonstrates the correct production pattern for Security Headers in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-security-headers",
-          title: "Production Security Headers Implementation",
+          title: "Production Security Headers Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1038,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.security_headers")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Security Headers."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Security Headers with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1089,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-security-headers",
-        title: "Challenge: Stress Testing & Hardening Security Headers",
+        title: "Challenge: Hardening Security Headers",
         description: "Extend the service implementation for Security Headers to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1109,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-security-headers-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Security Headers?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-security-headers-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-security-headers-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Security Headers under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Security Headers**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-security-headers-4",
+        question: "What failure modes and edge cases must be handled when deploying Security Headers across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-security-headers-5",
+        question: "What security considerations and threat vectors apply to Security Headers in a public API?",
+        answer: "Security considerations for **Security Headers**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1212,15 @@ response = await client.get(url, timeout=5.0)`
         id: "file-upload-security-core",
         type: "concept",
         title: "Architectural Mental Model: File Upload Security",
-        content: `In modern distributed systems, **File Upload Security** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **File Upload Security** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for File Upload Security, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for File Upload Security, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "file-upload-security-implementation",
@@ -1115,7 +1229,7 @@ Without a rigorous design for File Upload Security, backend services suffer from
         content: "The following implementation demonstrates the correct production pattern for File Upload Security in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-file-upload-security",
-          title: "Production File Upload Security Implementation",
+          title: "Production File Upload Security Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1240,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.file_upload_security")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for File Upload Security."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing File Upload Security with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1291,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-file-upload-security",
-        title: "Challenge: Stress Testing & Hardening File Upload Security",
+        title: "Challenge: Hardening File Upload Security",
         description: "Extend the service implementation for File Upload Security to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1311,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-file-upload-security-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with File Upload Security?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-file-upload-security-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-file-upload-security-3",
+        question: "How do you profile, identify, and resolve bottlenecks in File Upload Security under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **File Upload Security**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-file-upload-security-4",
+        question: "What failure modes and edge cases must be handled when deploying File Upload Security across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-file-upload-security-5",
+        question: "What security considerations and threat vectors apply to File Upload Security in a public API?",
+        answer: "Security considerations for **File Upload Security**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1414,15 @@ response = await client.get(url, timeout=5.0)`
         id: "brute-force-protection-core",
         type: "concept",
         title: "Architectural Mental Model: Brute-Force Protection & Account Lockout",
-        content: `In modern distributed systems, **Brute-Force Protection & Account Lockout** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Brute-Force Protection & Account Lockout** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Brute-Force Protection & Account Lockout, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Brute-Force Protection & Account Lockout, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "brute-force-protection-implementation",
@@ -1294,7 +1431,7 @@ Without a rigorous design for Brute-Force Protection & Account Lockout, backend 
         content: "The following implementation demonstrates the correct production pattern for Brute-Force Protection & Account Lockout in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-brute-force-protection",
-          title: "Production Brute-Force Protection & Account Lockout Implementation",
+          title: "Production Brute-Force Protection & Account Lockout Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1442,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.brute_force_protection")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Brute-Force Protection & Account Lockout."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Brute-Force Protection & Account Lockout with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1493,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-brute-force-protection",
-        title: "Challenge: Stress Testing & Hardening Brute-Force Protection & Account Lockout",
+        title: "Challenge: Hardening Brute-Force Protection & Account Lockout",
         description: "Extend the service implementation for Brute-Force Protection & Account Lockout to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1513,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-brute-force-protection-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Brute-Force Protection & Account Lockout?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Brute-Force Protection & Account Lockout under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Brute-Force Protection & Account Lockout**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-brute-force-protection-2",
+        question: "What failure modes and edge cases must be handled when deploying Brute-Force Protection & Account Lockout across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-brute-force-protection-3",
+        question: "What security considerations and threat vectors apply to Brute-Force Protection & Account Lockout in a public API?",
+        answer: "Security considerations for **Brute-Force Protection & Account Lockout**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1604,15 @@ response = await client.get(url, timeout=5.0)`
         id: "secrets-management-core",
         type: "concept",
         title: "Architectural Mental Model: Secrets Management in Production",
-        content: `In modern distributed systems, **Secrets Management in Production** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Secrets Management in Production** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Secrets Management in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Secrets Management in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "secrets-management-implementation",
@@ -1473,7 +1621,7 @@ Without a rigorous design for Secrets Management in Production, backend services
         content: "The following implementation demonstrates the correct production pattern for Secrets Management in Production in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-secrets-management",
-          title: "Production Secrets Management in Production Implementation",
+          title: "Production Secrets Management in Production Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1632,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.secrets_management")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Secrets Management in Production."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Secrets Management in Production with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1683,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-secrets-management",
-        title: "Challenge: Stress Testing & Hardening Secrets Management in Production",
+        title: "Challenge: Hardening Secrets Management in Production",
         description: "Extend the service implementation for Secrets Management in Production to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1703,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-secrets-management-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Secrets Management in Production?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Secrets Management in Production under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Secrets Management in Production**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-secrets-management-2",
+        question: "What failure modes and edge cases must be handled when deploying Secrets Management in Production across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-secrets-management-3",
+        question: "What security considerations and threat vectors apply to Secrets Management in Production in a public API?",
+        answer: "Security considerations for **Secrets Management in Production**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1794,15 @@ response = await client.get(url, timeout=5.0)`
         id: "dependency-security-core",
         type: "concept",
         title: "Architectural Mental Model: Dependency & Supply Chain Security",
-        content: `In modern distributed systems, **Dependency & Supply Chain Security** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Dependency & Supply Chain Security** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Dependency & Supply Chain Security, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Dependency & Supply Chain Security, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "dependency-security-implementation",
@@ -1652,7 +1811,7 @@ Without a rigorous design for Dependency & Supply Chain Security, backend servic
         content: "The following implementation demonstrates the correct production pattern for Dependency & Supply Chain Security in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-dependency-security",
-          title: "Production Dependency & Supply Chain Security Implementation",
+          title: "Production Dependency & Supply Chain Security Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1822,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.dependency_security")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Dependency & Supply Chain Security."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Dependency & Supply Chain Security with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1873,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-dependency-security",
-        title: "Challenge: Stress Testing & Hardening Dependency & Supply Chain Security",
+        title: "Challenge: Hardening Dependency & Supply Chain Security",
         description: "Extend the service implementation for Dependency & Supply Chain Security to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1893,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-dependency-security-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Dependency & Supply Chain Security?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-dependency-security-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-dependency-security-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Dependency & Supply Chain Security under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Dependency & Supply Chain Security**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-dependency-security-4",
+        question: "What failure modes and edge cases must be handled when deploying Dependency & Supply Chain Security across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-dependency-security-5",
+        question: "What security considerations and threat vectors apply to Dependency & Supply Chain Security in a public API?",
+        answer: "Security considerations for **Dependency & Supply Chain Security**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1814,15 +1996,15 @@ response = await client.get(url, timeout=5.0)`
         id: "secure-docker-images-core",
         type: "concept",
         title: "Architectural Mental Model: Secure Docker Images",
-        content: `In modern distributed systems, **Secure Docker Images** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Secure Docker Images** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Secure Docker Images, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Secure Docker Images, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "secure-docker-images-implementation",
@@ -1831,7 +2013,7 @@ Without a rigorous design for Secure Docker Images, backend services suffer from
         content: "The following implementation demonstrates the correct production pattern for Secure Docker Images in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-secure-docker-images",
-          title: "Production Secure Docker Images Implementation",
+          title: "Production Secure Docker Images Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1842,18 +2024,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.secure_docker_images")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Secure Docker Images."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Secure Docker Images with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1894,7 +2075,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-secure-docker-images",
-        title: "Challenge: Stress Testing & Hardening Secure Docker Images",
+        title: "Challenge: Hardening Secure Docker Images",
         description: "Extend the service implementation for Secure Docker Images to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1914,9 +2095,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-secure-docker-images-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Secure Docker Images?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you configure Kubernetes liveness and readiness probes for a FastAPI service with database and Redis dependencies?",
+        answer: `Readiness Probe (\`/health/ready\`): Checks critical dependencies (PostgreSQL connection pool, Redis ping). If a dependency is down, K8s temporarily removes the Pod from Service endpoints so traffic isn't routed to a broken instance. Liveness Probe (\`/health/live\`): Checks ONLY that the Python event loop and Uvicorn process are responsive (returns 200 immediately). Never include database checks in liveness probes, or a brief DB blip will trigger a cascading restart of all Pods simultaneously.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-secure-docker-images-2",
+        question: "Why is a 'preStop' hook and graceful shutdown configuration essential when deploying Uvicorn in Kubernetes?",
+        answer: `When a Pod is terminated, Kubernetes removes it from endpoints and sends \`SIGTERM\` simultaneously. Network iptables rules take several seconds to propagate across nodes. A \`preStop\` sleep hook (\`sleep 5\`) ensures the Pod continues accepting remaining inflight packets while traffic is rerouted. Setting \`uvicorn --timeout-graceful-shutdown 30\` allows active coroutines to finish database transactions before \`SIGKILL\`.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-secure-docker-images-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Secure Docker Images under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Secure Docker Images**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-secure-docker-images-4",
+        question: "What failure modes and edge cases must be handled when deploying Secure Docker Images across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-secure-docker-images-5",
+        question: "What security considerations and threat vectors apply to Secure Docker Images in a public API?",
+        answer: "Security considerations for **Secure Docker Images**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

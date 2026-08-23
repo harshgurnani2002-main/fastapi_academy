@@ -24,15 +24,15 @@ export const ch08Lessons: Record<string, Lesson> = {
         id: "caching-patterns-overview-core",
         type: "concept",
         title: "Architectural Mental Model: Caching Patterns: Cache-Aside, Read-Through, Write-Through",
-        content: `In modern distributed systems, **Caching Patterns: Cache-Aside, Read-Through, Write-Through** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Caching Patterns: Cache-Aside, Read-Through, Write-Through** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Caching Patterns: Cache-Aside, Read-Through, Write-Through, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Caching Patterns: Cache-Aside, Read-Through, Write-Through, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "caching-patterns-overview-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for Caching Patterns: Cache-Aside, Read-Through, Write
         content: "The following implementation demonstrates the correct production pattern for Caching Patterns: Cache-Aside, Read-Through, Write-Through in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-caching-patterns-overview",
-          title: "Production Caching Patterns: Cache-Aside, Read-Through, Write-Through Implementation",
+          title: "Production Caching Patterns: Cache-Aside, Read-Through, Write-Through Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.caching_patterns_overview")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Caching Patterns: Cache-Aside, Read-Through, Write-Through."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Caching Patterns: Cache-Aside, Read-Through, Write-Through with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-caching-patterns-overview",
-        title: "Challenge: Stress Testing & Hardening Caching Patterns: Cache-Aside, Read-Through, Write-Through",
+        title: "Challenge: Hardening Caching Patterns: Cache-Aside, Read-Through, Write-Through",
         description: "Extend the service implementation for Caching Patterns: Cache-Aside, Read-Through, Write-Through to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-caching-patterns-overview-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Caching Patterns: Cache-Aside, Read-Through, Write-Through?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-caching-patterns-overview-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-patterns-overview-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Caching Patterns: Cache-Aside, Read-Through, Write-Through under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Caching Patterns: Cache-Aside, Read-Through, Write-Through**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-patterns-overview-4",
+        question: "What failure modes and edge cases must be handled when deploying Caching Patterns: Cache-Aside, Read-Through, Write-Through across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-patterns-overview-5",
+        question: "What security considerations and threat vectors apply to Caching Patterns: Cache-Aside, Read-Through, Write-Through in a public API?",
+        answer: "Security considerations for **Caching Patterns: Cache-Aside, Read-Through, Write-Through**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +226,15 @@ response = await client.get(url, timeout=5.0)`
         id: "ttl-strategies-core",
         type: "concept",
         title: "Architectural Mental Model: TTL Strategies & Cache Sizing",
-        content: `In modern distributed systems, **TTL Strategies & Cache Sizing** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **TTL Strategies & Cache Sizing** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for TTL Strategies & Cache Sizing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for TTL Strategies & Cache Sizing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "ttl-strategies-implementation",
@@ -220,7 +243,7 @@ Without a rigorous design for TTL Strategies & Cache Sizing, backend services su
         content: "The following implementation demonstrates the correct production pattern for TTL Strategies & Cache Sizing in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-ttl-strategies",
-          title: "Production TTL Strategies & Cache Sizing Implementation",
+          title: "Production TTL Strategies & Cache Sizing Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +254,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.ttl_strategies")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for TTL Strategies & Cache Sizing."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing TTL Strategies & Cache Sizing with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +305,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-ttl-strategies",
-        title: "Challenge: Stress Testing & Hardening TTL Strategies & Cache Sizing",
+        title: "Challenge: Hardening TTL Strategies & Cache Sizing",
         description: "Extend the service implementation for TTL Strategies & Cache Sizing to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +325,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-ttl-strategies-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with TTL Strategies & Cache Sizing?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-ttl-strategies-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-ttl-strategies-3",
+        question: "How do you profile, identify, and resolve bottlenecks in TTL Strategies & Cache Sizing under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **TTL Strategies & Cache Sizing**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-ttl-strategies-4",
+        question: "What failure modes and edge cases must be handled when deploying TTL Strategies & Cache Sizing across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-ttl-strategies-5",
+        question: "What security considerations and threat vectors apply to TTL Strategies & Cache Sizing in a public API?",
+        answer: "Security considerations for **TTL Strategies & Cache Sizing**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +428,15 @@ response = await client.get(url, timeout=5.0)`
         id: "cache-hit-ratio-metrics-core",
         type: "concept",
         title: "Architectural Mental Model: Measuring Cache Performance",
-        content: `In modern distributed systems, **Measuring Cache Performance** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Measuring Cache Performance** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Measuring Cache Performance, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Measuring Cache Performance, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "cache-hit-ratio-metrics-implementation",
@@ -399,7 +445,7 @@ Without a rigorous design for Measuring Cache Performance, backend services suff
         content: "The following implementation demonstrates the correct production pattern for Measuring Cache Performance in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-cache-hit-ratio-metrics",
-          title: "Production Measuring Cache Performance Implementation",
+          title: "Production Measuring Cache Performance Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +456,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.cache_hit_ratio_metrics")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Measuring Cache Performance."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Measuring Cache Performance with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +507,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-cache-hit-ratio-metrics",
-        title: "Challenge: Stress Testing & Hardening Measuring Cache Performance",
+        title: "Challenge: Hardening Measuring Cache Performance",
         description: "Extend the service implementation for Measuring Cache Performance to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +527,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-cache-hit-ratio-metrics-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Measuring Cache Performance?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-cache-hit-ratio-metrics-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-hit-ratio-metrics-3",
+        question: "How does OpenTelemetry propagate W3C Trace Context across asynchronous HTTP boundaries and message queues in FastAPI?",
+        answer: `OpenTelemetry injects and extracts the \`traceparent\` HTTP header (\`00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01\`). An ASGI middleware intercepts the incoming header, starts a child span linked to the parent trace ID, and stores the span in Python's \`contextvars.ContextVar\`. When the application makes an outbound HTTP call via \`httpx\` or publishes to Kafka, the instrumentation automatically injects the current \`traceparent\` header.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-hit-ratio-metrics-4",
+        question: "What is the difference between Prometheus Counter, Gauge, and Histogram, and which should you use for tracking API latency in FastAPI?",
+        answer: "Counter: Monotonically increasing metric (resets only on restart), used for request counts and error totals. Gauge: Snapshot value that goes up and down, used for active connections and memory usage. Histogram: Samples observations into configurable buckets, used for request durations and response sizes. For API latency, always use Histogram to calculate p50, p95, and p99 percentiles across worker processes without skew from averages.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-cache-hit-ratio-metrics-5",
+        question: "What security considerations and threat vectors apply to Measuring Cache Performance in a public API?",
+        answer: "Security considerations for **Measuring Cache Performance**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +630,15 @@ response = await client.get(url, timeout=5.0)`
         id: "cache-warming-core",
         type: "concept",
         title: "Architectural Mental Model: Cache Warming & Preloading",
-        content: `In modern distributed systems, **Cache Warming & Preloading** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Cache Warming & Preloading** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Cache Warming & Preloading, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Cache Warming & Preloading, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "cache-warming-implementation",
@@ -578,7 +647,7 @@ Without a rigorous design for Cache Warming & Preloading, backend services suffe
         content: "The following implementation demonstrates the correct production pattern for Cache Warming & Preloading in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-cache-warming",
-          title: "Production Cache Warming & Preloading Implementation",
+          title: "Production Cache Warming & Preloading Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +658,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.cache_warming")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Cache Warming & Preloading."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Cache Warming & Preloading with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +709,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-cache-warming",
-        title: "Challenge: Stress Testing & Hardening Cache Warming & Preloading",
+        title: "Challenge: Hardening Cache Warming & Preloading",
         description: "Extend the service implementation for Cache Warming & Preloading to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +729,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-cache-warming-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Cache Warming & Preloading?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-cache-warming-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-warming-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Cache Warming & Preloading under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Cache Warming & Preloading**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-warming-4",
+        question: "What failure modes and edge cases must be handled when deploying Cache Warming & Preloading across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-warming-5",
+        question: "What security considerations and threat vectors apply to Cache Warming & Preloading in a public API?",
+        answer: "Security considerations for **Cache Warming & Preloading**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +832,15 @@ response = await client.get(url, timeout=5.0)`
         id: "negative-caching-core",
         type: "concept",
         title: "Architectural Mental Model: Negative Caching",
-        content: `In modern distributed systems, **Negative Caching** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Negative Caching** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Negative Caching, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Negative Caching, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "negative-caching-implementation",
@@ -757,7 +849,7 @@ Without a rigorous design for Negative Caching, backend services suffer from res
         content: "The following implementation demonstrates the correct production pattern for Negative Caching in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-negative-caching",
-          title: "Production Negative Caching Implementation",
+          title: "Production Negative Caching Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +860,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.negative_caching")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Negative Caching."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Negative Caching with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +911,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-negative-caching",
-        title: "Challenge: Stress Testing & Hardening Negative Caching",
+        title: "Challenge: Hardening Negative Caching",
         description: "Extend the service implementation for Negative Caching to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +931,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-negative-caching-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Negative Caching?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-negative-caching-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-negative-caching-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Negative Caching under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Negative Caching**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-negative-caching-4",
+        question: "What failure modes and edge cases must be handled when deploying Negative Caching across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-negative-caching-5",
+        question: "What security considerations and threat vectors apply to Negative Caching in a public API?",
+        answer: "Security considerations for **Negative Caching**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +1034,15 @@ response = await client.get(url, timeout=5.0)`
         id: "cache-stampede-protection-core",
         type: "concept",
         title: "Architectural Mental Model: Cache Stampede Protection",
-        content: `In modern distributed systems, **Cache Stampede Protection** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Cache Stampede Protection** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Cache Stampede Protection, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Cache Stampede Protection, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "cache-stampede-protection-implementation",
@@ -936,7 +1051,7 @@ Without a rigorous design for Cache Stampede Protection, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Cache Stampede Protection in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-cache-stampede-protection",
-          title: "Production Cache Stampede Protection Implementation",
+          title: "Production Cache Stampede Protection Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1062,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.cache_stampede_protection")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Cache Stampede Protection."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Cache Stampede Protection with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1113,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-cache-stampede-protection",
-        title: "Challenge: Stress Testing & Hardening Cache Stampede Protection",
+        title: "Challenge: Hardening Cache Stampede Protection",
         description: "Extend the service implementation for Cache Stampede Protection to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1133,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-cache-stampede-protection-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Cache Stampede Protection?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-cache-stampede-protection-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-stampede-protection-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Cache Stampede Protection under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Cache Stampede Protection**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-stampede-protection-4",
+        question: "What failure modes and edge cases must be handled when deploying Cache Stampede Protection across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-stampede-protection-5",
+        question: "What security considerations and threat vectors apply to Cache Stampede Protection in a public API?",
+        answer: "Security considerations for **Cache Stampede Protection**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1236,15 @@ response = await client.get(url, timeout=5.0)`
         id: "request-coalescing-core",
         type: "concept",
         title: "Architectural Mental Model: Request Coalescing",
-        content: `In modern distributed systems, **Request Coalescing** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Request Coalescing** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Request Coalescing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Request Coalescing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "request-coalescing-implementation",
@@ -1115,7 +1253,7 @@ Without a rigorous design for Request Coalescing, backend services suffer from r
         content: "The following implementation demonstrates the correct production pattern for Request Coalescing in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-request-coalescing",
-          title: "Production Request Coalescing Implementation",
+          title: "Production Request Coalescing Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1264,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.request_coalescing")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Request Coalescing."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Request Coalescing with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1315,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-request-coalescing",
-        title: "Challenge: Stress Testing & Hardening Request Coalescing",
+        title: "Challenge: Hardening Request Coalescing",
         description: "Extend the service implementation for Request Coalescing to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1335,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-request-coalescing-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Request Coalescing?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Request Coalescing under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Request Coalescing**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-request-coalescing-2",
+        question: "What failure modes and edge cases must be handled when deploying Request Coalescing across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-request-coalescing-3",
+        question: "What security considerations and threat vectors apply to Request Coalescing in a public API?",
+        answer: "Security considerations for **Request Coalescing**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1426,15 @@ response = await client.get(url, timeout=5.0)`
         id: "distributed-cache-consistency-core",
         type: "concept",
         title: "Architectural Mental Model: Distributed Cache Consistency",
-        content: `In modern distributed systems, **Distributed Cache Consistency** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Distributed Cache Consistency** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Distributed Cache Consistency, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Distributed Cache Consistency, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "distributed-cache-consistency-implementation",
@@ -1294,7 +1443,7 @@ Without a rigorous design for Distributed Cache Consistency, backend services su
         content: "The following implementation demonstrates the correct production pattern for Distributed Cache Consistency in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-distributed-cache-consistency",
-          title: "Production Distributed Cache Consistency Implementation",
+          title: "Production Distributed Cache Consistency Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1454,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.distributed_cache_consistency")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Distributed Cache Consistency."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Distributed Cache Consistency with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1505,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-distributed-cache-consistency",
-        title: "Challenge: Stress Testing & Hardening Distributed Cache Consistency",
+        title: "Challenge: Hardening Distributed Cache Consistency",
         description: "Extend the service implementation for Distributed Cache Consistency to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1525,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-distributed-cache-consistency-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Distributed Cache Consistency?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-cache-consistency-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-cache-consistency-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Distributed Cache Consistency under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Distributed Cache Consistency**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-cache-consistency-4",
+        question: "What failure modes and edge cases must be handled when deploying Distributed Cache Consistency across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-cache-consistency-5",
+        question: "What security considerations and threat vectors apply to Distributed Cache Consistency in a public API?",
+        answer: "Security considerations for **Distributed Cache Consistency**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1628,15 @@ response = await client.get(url, timeout=5.0)`
         id: "cache-avalanche-prevention-core",
         type: "concept",
         title: "Architectural Mental Model: Cache Avalanche Prevention",
-        content: `In modern distributed systems, **Cache Avalanche Prevention** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Cache Avalanche Prevention** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Cache Avalanche Prevention, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Cache Avalanche Prevention, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "cache-avalanche-prevention-implementation",
@@ -1473,7 +1645,7 @@ Without a rigorous design for Cache Avalanche Prevention, backend services suffe
         content: "The following implementation demonstrates the correct production pattern for Cache Avalanche Prevention in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-cache-avalanche-prevention",
-          title: "Production Cache Avalanche Prevention Implementation",
+          title: "Production Cache Avalanche Prevention Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1656,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.cache_avalanche_prevention")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Cache Avalanche Prevention."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Cache Avalanche Prevention with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1707,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-cache-avalanche-prevention",
-        title: "Challenge: Stress Testing & Hardening Cache Avalanche Prevention",
+        title: "Challenge: Hardening Cache Avalanche Prevention",
         description: "Extend the service implementation for Cache Avalanche Prevention to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1727,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-cache-avalanche-prevention-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Cache Avalanche Prevention?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-cache-avalanche-prevention-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-avalanche-prevention-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Cache Avalanche Prevention under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Cache Avalanche Prevention**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-avalanche-prevention-4",
+        question: "What failure modes and edge cases must be handled when deploying Cache Avalanche Prevention across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-avalanche-prevention-5",
+        question: "What security considerations and threat vectors apply to Cache Avalanche Prevention in a public API?",
+        answer: "Security considerations for **Cache Avalanche Prevention**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1830,15 @@ response = await client.get(url, timeout=5.0)`
         id: "multilayer-caching-core",
         type: "concept",
         title: "Architectural Mental Model: Multi-Layer Caching Architecture",
-        content: `In modern distributed systems, **Multi-Layer Caching Architecture** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Multi-Layer Caching Architecture** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Multi-Layer Caching Architecture, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Multi-Layer Caching Architecture, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "multilayer-caching-implementation",
@@ -1652,7 +1847,7 @@ Without a rigorous design for Multi-Layer Caching Architecture, backend services
         content: "The following implementation demonstrates the correct production pattern for Multi-Layer Caching Architecture in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-multilayer-caching",
-          title: "Production Multi-Layer Caching Architecture Implementation",
+          title: "Production Multi-Layer Caching Architecture Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1858,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.multilayer_caching")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Multi-Layer Caching Architecture."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Multi-Layer Caching Architecture with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1909,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-multilayer-caching",
-        title: "Challenge: Stress Testing & Hardening Multi-Layer Caching Architecture",
+        title: "Challenge: Hardening Multi-Layer Caching Architecture",
         description: "Extend the service implementation for Multi-Layer Caching Architecture to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1929,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-multilayer-caching-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Multi-Layer Caching Architecture?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-multilayer-caching-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-multilayer-caching-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Multi-Layer Caching Architecture under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Multi-Layer Caching Architecture**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-multilayer-caching-4",
+        question: "What failure modes and edge cases must be handled when deploying Multi-Layer Caching Architecture across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-multilayer-caching-5",
+        question: "What security considerations and threat vectors apply to Multi-Layer Caching Architecture in a public API?",
+        answer: "Security considerations for **Multi-Layer Caching Architecture**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

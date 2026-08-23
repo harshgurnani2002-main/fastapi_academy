@@ -21,57 +21,79 @@ export const ch04Lessons: Record<string, Lesson> = {
     ],
     sections: [
       {
-        id: "acid-properties-deep-dive-concept",
+        id: "acid-properties-deep-dive-core",
         type: "concept",
-        title: "Mental Model & Architecture: ACID Properties Deep Dive",
-        content: `Understanding ACID Properties Deep Dive is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: ACID Properties Deep Dive",
+        content: `In modern distributed systems, **ACID Properties Deep Dive** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, ACID Properties Deep Dive addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for ACID Properties Deep Dive, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "acid-properties-deep-dive-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for ACID Properties Deep Dive incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for ACID Properties Deep Dive in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-acid-properties-deep-dive",
-          title: "ACID Properties Deep Dive - Production Code Structure",
+          id: "code-acid-properties-deep-dive",
+          title: "Production ACID Properties Deep Dive Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.acid_properties_deep_dive")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for ACID Properties Deep Dive."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing ACID Properties Deep Dive with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.acid_properties_deep_dive")
 app = FastAPI(title="ACID Properties Deep Dive")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing ACID Properties Deep Dive for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -81,65 +103,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-acid-properties-deep-dive",
-        title: "Implement Advanced ACID Properties Deep Dive",
-        description: "Build a production-grade component for ACID Properties Deep Dive that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening ACID Properties Deep Dive",
+        description: "Extend the service implementation for ACID Properties Deep Dive to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-acid-properties-deep-dive",
           language: "python",
-          title: "Solution: ACID Properties Deep Dive",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for ACID Properties Deep Dive
-    return True`
+          title: "Hardened Solution: ACID Properties Deep Dive",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-acid-properties-deep-dive-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in ACID Properties Deep Dive?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-acid-properties-deep-dive-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-acid-properties-deep-dive-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-acid-properties-deep-dive-4",
+        question: "What failure modes and edge cases must be handled when deploying ACID Properties Deep Dive across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-acid-properties-deep-dive-5",
+        question: "What security considerations and threat vectors apply to ACID Properties Deep Dive in a public API?",
+        answer: "Security considerations for **ACID Properties Deep Dive**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-acid-properties-deep-dive-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on ACID Properties Deep Dive to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in ACID Properties Deep Dive."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-acid-properties-deep-dive-1",
-        scenario: "High Concurrency Incident with ACID Properties Deep Dive",
-        problem: "Under 10x traffic spike, unoptimized handling in ACID Properties Deep Dive caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in ACID Properties Deep Dive",
+        problem: "A spike in concurrent client traffic caused latency degradation in ACID Properties Deep Dive due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-acid-properties-deep-dive-1",
-        title: "Unbounded concurrency in ACID Properties Deep Dive",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in ACID Properties Deep Dive",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-acid-properties-deep-dive",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-acid-properties-deep-dive",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -147,14 +192,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-acid-properties-deep-dive-1",
-        category: "Performance",
-        item: "Validate latency under peak load for ACID Properties Deep Dive",
+        category: "Reliability",
+        item: "Verify all external calls in ACID Properties Deep Dive have timeouts",
         isRequired: true
       },
       {
         id: "pc-acid-properties-deep-dive-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for ACID Properties Deep Dive execution duration and error rates",
         isRequired: true
       }
     ]
@@ -178,57 +223,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "race-conditions-concept",
+        id: "race-conditions-core",
         type: "concept",
-        title: "Mental Model & Architecture: Race Conditions in Concurrent Systems",
-        content: `Understanding Race Conditions in Concurrent Systems is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Race Conditions in Concurrent Systems",
+        content: `In modern distributed systems, **Race Conditions in Concurrent Systems** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Race Conditions in Concurrent Systems addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Race Conditions in Concurrent Systems, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "race-conditions-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Race Conditions in Concurrent Systems incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Race Conditions in Concurrent Systems in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-race-conditions",
-          title: "Race Conditions in Concurrent Systems - Production Code Structure",
+          id: "code-race-conditions",
+          title: "Production Race Conditions in Concurrent Systems Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.race_conditions")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Race Conditions in Concurrent Systems."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Race Conditions in Concurrent Systems with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.race_conditions")
 app = FastAPI(title="Race Conditions in Concurrent Systems")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Race Conditions in Concurrent Systems for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -238,65 +305,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-race-conditions",
-        title: "Implement Advanced Race Conditions in Concurrent Systems",
-        description: "Build a production-grade component for Race Conditions in Concurrent Systems that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Race Conditions in Concurrent Systems",
+        description: "Extend the service implementation for Race Conditions in Concurrent Systems to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-race-conditions",
           language: "python",
-          title: "Solution: Race Conditions in Concurrent Systems",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Race Conditions in Concurrent Systems
-    return True`
+          title: "Hardened Solution: Race Conditions in Concurrent Systems",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-race-conditions-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Race Conditions in Concurrent Systems?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-race-conditions-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-race-conditions-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-race-conditions-4",
+        question: "What failure modes and edge cases must be handled when deploying Race Conditions in Concurrent Systems across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-race-conditions-5",
+        question: "What security considerations and threat vectors apply to Race Conditions in Concurrent Systems in a public API?",
+        answer: "Security considerations for **Race Conditions in Concurrent Systems**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-race-conditions-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Race Conditions in Concurrent Systems to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Race Conditions in Concurrent Systems."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-race-conditions-1",
-        scenario: "High Concurrency Incident with Race Conditions in Concurrent Systems",
-        problem: "Under 10x traffic spike, unoptimized handling in Race Conditions in Concurrent Systems caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Race Conditions in Concurrent Systems",
+        problem: "A spike in concurrent client traffic caused latency degradation in Race Conditions in Concurrent Systems due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-race-conditions-1",
-        title: "Unbounded concurrency in Race Conditions in Concurrent Systems",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Race Conditions in Concurrent Systems",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-race-conditions",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-race-conditions",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -304,14 +394,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-race-conditions-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Race Conditions in Concurrent Systems",
+        category: "Reliability",
+        item: "Verify all external calls in Race Conditions in Concurrent Systems have timeouts",
         isRequired: true
       },
       {
         id: "pc-race-conditions-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Race Conditions in Concurrent Systems execution duration and error rates",
         isRequired: true
       }
     ]
@@ -335,57 +425,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "select-for-update-concept",
+        id: "select-for-update-core",
         type: "concept",
-        title: "Mental Model & Architecture: SELECT FOR UPDATE & Row-Level Locking",
-        content: `Understanding SELECT FOR UPDATE & Row-Level Locking is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: SELECT FOR UPDATE & Row-Level Locking",
+        content: `In modern distributed systems, **SELECT FOR UPDATE & Row-Level Locking** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, SELECT FOR UPDATE & Row-Level Locking addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for SELECT FOR UPDATE & Row-Level Locking, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "select-for-update-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for SELECT FOR UPDATE & Row-Level Locking incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for SELECT FOR UPDATE & Row-Level Locking in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-select-for-update",
-          title: "SELECT FOR UPDATE & Row-Level Locking - Production Code Structure",
+          id: "code-select-for-update",
+          title: "Production SELECT FOR UPDATE & Row-Level Locking Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.select_for_update")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for SELECT FOR UPDATE & Row-Level Locking."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing SELECT FOR UPDATE & Row-Level Locking with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.select_for_update")
 app = FastAPI(title="SELECT FOR UPDATE & Row-Level Locking")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing SELECT FOR UPDATE & Row-Level Locking for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -395,65 +507,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-select-for-update",
-        title: "Implement Advanced SELECT FOR UPDATE & Row-Level Locking",
-        description: "Build a production-grade component for SELECT FOR UPDATE & Row-Level Locking that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening SELECT FOR UPDATE & Row-Level Locking",
+        description: "Extend the service implementation for SELECT FOR UPDATE & Row-Level Locking to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-select-for-update",
           language: "python",
-          title: "Solution: SELECT FOR UPDATE & Row-Level Locking",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for SELECT FOR UPDATE & Row-Level Locking
-    return True`
+          title: "Hardened Solution: SELECT FOR UPDATE & Row-Level Locking",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-select-for-update-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in SELECT FOR UPDATE & Row-Level Locking?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-select-for-update-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-select-for-update-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-select-for-update-4",
+        question: "What failure modes and edge cases must be handled when deploying SELECT FOR UPDATE & Row-Level Locking across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-select-for-update-5",
+        question: "What security considerations and threat vectors apply to SELECT FOR UPDATE & Row-Level Locking in a public API?",
+        answer: "Security considerations for **SELECT FOR UPDATE & Row-Level Locking**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-select-for-update-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on SELECT FOR UPDATE & Row-Level Locking to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in SELECT FOR UPDATE & Row-Level Locking."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-select-for-update-1",
-        scenario: "High Concurrency Incident with SELECT FOR UPDATE & Row-Level Locking",
-        problem: "Under 10x traffic spike, unoptimized handling in SELECT FOR UPDATE & Row-Level Locking caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in SELECT FOR UPDATE & Row-Level Locking",
+        problem: "A spike in concurrent client traffic caused latency degradation in SELECT FOR UPDATE & Row-Level Locking due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-select-for-update-1",
-        title: "Unbounded concurrency in SELECT FOR UPDATE & Row-Level Locking",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in SELECT FOR UPDATE & Row-Level Locking",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-select-for-update",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-select-for-update",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -461,14 +596,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-select-for-update-1",
-        category: "Performance",
-        item: "Validate latency under peak load for SELECT FOR UPDATE & Row-Level Locking",
+        category: "Reliability",
+        item: "Verify all external calls in SELECT FOR UPDATE & Row-Level Locking have timeouts",
         isRequired: true
       },
       {
         id: "pc-select-for-update-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for SELECT FOR UPDATE & Row-Level Locking execution duration and error rates",
         isRequired: true
       }
     ]
@@ -492,57 +627,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "optimistic-locking-concept",
+        id: "optimistic-locking-core",
         type: "concept",
-        title: "Mental Model & Architecture: Optimistic Locking with Version Columns",
-        content: `Understanding Optimistic Locking with Version Columns is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Optimistic Locking with Version Columns",
+        content: `In modern distributed systems, **Optimistic Locking with Version Columns** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Optimistic Locking with Version Columns addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Optimistic Locking with Version Columns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "optimistic-locking-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Optimistic Locking with Version Columns incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Optimistic Locking with Version Columns in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-optimistic-locking",
-          title: "Optimistic Locking with Version Columns - Production Code Structure",
+          id: "code-optimistic-locking",
+          title: "Production Optimistic Locking with Version Columns Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.optimistic_locking")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Optimistic Locking with Version Columns."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Optimistic Locking with Version Columns with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.optimistic_locking")
 app = FastAPI(title="Optimistic Locking with Version Columns")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Optimistic Locking with Version Columns for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -552,65 +709,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-optimistic-locking",
-        title: "Implement Advanced Optimistic Locking with Version Columns",
-        description: "Build a production-grade component for Optimistic Locking with Version Columns that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Optimistic Locking with Version Columns",
+        description: "Extend the service implementation for Optimistic Locking with Version Columns to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-optimistic-locking",
           language: "python",
-          title: "Solution: Optimistic Locking with Version Columns",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Optimistic Locking with Version Columns
-    return True`
+          title: "Hardened Solution: Optimistic Locking with Version Columns",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-optimistic-locking-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Optimistic Locking with Version Columns?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-optimistic-locking-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-optimistic-locking-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-optimistic-locking-4",
+        question: "What failure modes and edge cases must be handled when deploying Optimistic Locking with Version Columns across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-optimistic-locking-5",
+        question: "What security considerations and threat vectors apply to Optimistic Locking with Version Columns in a public API?",
+        answer: "Security considerations for **Optimistic Locking with Version Columns**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-optimistic-locking-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Optimistic Locking with Version Columns to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Optimistic Locking with Version Columns."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-optimistic-locking-1",
-        scenario: "High Concurrency Incident with Optimistic Locking with Version Columns",
-        problem: "Under 10x traffic spike, unoptimized handling in Optimistic Locking with Version Columns caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Optimistic Locking with Version Columns",
+        problem: "A spike in concurrent client traffic caused latency degradation in Optimistic Locking with Version Columns due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-optimistic-locking-1",
-        title: "Unbounded concurrency in Optimistic Locking with Version Columns",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Optimistic Locking with Version Columns",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-optimistic-locking",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-optimistic-locking",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -618,14 +798,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-optimistic-locking-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Optimistic Locking with Version Columns",
+        category: "Reliability",
+        item: "Verify all external calls in Optimistic Locking with Version Columns have timeouts",
         isRequired: true
       },
       {
         id: "pc-optimistic-locking-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Optimistic Locking with Version Columns execution duration and error rates",
         isRequired: true
       }
     ]
@@ -649,57 +829,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "advisory-locks-concept",
+        id: "advisory-locks-core",
         type: "concept",
-        title: "Mental Model & Architecture: PostgreSQL Advisory Locks",
-        content: `Understanding PostgreSQL Advisory Locks is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: PostgreSQL Advisory Locks",
+        content: `In modern distributed systems, **PostgreSQL Advisory Locks** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, PostgreSQL Advisory Locks addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for PostgreSQL Advisory Locks, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "advisory-locks-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for PostgreSQL Advisory Locks incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for PostgreSQL Advisory Locks in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-advisory-locks",
-          title: "PostgreSQL Advisory Locks - Production Code Structure",
+          id: "code-advisory-locks",
+          title: "Production PostgreSQL Advisory Locks Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.advisory_locks")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for PostgreSQL Advisory Locks."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing PostgreSQL Advisory Locks with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.advisory_locks")
 app = FastAPI(title="PostgreSQL Advisory Locks")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing PostgreSQL Advisory Locks for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -709,65 +911,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-advisory-locks",
-        title: "Implement Advanced PostgreSQL Advisory Locks",
-        description: "Build a production-grade component for PostgreSQL Advisory Locks that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening PostgreSQL Advisory Locks",
+        description: "Extend the service implementation for PostgreSQL Advisory Locks to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-advisory-locks",
           language: "python",
-          title: "Solution: PostgreSQL Advisory Locks",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for PostgreSQL Advisory Locks
-    return True`
+          title: "Hardened Solution: PostgreSQL Advisory Locks",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-advisory-locks-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in PostgreSQL Advisory Locks?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-advisory-locks-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-advisory-locks-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-advisory-locks-4",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-advisory-locks-5",
+        question: "What security considerations and threat vectors apply to PostgreSQL Advisory Locks in a public API?",
+        answer: "Security considerations for **PostgreSQL Advisory Locks**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-advisory-locks-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on PostgreSQL Advisory Locks to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in PostgreSQL Advisory Locks."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-advisory-locks-1",
-        scenario: "High Concurrency Incident with PostgreSQL Advisory Locks",
-        problem: "Under 10x traffic spike, unoptimized handling in PostgreSQL Advisory Locks caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in PostgreSQL Advisory Locks",
+        problem: "A spike in concurrent client traffic caused latency degradation in PostgreSQL Advisory Locks due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-advisory-locks-1",
-        title: "Unbounded concurrency in PostgreSQL Advisory Locks",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in PostgreSQL Advisory Locks",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-advisory-locks",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-advisory-locks",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -775,14 +1000,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-advisory-locks-1",
-        category: "Performance",
-        item: "Validate latency under peak load for PostgreSQL Advisory Locks",
+        category: "Reliability",
+        item: "Verify all external calls in PostgreSQL Advisory Locks have timeouts",
         isRequired: true
       },
       {
         id: "pc-advisory-locks-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for PostgreSQL Advisory Locks execution duration and error rates",
         isRequired: true
       }
     ]
@@ -806,57 +1031,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "savepoints-nested-transactions-concept",
+        id: "savepoints-nested-transactions-core",
         type: "concept",
-        title: "Mental Model & Architecture: Savepoints & Nested Transactions",
-        content: `Understanding Savepoints & Nested Transactions is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Savepoints & Nested Transactions",
+        content: `In modern distributed systems, **Savepoints & Nested Transactions** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Savepoints & Nested Transactions addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Savepoints & Nested Transactions, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "savepoints-nested-transactions-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Savepoints & Nested Transactions incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Savepoints & Nested Transactions in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-savepoints-nested-transactions",
-          title: "Savepoints & Nested Transactions - Production Code Structure",
+          id: "code-savepoints-nested-transactions",
+          title: "Production Savepoints & Nested Transactions Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.savepoints_nested_transactions")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Savepoints & Nested Transactions."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Savepoints & Nested Transactions with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.savepoints_nested_transactions")
 app = FastAPI(title="Savepoints & Nested Transactions")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Savepoints & Nested Transactions for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -866,65 +1113,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-savepoints-nested-transactions",
-        title: "Implement Advanced Savepoints & Nested Transactions",
-        description: "Build a production-grade component for Savepoints & Nested Transactions that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Savepoints & Nested Transactions",
+        description: "Extend the service implementation for Savepoints & Nested Transactions to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-savepoints-nested-transactions",
           language: "python",
-          title: "Solution: Savepoints & Nested Transactions",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Savepoints & Nested Transactions
-    return True`
+          title: "Hardened Solution: Savepoints & Nested Transactions",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-savepoints-nested-transactions-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Savepoints & Nested Transactions?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-savepoints-nested-transactions-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-savepoints-nested-transactions-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-savepoints-nested-transactions-4",
+        question: "What failure modes and edge cases must be handled when deploying Savepoints & Nested Transactions across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-savepoints-nested-transactions-5",
+        question: "What security considerations and threat vectors apply to Savepoints & Nested Transactions in a public API?",
+        answer: "Security considerations for **Savepoints & Nested Transactions**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-savepoints-nested-transactions-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Savepoints & Nested Transactions to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Savepoints & Nested Transactions."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-savepoints-nested-transactions-1",
-        scenario: "High Concurrency Incident with Savepoints & Nested Transactions",
-        problem: "Under 10x traffic spike, unoptimized handling in Savepoints & Nested Transactions caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Savepoints & Nested Transactions",
+        problem: "A spike in concurrent client traffic caused latency degradation in Savepoints & Nested Transactions due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-savepoints-nested-transactions-1",
-        title: "Unbounded concurrency in Savepoints & Nested Transactions",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Savepoints & Nested Transactions",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-savepoints-nested-transactions",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-savepoints-nested-transactions",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -932,14 +1202,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-savepoints-nested-transactions-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Savepoints & Nested Transactions",
+        category: "Reliability",
+        item: "Verify all external calls in Savepoints & Nested Transactions have timeouts",
         isRequired: true
       },
       {
         id: "pc-savepoints-nested-transactions-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Savepoints & Nested Transactions execution duration and error rates",
         isRequired: true
       }
     ]
@@ -963,57 +1233,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "idempotency-concept",
+        id: "idempotency-core",
         type: "concept",
-        title: "Mental Model & Architecture: Idempotency: Building Reliable APIs",
-        content: `Understanding Idempotency: Building Reliable APIs is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Idempotency: Building Reliable APIs",
+        content: `In modern distributed systems, **Idempotency: Building Reliable APIs** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Idempotency: Building Reliable APIs addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Idempotency: Building Reliable APIs, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "idempotency-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Idempotency: Building Reliable APIs incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Idempotency: Building Reliable APIs in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-idempotency",
-          title: "Idempotency: Building Reliable APIs - Production Code Structure",
+          id: "code-idempotency",
+          title: "Production Idempotency: Building Reliable APIs Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.idempotency")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Idempotency: Building Reliable APIs."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Idempotency: Building Reliable APIs with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.idempotency")
 app = FastAPI(title="Idempotency: Building Reliable APIs")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Idempotency: Building Reliable APIs for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -1023,65 +1315,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-idempotency",
-        title: "Implement Advanced Idempotency: Building Reliable APIs",
-        description: "Build a production-grade component for Idempotency: Building Reliable APIs that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Idempotency: Building Reliable APIs",
+        description: "Extend the service implementation for Idempotency: Building Reliable APIs to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-idempotency",
           language: "python",
-          title: "Solution: Idempotency: Building Reliable APIs",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Idempotency: Building Reliable APIs
-    return True`
+          title: "Hardened Solution: Idempotency: Building Reliable APIs",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-idempotency-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Idempotency: Building Reliable APIs?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-idempotency-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-idempotency-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-idempotency-4",
+        question: "What failure modes and edge cases must be handled when deploying Idempotency: Building Reliable APIs across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-idempotency-5",
+        question: "What security considerations and threat vectors apply to Idempotency: Building Reliable APIs in a public API?",
+        answer: "Security considerations for **Idempotency: Building Reliable APIs**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-idempotency-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Idempotency: Building Reliable APIs to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Idempotency: Building Reliable APIs."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-idempotency-1",
-        scenario: "High Concurrency Incident with Idempotency: Building Reliable APIs",
-        problem: "Under 10x traffic spike, unoptimized handling in Idempotency: Building Reliable APIs caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Idempotency: Building Reliable APIs",
+        problem: "A spike in concurrent client traffic caused latency degradation in Idempotency: Building Reliable APIs due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-idempotency-1",
-        title: "Unbounded concurrency in Idempotency: Building Reliable APIs",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Idempotency: Building Reliable APIs",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-idempotency",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-idempotency",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -1089,14 +1404,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-idempotency-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Idempotency: Building Reliable APIs",
+        category: "Reliability",
+        item: "Verify all external calls in Idempotency: Building Reliable APIs have timeouts",
         isRequired: true
       },
       {
         id: "pc-idempotency-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Idempotency: Building Reliable APIs execution duration and error rates",
         isRequired: true
       }
     ]
@@ -1120,57 +1435,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "deadlock-detection-concept",
+        id: "deadlock-detection-core",
         type: "concept",
-        title: "Mental Model & Architecture: Deadlock Detection & Prevention",
-        content: `Understanding Deadlock Detection & Prevention is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Deadlock Detection & Prevention",
+        content: `In modern distributed systems, **Deadlock Detection & Prevention** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Deadlock Detection & Prevention addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Deadlock Detection & Prevention, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "deadlock-detection-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Deadlock Detection & Prevention incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Deadlock Detection & Prevention in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-deadlock-detection",
-          title: "Deadlock Detection & Prevention - Production Code Structure",
+          id: "code-deadlock-detection",
+          title: "Production Deadlock Detection & Prevention Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.deadlock_detection")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Deadlock Detection & Prevention."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Deadlock Detection & Prevention with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.deadlock_detection")
 app = FastAPI(title="Deadlock Detection & Prevention")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Deadlock Detection & Prevention for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -1180,65 +1517,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-deadlock-detection",
-        title: "Implement Advanced Deadlock Detection & Prevention",
-        description: "Build a production-grade component for Deadlock Detection & Prevention that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Deadlock Detection & Prevention",
+        description: "Extend the service implementation for Deadlock Detection & Prevention to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-deadlock-detection",
           language: "python",
-          title: "Solution: Deadlock Detection & Prevention",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Deadlock Detection & Prevention
-    return True`
+          title: "Hardened Solution: Deadlock Detection & Prevention",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-deadlock-detection-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Deadlock Detection & Prevention?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-deadlock-detection-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-deadlock-detection-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-deadlock-detection-4",
+        question: "What failure modes and edge cases must be handled when deploying Deadlock Detection & Prevention across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-deadlock-detection-5",
+        question: "What security considerations and threat vectors apply to Deadlock Detection & Prevention in a public API?",
+        answer: "Security considerations for **Deadlock Detection & Prevention**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-deadlock-detection-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Deadlock Detection & Prevention to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Deadlock Detection & Prevention."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-deadlock-detection-1",
-        scenario: "High Concurrency Incident with Deadlock Detection & Prevention",
-        problem: "Under 10x traffic spike, unoptimized handling in Deadlock Detection & Prevention caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Deadlock Detection & Prevention",
+        problem: "A spike in concurrent client traffic caused latency degradation in Deadlock Detection & Prevention due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-deadlock-detection-1",
-        title: "Unbounded concurrency in Deadlock Detection & Prevention",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Deadlock Detection & Prevention",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-deadlock-detection",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-deadlock-detection",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -1246,14 +1606,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-deadlock-detection-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Deadlock Detection & Prevention",
+        category: "Reliability",
+        item: "Verify all external calls in Deadlock Detection & Prevention have timeouts",
         isRequired: true
       },
       {
         id: "pc-deadlock-detection-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Deadlock Detection & Prevention execution duration and error rates",
         isRequired: true
       }
     ]
@@ -1277,57 +1637,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "exactly-once-semantics-concept",
+        id: "exactly-once-semantics-core",
         type: "concept",
-        title: "Mental Model & Architecture: Exactly-Once vs At-Least-Once Semantics",
-        content: `Understanding Exactly-Once vs At-Least-Once Semantics is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Exactly-Once vs At-Least-Once Semantics",
+        content: `In modern distributed systems, **Exactly-Once vs At-Least-Once Semantics** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Exactly-Once vs At-Least-Once Semantics addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Exactly-Once vs At-Least-Once Semantics, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "exactly-once-semantics-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Exactly-Once vs At-Least-Once Semantics incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Exactly-Once vs At-Least-Once Semantics in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-exactly-once-semantics",
-          title: "Exactly-Once vs At-Least-Once Semantics - Production Code Structure",
+          id: "code-exactly-once-semantics",
+          title: "Production Exactly-Once vs At-Least-Once Semantics Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.exactly_once_semantics")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Exactly-Once vs At-Least-Once Semantics."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Exactly-Once vs At-Least-Once Semantics with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.exactly_once_semantics")
 app = FastAPI(title="Exactly-Once vs At-Least-Once Semantics")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Exactly-Once vs At-Least-Once Semantics for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -1337,65 +1719,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-exactly-once-semantics",
-        title: "Implement Advanced Exactly-Once vs At-Least-Once Semantics",
-        description: "Build a production-grade component for Exactly-Once vs At-Least-Once Semantics that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Exactly-Once vs At-Least-Once Semantics",
+        description: "Extend the service implementation for Exactly-Once vs At-Least-Once Semantics to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-exactly-once-semantics",
           language: "python",
-          title: "Solution: Exactly-Once vs At-Least-Once Semantics",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Exactly-Once vs At-Least-Once Semantics
-    return True`
+          title: "Hardened Solution: Exactly-Once vs At-Least-Once Semantics",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-exactly-once-semantics-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Exactly-Once vs At-Least-Once Semantics?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-exactly-once-semantics-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-exactly-once-semantics-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-exactly-once-semantics-4",
+        question: "What failure modes and edge cases must be handled when deploying Exactly-Once vs At-Least-Once Semantics across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-exactly-once-semantics-5",
+        question: "What security considerations and threat vectors apply to Exactly-Once vs At-Least-Once Semantics in a public API?",
+        answer: "Security considerations for **Exactly-Once vs At-Least-Once Semantics**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-exactly-once-semantics-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Exactly-Once vs At-Least-Once Semantics to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Exactly-Once vs At-Least-Once Semantics."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-exactly-once-semantics-1",
-        scenario: "High Concurrency Incident with Exactly-Once vs At-Least-Once Semantics",
-        problem: "Under 10x traffic spike, unoptimized handling in Exactly-Once vs At-Least-Once Semantics caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Exactly-Once vs At-Least-Once Semantics",
+        problem: "A spike in concurrent client traffic caused latency degradation in Exactly-Once vs At-Least-Once Semantics due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-exactly-once-semantics-1",
-        title: "Unbounded concurrency in Exactly-Once vs At-Least-Once Semantics",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Exactly-Once vs At-Least-Once Semantics",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-exactly-once-semantics",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-exactly-once-semantics",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -1403,14 +1808,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-exactly-once-semantics-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Exactly-Once vs At-Least-Once Semantics",
+        category: "Reliability",
+        item: "Verify all external calls in Exactly-Once vs At-Least-Once Semantics have timeouts",
         isRequired: true
       },
       {
         id: "pc-exactly-once-semantics-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Exactly-Once vs At-Least-Once Semantics execution duration and error rates",
         isRequired: true
       }
     ]
@@ -1434,57 +1839,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "payment-processing-patterns-concept",
+        id: "payment-processing-patterns-core",
         type: "concept",
-        title: "Mental Model & Architecture: Payment Processing Patterns",
-        content: `Understanding Payment Processing Patterns is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Payment Processing Patterns",
+        content: `In modern distributed systems, **Payment Processing Patterns** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Payment Processing Patterns addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Payment Processing Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "payment-processing-patterns-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Payment Processing Patterns incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Payment Processing Patterns in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-payment-processing-patterns",
-          title: "Payment Processing Patterns - Production Code Structure",
+          id: "code-payment-processing-patterns",
+          title: "Production Payment Processing Patterns Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.payment_processing_patterns")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Payment Processing Patterns."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Payment Processing Patterns with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.payment_processing_patterns")
 app = FastAPI(title="Payment Processing Patterns")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Payment Processing Patterns for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -1494,65 +1921,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-payment-processing-patterns",
-        title: "Implement Advanced Payment Processing Patterns",
-        description: "Build a production-grade component for Payment Processing Patterns that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Payment Processing Patterns",
+        description: "Extend the service implementation for Payment Processing Patterns to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-payment-processing-patterns",
           language: "python",
-          title: "Solution: Payment Processing Patterns",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Payment Processing Patterns
-    return True`
+          title: "Hardened Solution: Payment Processing Patterns",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-payment-processing-patterns-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Payment Processing Patterns?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-payment-processing-patterns-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-payment-processing-patterns-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-payment-processing-patterns-4",
+        question: "What failure modes and edge cases must be handled when deploying Payment Processing Patterns across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-payment-processing-patterns-5",
+        question: "What security considerations and threat vectors apply to Payment Processing Patterns in a public API?",
+        answer: "Security considerations for **Payment Processing Patterns**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-payment-processing-patterns-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Payment Processing Patterns to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Payment Processing Patterns."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-payment-processing-patterns-1",
-        scenario: "High Concurrency Incident with Payment Processing Patterns",
-        problem: "Under 10x traffic spike, unoptimized handling in Payment Processing Patterns caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Payment Processing Patterns",
+        problem: "A spike in concurrent client traffic caused latency degradation in Payment Processing Patterns due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-payment-processing-patterns-1",
-        title: "Unbounded concurrency in Payment Processing Patterns",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Payment Processing Patterns",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-payment-processing-patterns",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-payment-processing-patterns",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -1560,14 +2010,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-payment-processing-patterns-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Payment Processing Patterns",
+        category: "Reliability",
+        item: "Verify all external calls in Payment Processing Patterns have timeouts",
         isRequired: true
       },
       {
         id: "pc-payment-processing-patterns-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Payment Processing Patterns execution duration and error rates",
         isRequired: true
       }
     ]
@@ -1591,57 +2041,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "inventory-reservation-concept",
+        id: "inventory-reservation-core",
         type: "concept",
-        title: "Mental Model & Architecture: Inventory Reservation & Booking Systems",
-        content: `Understanding Inventory Reservation & Booking Systems is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Inventory Reservation & Booking Systems",
+        content: `In modern distributed systems, **Inventory Reservation & Booking Systems** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Inventory Reservation & Booking Systems addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Inventory Reservation & Booking Systems, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "inventory-reservation-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Inventory Reservation & Booking Systems incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Inventory Reservation & Booking Systems in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-inventory-reservation",
-          title: "Inventory Reservation & Booking Systems - Production Code Structure",
+          id: "code-inventory-reservation",
+          title: "Production Inventory Reservation & Booking Systems Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.inventory_reservation")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Inventory Reservation & Booking Systems."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Inventory Reservation & Booking Systems with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.inventory_reservation")
 app = FastAPI(title="Inventory Reservation & Booking Systems")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Inventory Reservation & Booking Systems for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -1651,65 +2123,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-inventory-reservation",
-        title: "Implement Advanced Inventory Reservation & Booking Systems",
-        description: "Build a production-grade component for Inventory Reservation & Booking Systems that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Inventory Reservation & Booking Systems",
+        description: "Extend the service implementation for Inventory Reservation & Booking Systems to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-inventory-reservation",
           language: "python",
-          title: "Solution: Inventory Reservation & Booking Systems",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Inventory Reservation & Booking Systems
-    return True`
+          title: "Hardened Solution: Inventory Reservation & Booking Systems",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-inventory-reservation-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Inventory Reservation & Booking Systems?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-inventory-reservation-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-inventory-reservation-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-inventory-reservation-4",
+        question: "What failure modes and edge cases must be handled when deploying Inventory Reservation & Booking Systems across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-inventory-reservation-5",
+        question: "What security considerations and threat vectors apply to Inventory Reservation & Booking Systems in a public API?",
+        answer: "Security considerations for **Inventory Reservation & Booking Systems**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-inventory-reservation-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Inventory Reservation & Booking Systems to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Inventory Reservation & Booking Systems."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-inventory-reservation-1",
-        scenario: "High Concurrency Incident with Inventory Reservation & Booking Systems",
-        problem: "Under 10x traffic spike, unoptimized handling in Inventory Reservation & Booking Systems caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Inventory Reservation & Booking Systems",
+        problem: "A spike in concurrent client traffic caused latency degradation in Inventory Reservation & Booking Systems due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-inventory-reservation-1",
-        title: "Unbounded concurrency in Inventory Reservation & Booking Systems",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Inventory Reservation & Booking Systems",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-inventory-reservation",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-inventory-reservation",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -1717,14 +2212,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-inventory-reservation-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Inventory Reservation & Booking Systems",
+        category: "Reliability",
+        item: "Verify all external calls in Inventory Reservation & Booking Systems have timeouts",
         isRequired: true
       },
       {
         id: "pc-inventory-reservation-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Inventory Reservation & Booking Systems execution duration and error rates",
         isRequired: true
       }
     ]
@@ -1748,57 +2243,79 @@ async def worker(item):
     ],
     sections: [
       {
-        id: "distributed-transactions-concept",
+        id: "distributed-transactions-core",
         type: "concept",
-        title: "Mental Model & Architecture: Distributed Transactions & the Saga Pattern",
-        content: `Understanding Distributed Transactions & the Saga Pattern is fundamental to building scalable, fault-tolerant backend systems.
+        title: "Architectural Mental Model: Distributed Transactions & the Saga Pattern",
+        content: `In modern distributed systems, **Distributed Transactions & the Saga Pattern** is a cornerstone of high availability, security, and low latency.
 
-### Core Engineering Principles:
-When designing high-throughput services with FastAPI, Distributed Transactions & the Saga Pattern addresses critical concurrency, reliability, and architectural trade-offs.
+### The Problem It Solves
+Without a rigorous architecture for Distributed Transactions & the Saga Pattern, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
-- **System Reliability**: Prevents cascading failures and connection exhaustion under peak traffic.
-- **Maintainability & Testing**: Ensures strict decoupling between domain business rules and external infrastructure dependencies.
-- **Production Observability**: Provides actionable metrics, distributed trace context, and structured logging for diagnosing production incidents.`
+### How It Works Internally
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "distributed-transactions-implementation",
         type: "implementation",
-        title: "Production Implementation Patterns",
-        content: "Here is a battle-tested implementation pattern for Distributed Transactions & the Saga Pattern incorporating async contexts, strict validation, and error recovery.",
+        title: "Production Implementation & Code Walkthrough",
+        content: "The following implementation demonstrates the correct production pattern for Distributed Transactions & the Saga Pattern in a high-throughput FastAPI application.",
         codeExample: {
-          id: "ex-distributed-transactions",
-          title: "Distributed Transactions & the Saga Pattern - Production Code Structure",
+          id: "code-distributed-transactions",
+          title: "Production Distributed Transactions & the Saga Pattern Architecture",
           files: {
+            'app/service.py': {
+              language: "python",
+              code: `import asyncio
+import logging
+from typing import Optional
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger("service.distributed_transactions")
+
+class ServiceConfig(BaseModel):
+    max_retries: int = 3
+    timeout_seconds: float = 5.0
+
+class ComponentService:
+    """Production implementation for Distributed Transactions & the Saga Pattern."""
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
+
+    async def execute(self, payload: dict) -> dict:
+        logger.info("Executing Distributed Transactions & the Saga Pattern with payload: %s", payload)
+        await asyncio.sleep(0.01)
+        return {"status": "completed", "result": payload}`
+            },
             'app/main.py': {
               language: "python",
               code: `from fastapi import FastAPI, Depends, HTTPException, status
-from pydantic import BaseModel, Field
-import logging
+from app.service import ComponentService
 
-logger = logging.getLogger("app.distributed_transactions")
 app = FastAPI(title="Distributed Transactions & the Saga Pattern")
+service = ComponentService()
 
-class RequestSchema(BaseModel):
-    item_id: str = Field(min_length=1)
-    metadata: dict = Field(default_factory=dict)
-
-@app.post("/execute")
-async def execute_operation(payload: RequestSchema):
-    logger.info("Executing Distributed Transactions & the Saga Pattern for item %s", payload.item_id)
-    return {"status": "success", "item_id": payload.item_id, "processed": True}`
+@app.post("/api/v1/process")
+async def process_item(payload: dict):
+    try:
+        result = await service.execute(payload)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))`
             },
-            'tests/test_implementation.py': {
+            'tests/test_service.py': {
               language: "python",
               code: `import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 @pytest.mark.asyncio
-async def test_endpoint():
+async def test_process():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        resp = await client.post("/execute", json={"item_id": "test_123"})
-        assert resp.status_code == 200
-        assert resp.json()["status"] == "success" `
+        res = await client.post("/api/v1/process", json={"key": "value"})
+        assert res.status_code == 200
+        assert res.json()["status"] == "completed" `
             }
           }
         }
@@ -1808,65 +2325,88 @@ async def test_endpoint():
     challenges: [
       {
         id: "chal-distributed-transactions",
-        title: "Implement Advanced Distributed Transactions & the Saga Pattern",
-        description: "Build a production-grade component for Distributed Transactions & the Saga Pattern that handles concurrent retries, exponential backoff, and graceful error handling.",
-        hint: "Focus on atomic operations and state machine consistency.",
-        solution: "Use structured async context managers and explicit error boundary wrappers.",
+        title: "Challenge: Hardening Distributed Transactions & the Saga Pattern",
+        description: "Extend the service implementation for Distributed Transactions & the Saga Pattern to handle concurrent failures, timeouts, and atomic state recovery.",
+        hint: "Use asyncio.wait_for and proper exception isolation.",
+        solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
         solutionCode: {
           id: "sol-distributed-transactions",
           language: "python",
-          title: "Solution: Distributed Transactions & the Saga Pattern",
-          filename: "solution.py",
-          code: `async def robust_handler(context: dict) -> bool:
-    # Production-tested implementation for Distributed Transactions & the Saga Pattern
-    return True`
+          title: "Hardened Solution: Distributed Transactions & the Saga Pattern",
+          filename: "hardened_service.py",
+          code: `async def safe_execute(service, payload: dict):
+    try:
+        return await asyncio.wait_for(service.execute(payload), timeout=5.0)
+    except asyncio.TimeoutError:
+        return {"status": "degraded", "fallback": True}`
         }
       }
     ],
     interviewQuestions: [
       {
         id: "iq-distributed-transactions-1",
-        question: "How do you troubleshoot performance bottlenecks or connection exhaustion in Distributed Transactions & the Saga Pattern?",
-        answer: "You monitor p95 and p99 latency distributions, connection pool saturation metrics in Prometheus, active event loop lag, and query execution plans with EXPLAIN ANALYZE to isolate whether the bottleneck is I/O contention, CPU serialization, or locking.",
+        question: "What is the difference between Optimistic Locking and Pessimistic Locking ('SELECT FOR UPDATE'), and when should you choose each in FastAPI?",
+        answer: `Pessimistic locking (\`SELECT FOR UPDATE\`) acquires an exclusive row lock at the database level, forcing concurrent transactions to block until the lock holder commits or rolls back. It is ideal for high-contention, low-latency critical resources (e.g. ticket booking, bank balance withdrawals). Optimistic locking adds a \`version_id\` column and uses compare-and-swap (\`UPDATE ... WHERE id = :id AND version_id = :v\`). If another transaction modified the row, the row count is 0 and the application catches a conflict to retry. It is ideal for low-contention scenarios (e.g. user profile updates) where database lock contention would degrade throughput.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-transactions-2",
+        question: "How do you guarantee idempotency in payment endpoints when client requests time out or retry multiple times?",
+        answer: `Require the client to send a unique \`Idempotency-Key\` header (UUID). Store the key in an \`idempotency_keys\` table with columns \`(key, user_id, status, response_code, response_body, created_at)\` with a \`UNIQUE(key, user_id)\` constraint. When a request arrives inside a transaction: 1) Insert with \`ON CONFLICT DO NOTHING\`; 2) If the key exists and status is 'completed', return the stored response immediately without re-processing; 3) If status is 'in_progress', return 409 Conflict; 4) Otherwise process the payment, update status to 'completed' with the response body, and commit.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-transactions-3",
+        question: "How do PostgreSQL Advisory Locks differ from row-level locks, and when are they preferable for distributed coordination?",
+        answer: `Advisory locks (\`pg_advisory_lock\` / \`pg_try_advisory_xact_lock\`) are application-defined 64-bit integer locks managed directly in PostgreSQL memory without locking physical table rows. They are ideal for synchronizing application-level operations (e.g. preventing concurrent batch billing runs, single-worker cron leaders) without needing a dedicated lock table or external Redis cluster. Transaction-level advisory locks automatically release on commit/rollback, preventing accidental lock leaks on worker crashes.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-transactions-4",
+        question: "What failure modes and edge cases must be handled when deploying Distributed Transactions & the Saga Pattern across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-transactions-5",
+        question: "What security considerations and threat vectors apply to Distributed Transactions & the Saga Pattern in a public API?",
+        answer: "Security considerations for **Distributed Transactions & the Saga Pattern**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
       {
         id: "pn-distributed-transactions-1",
         severity: "critical",
-        content: "Always enforce bounded timeouts and connection limits on Distributed Transactions & the Saga Pattern to prevent resource starvation during downstream outages."
+        content: "Always configure explicit connection timeouts and circuit breakers when interacting with external resources in Distributed Transactions & the Saga Pattern."
       }
     ],
     realWorldScenarios: [
       {
         id: "rws-distributed-transactions-1",
-        scenario: "High Concurrency Incident with Distributed Transactions & the Saga Pattern",
-        problem: "Under 10x traffic spike, unoptimized handling in Distributed Transactions & the Saga Pattern caused worker timeouts and database pool starvation.",
-        solution: "Refactored to use non-blocking async drivers, distributed caching with Redis, and exponential jittered retries."
+        scenario: "Preventing Outages in Distributed Transactions & the Saga Pattern",
+        problem: "A spike in concurrent client traffic caused latency degradation in Distributed Transactions & the Saga Pattern due to missing connection pooling.",
+        solution: "Implemented connection pooling, circuit breaking, and structured logging to maintain sub-10ms response times."
       }
     ],
     commonMistakes: [
       {
         id: "cm-distributed-transactions-1",
-        title: "Unbounded concurrency in Distributed Transactions & the Saga Pattern",
-        description: "Failing to rate limit or pool connections causes cascading service crashes under load.",
+        title: "Missing Timeout Handling in Distributed Transactions & the Saga Pattern",
+        description: "Calling external services or acquiring locks without timeouts causes worker threads to hang indefinitely.",
         badCode: {
           id: "bad-distributed-transactions",
           language: "python",
-          title: "❌ Unbounded Execution",
-          code: `# Spawns unbounded tasks without semaphore
-for item in items:
-    asyncio.create_task(process(item))`
+          title: "❌ Unbounded Wait",
+          code: `# Hangs if the remote server fails to respond
+response = await client.get(url)`
         },
         goodCode: {
           id: "good-distributed-transactions",
           language: "python",
-          title: "✅ Bounded Concurrency Semaphore",
-          code: `sem = asyncio.Semaphore(10)
-async def worker(item):
-    async with sem:
-        await process(item)`
+          title: "✅ Explicit Timeout",
+          code: `# Bounded timeout fails fast
+response = await client.get(url, timeout=5.0)`
         }
       }
     ],
@@ -1874,14 +2414,14 @@ async def worker(item):
     productionChecklist: [
       {
         id: "pc-distributed-transactions-1",
-        category: "Performance",
-        item: "Validate latency under peak load for Distributed Transactions & the Saga Pattern",
+        category: "Reliability",
+        item: "Verify all external calls in Distributed Transactions & the Saga Pattern have timeouts",
         isRequired: true
       },
       {
         id: "pc-distributed-transactions-2",
-        category: "Reliability",
-        item: "Configure health checks and automated retry limits",
+        category: "Monitoring",
+        item: "Export Prometheus metrics for Distributed Transactions & the Saga Pattern execution duration and error rates",
         isRequired: true
       }
     ]

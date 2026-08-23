@@ -18,6 +18,7 @@ import SystemDesignView from '@/components/lesson/SystemDesignView';
 import ProductionChecklist from '@/components/lesson/ProductionChecklist';
 import MultiFileCodeViewer from '@/components/lesson/MultiFileCodeViewer';
 import ArchitectureDiagram from '@/components/lesson/ArchitectureDiagram';
+import MarkdownContent from '@/components/lesson/MarkdownContent';
 
 export async function generateMetadata({
   params,
@@ -117,9 +118,7 @@ export default async function LessonPage({
                 />
               )}
               <div className="prose prose-slate max-w-none mb-4">
-                <p className="text-slate-700 leading-relaxed whitespace-pre-line">
-                  {section.content}
-                </p>
+                <MarkdownContent content={section.content} />
               </div>
               {section.codeExample && (
                 section.codeExample.files ? (

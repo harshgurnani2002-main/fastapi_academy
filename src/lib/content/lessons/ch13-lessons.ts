@@ -24,15 +24,15 @@ export const ch13Lessons: Record<string, Lesson> = {
         id: "session-architecture-core",
         type: "concept",
         title: "Architectural Mental Model: Session Architecture: Cookies vs Server-Side",
-        content: `In modern distributed systems, **Session Architecture: Cookies vs Server-Side** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Session Architecture: Cookies vs Server-Side** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Session Architecture: Cookies vs Server-Side, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Session Architecture: Cookies vs Server-Side, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "session-architecture-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for Session Architecture: Cookies vs Server-Side, back
         content: "The following implementation demonstrates the correct production pattern for Session Architecture: Cookies vs Server-Side in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-session-architecture",
-          title: "Production Session Architecture: Cookies vs Server-Side Implementation",
+          title: "Production Session Architecture: Cookies vs Server-Side Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.session_architecture")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Session Architecture: Cookies vs Server-Side."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Session Architecture: Cookies vs Server-Side with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-session-architecture",
-        title: "Challenge: Stress Testing & Hardening Session Architecture: Cookies vs Server-Side",
+        title: "Challenge: Hardening Session Architecture: Cookies vs Server-Side",
         description: "Extend the service implementation for Session Architecture: Cookies vs Server-Side to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-session-architecture-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Session Architecture: Cookies vs Server-Side?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Session Architecture: Cookies vs Server-Side under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Session Architecture: Cookies vs Server-Side**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-session-architecture-2",
+        question: "What failure modes and edge cases must be handled when deploying Session Architecture: Cookies vs Server-Side across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-session-architecture-3",
+        question: "What security considerations and threat vectors apply to Session Architecture: Cookies vs Server-Side in a public API?",
+        answer: "Security considerations for **Session Architecture: Cookies vs Server-Side**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +214,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-session-store-core",
         type: "concept",
         title: "Architectural Mental Model: Building a Redis Session Store",
-        content: `In modern distributed systems, **Building a Redis Session Store** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Building a Redis Session Store** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Building a Redis Session Store, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Building a Redis Session Store, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-session-store-implementation",
@@ -220,7 +231,7 @@ Without a rigorous design for Building a Redis Session Store, backend services s
         content: "The following implementation demonstrates the correct production pattern for Building a Redis Session Store in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-session-store",
-          title: "Production Building a Redis Session Store Implementation",
+          title: "Production Building a Redis Session Store Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +242,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_session_store")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Building a Redis Session Store."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Building a Redis Session Store with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +293,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-session-store",
-        title: "Challenge: Stress Testing & Hardening Building a Redis Session Store",
+        title: "Challenge: Hardening Building a Redis Session Store",
         description: "Extend the service implementation for Building a Redis Session Store to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +313,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-session-store-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Building a Redis Session Store?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-session-store-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-session-store-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Building a Redis Session Store under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Building a Redis Session Store**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-session-store-4",
+        question: "What failure modes and edge cases must be handled when deploying Building a Redis Session Store across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-session-store-5",
+        question: "What security considerations and threat vectors apply to Building a Redis Session Store in a public API?",
+        answer: "Security considerations for **Building a Redis Session Store**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +416,15 @@ response = await client.get(url, timeout=5.0)`
         id: "session-rotation-core",
         type: "concept",
         title: "Architectural Mental Model: Session Rotation & Fixation Prevention",
-        content: `In modern distributed systems, **Session Rotation & Fixation Prevention** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Session Rotation & Fixation Prevention** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Session Rotation & Fixation Prevention, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Session Rotation & Fixation Prevention, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "session-rotation-implementation",
@@ -399,7 +433,7 @@ Without a rigorous design for Session Rotation & Fixation Prevention, backend se
         content: "The following implementation demonstrates the correct production pattern for Session Rotation & Fixation Prevention in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-session-rotation",
-          title: "Production Session Rotation & Fixation Prevention Implementation",
+          title: "Production Session Rotation & Fixation Prevention Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +444,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.session_rotation")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Session Rotation & Fixation Prevention."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Session Rotation & Fixation Prevention with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +495,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-session-rotation",
-        title: "Challenge: Stress Testing & Hardening Session Rotation & Fixation Prevention",
+        title: "Challenge: Hardening Session Rotation & Fixation Prevention",
         description: "Extend the service implementation for Session Rotation & Fixation Prevention to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +515,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-session-rotation-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Session Rotation & Fixation Prevention?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Session Rotation & Fixation Prevention under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Session Rotation & Fixation Prevention**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-session-rotation-2",
+        question: "What failure modes and edge cases must be handled when deploying Session Rotation & Fixation Prevention across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-session-rotation-3",
+        question: "What security considerations and threat vectors apply to Session Rotation & Fixation Prevention in a public API?",
+        answer: "Security considerations for **Session Rotation & Fixation Prevention**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +606,15 @@ response = await client.get(url, timeout=5.0)`
         id: "multi-device-sessions-core",
         type: "concept",
         title: "Architectural Mental Model: Multi-Device Session Management",
-        content: `In modern distributed systems, **Multi-Device Session Management** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Multi-Device Session Management** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Multi-Device Session Management, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Multi-Device Session Management, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "multi-device-sessions-implementation",
@@ -578,7 +623,7 @@ Without a rigorous design for Multi-Device Session Management, backend services 
         content: "The following implementation demonstrates the correct production pattern for Multi-Device Session Management in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-multi-device-sessions",
-          title: "Production Multi-Device Session Management Implementation",
+          title: "Production Multi-Device Session Management Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +634,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.multi_device_sessions")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Multi-Device Session Management."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Multi-Device Session Management with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +685,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-multi-device-sessions",
-        title: "Challenge: Stress Testing & Hardening Multi-Device Session Management",
+        title: "Challenge: Hardening Multi-Device Session Management",
         description: "Extend the service implementation for Multi-Device Session Management to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +705,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-multi-device-sessions-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Multi-Device Session Management?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Multi-Device Session Management under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Multi-Device Session Management**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-multi-device-sessions-2",
+        question: "What failure modes and edge cases must be handled when deploying Multi-Device Session Management across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-multi-device-sessions-3",
+        question: "What security considerations and threat vectors apply to Multi-Device Session Management in a public API?",
+        answer: "Security considerations for **Multi-Device Session Management**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +796,15 @@ response = await client.get(url, timeout=5.0)`
         id: "logout-everywhere-core",
         type: "concept",
         title: "Architectural Mental Model: Logout Everywhere & Session Invalidation",
-        content: `In modern distributed systems, **Logout Everywhere & Session Invalidation** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Logout Everywhere & Session Invalidation** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Logout Everywhere & Session Invalidation, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Logout Everywhere & Session Invalidation, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "logout-everywhere-implementation",
@@ -757,7 +813,7 @@ Without a rigorous design for Logout Everywhere & Session Invalidation, backend 
         content: "The following implementation demonstrates the correct production pattern for Logout Everywhere & Session Invalidation in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-logout-everywhere",
-          title: "Production Logout Everywhere & Session Invalidation Implementation",
+          title: "Production Logout Everywhere & Session Invalidation Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +824,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.logout_everywhere")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Logout Everywhere & Session Invalidation."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Logout Everywhere & Session Invalidation with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +875,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-logout-everywhere",
-        title: "Challenge: Stress Testing & Hardening Logout Everywhere & Session Invalidation",
+        title: "Challenge: Hardening Logout Everywhere & Session Invalidation",
         description: "Extend the service implementation for Logout Everywhere & Session Invalidation to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +895,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-logout-everywhere-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Logout Everywhere & Session Invalidation?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Logout Everywhere & Session Invalidation under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Logout Everywhere & Session Invalidation**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-logout-everywhere-2",
+        question: "What failure modes and edge cases must be handled when deploying Logout Everywhere & Session Invalidation across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-logout-everywhere-3",
+        question: "What security considerations and threat vectors apply to Logout Everywhere & Session Invalidation in a public API?",
+        answer: "Security considerations for **Logout Everywhere & Session Invalidation**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +986,15 @@ response = await client.get(url, timeout=5.0)`
         id: "session-security-core",
         type: "concept",
         title: "Architectural Mental Model: Session Cookie Security",
-        content: `In modern distributed systems, **Session Cookie Security** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Session Cookie Security** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Session Cookie Security, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Session Cookie Security, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "session-security-implementation",
@@ -936,7 +1003,7 @@ Without a rigorous design for Session Cookie Security, backend services suffer f
         content: "The following implementation demonstrates the correct production pattern for Session Cookie Security in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-session-security",
-          title: "Production Session Cookie Security Implementation",
+          title: "Production Session Cookie Security Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1014,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.session_security")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Session Cookie Security."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Session Cookie Security with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1065,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-session-security",
-        title: "Challenge: Stress Testing & Hardening Session Cookie Security",
+        title: "Challenge: Hardening Session Cookie Security",
         description: "Extend the service implementation for Session Cookie Security to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1085,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-session-security-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Session Cookie Security?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-session-security-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-session-security-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Session Cookie Security under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Session Cookie Security**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-session-security-4",
+        question: "What failure modes and edge cases must be handled when deploying Session Cookie Security across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-session-security-5",
+        question: "What security considerations and threat vectors apply to Session Cookie Security in a public API?",
+        answer: "Security considerations for **Session Cookie Security**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1188,15 @@ response = await client.get(url, timeout=5.0)`
         id: "distributed-session-patterns-core",
         type: "concept",
         title: "Architectural Mental Model: Distributed Session Architecture Patterns",
-        content: `In modern distributed systems, **Distributed Session Architecture Patterns** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Distributed Session Architecture Patterns** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Distributed Session Architecture Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Distributed Session Architecture Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "distributed-session-patterns-implementation",
@@ -1115,7 +1205,7 @@ Without a rigorous design for Distributed Session Architecture Patterns, backend
         content: "The following implementation demonstrates the correct production pattern for Distributed Session Architecture Patterns in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-distributed-session-patterns",
-          title: "Production Distributed Session Architecture Patterns Implementation",
+          title: "Production Distributed Session Architecture Patterns Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1216,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.distributed_session_patterns")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Distributed Session Architecture Patterns."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Distributed Session Architecture Patterns with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1267,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-distributed-session-patterns",
-        title: "Challenge: Stress Testing & Hardening Distributed Session Architecture Patterns",
+        title: "Challenge: Hardening Distributed Session Architecture Patterns",
         description: "Extend the service implementation for Distributed Session Architecture Patterns to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1287,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-distributed-session-patterns-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Distributed Session Architecture Patterns?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Distributed Session Architecture Patterns under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Distributed Session Architecture Patterns**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-session-patterns-2",
+        question: "What failure modes and edge cases must be handled when deploying Distributed Session Architecture Patterns across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-session-patterns-3",
+        question: "What security considerations and threat vectors apply to Distributed Session Architecture Patterns in a public API?",
+        answer: "Security considerations for **Distributed Session Architecture Patterns**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1378,15 @@ response = await client.get(url, timeout=5.0)`
         id: "session-analytics-core",
         type: "concept",
         title: "Architectural Mental Model: Session Analytics & Security Monitoring",
-        content: `In modern distributed systems, **Session Analytics & Security Monitoring** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Session Analytics & Security Monitoring** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Session Analytics & Security Monitoring, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Session Analytics & Security Monitoring, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "session-analytics-implementation",
@@ -1294,7 +1395,7 @@ Without a rigorous design for Session Analytics & Security Monitoring, backend s
         content: "The following implementation demonstrates the correct production pattern for Session Analytics & Security Monitoring in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-session-analytics",
-          title: "Production Session Analytics & Security Monitoring Implementation",
+          title: "Production Session Analytics & Security Monitoring Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1406,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.session_analytics")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Session Analytics & Security Monitoring."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Session Analytics & Security Monitoring with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1457,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-session-analytics",
-        title: "Challenge: Stress Testing & Hardening Session Analytics & Security Monitoring",
+        title: "Challenge: Hardening Session Analytics & Security Monitoring",
         description: "Extend the service implementation for Session Analytics & Security Monitoring to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1477,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-session-analytics-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Session Analytics & Security Monitoring?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-session-analytics-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-session-analytics-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Session Analytics & Security Monitoring under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Session Analytics & Security Monitoring**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-session-analytics-4",
+        question: "What failure modes and edge cases must be handled when deploying Session Analytics & Security Monitoring across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-session-analytics-5",
+        question: "What security considerations and threat vectors apply to Session Analytics & Security Monitoring in a public API?",
+        answer: "Security considerations for **Session Analytics & Security Monitoring**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1580,15 @@ response = await client.get(url, timeout=5.0)`
         id: "jwt-vs-sessions-core",
         type: "concept",
         title: "Architectural Mental Model: JWT vs Sessions: The Production Decision",
-        content: `In modern distributed systems, **JWT vs Sessions: The Production Decision** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **JWT vs Sessions: The Production Decision** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for JWT vs Sessions: The Production Decision, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for JWT vs Sessions: The Production Decision, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "jwt-vs-sessions-implementation",
@@ -1473,7 +1597,7 @@ Without a rigorous design for JWT vs Sessions: The Production Decision, backend 
         content: "The following implementation demonstrates the correct production pattern for JWT vs Sessions: The Production Decision in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-jwt-vs-sessions",
-          title: "Production JWT vs Sessions: The Production Decision Implementation",
+          title: "Production JWT vs Sessions: The Production Decision Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1608,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.jwt_vs_sessions")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for JWT vs Sessions: The Production Decision."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing JWT vs Sessions: The Production Decision with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1659,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-jwt-vs-sessions",
-        title: "Challenge: Stress Testing & Hardening JWT vs Sessions: The Production Decision",
+        title: "Challenge: Hardening JWT vs Sessions: The Production Decision",
         description: "Extend the service implementation for JWT vs Sessions: The Production Decision to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1679,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-jwt-vs-sessions-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with JWT vs Sessions: The Production Decision?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in JWT vs Sessions: The Production Decision under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **JWT vs Sessions: The Production Decision**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-jwt-vs-sessions-2",
+        question: "What failure modes and edge cases must be handled when deploying JWT vs Sessions: The Production Decision across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-jwt-vs-sessions-3",
+        question: "What security considerations and threat vectors apply to JWT vs Sessions: The Production Decision in a public API?",
+        answer: "Security considerations for **JWT vs Sessions: The Production Decision**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

@@ -24,15 +24,15 @@ export const ch10Lessons: Record<string, Lesson> = {
         id: "celery-architecture-core",
         type: "concept",
         title: "Architectural Mental Model: Celery Architecture Deep Dive",
-        content: `In modern distributed systems, **Celery Architecture Deep Dive** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Celery Architecture Deep Dive** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Celery Architecture Deep Dive, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Celery Architecture Deep Dive, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "celery-architecture-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for Celery Architecture Deep Dive, backend services su
         content: "The following implementation demonstrates the correct production pattern for Celery Architecture Deep Dive in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-celery-architecture",
-          title: "Production Celery Architecture Deep Dive Implementation",
+          title: "Production Celery Architecture Deep Dive Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.celery_architecture")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Celery Architecture Deep Dive."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Celery Architecture Deep Dive with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-celery-architecture",
-        title: "Challenge: Stress Testing & Hardening Celery Architecture Deep Dive",
+        title: "Challenge: Hardening Celery Architecture Deep Dive",
         description: "Extend the service implementation for Celery Architecture Deep Dive to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-celery-architecture-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Celery Architecture Deep Dive?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you guarantee idempotency in Celery background workers when broker acknowledgments are lost?",
+        answer: `Because message brokers (RabbitMQ/Redis) provide 'at-least-once' delivery, workers may receive the same task multiple times if a network partition occurs before the ACK is received. Tasks must be designed to be strictly idempotent: use unique idempotency keys or business state machines (\`if order.status == 'processed': return\`) with database unique constraints or atomic Redis locks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-celery-architecture-2",
+        question: "What is the difference between Celery worker prefork, gevent, and threads concurrency models, and which should you choose for FastAPI background tasks?",
+        answer: `'prefork' uses multiprocessing (1 process per CPU core), ideal for CPU-bound tasks and non-async code. 'gevent' and 'eventlet' use greenlet coroutines, ideal for thousands of concurrent I/O-bound tasks using monkey patching. 'threads' uses OS threads. For modern Python async ecosystems, dedicated async queues like \`ARQ\` or \`SAQ\` running natively on \`asyncio\` are often preferred over Celery for lightweight I/O workers.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-architecture-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Celery Architecture Deep Dive under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Celery Architecture Deep Dive**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-architecture-4",
+        question: "What failure modes and edge cases must be handled when deploying Celery Architecture Deep Dive across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-architecture-5",
+        question: "What security considerations and threat vectors apply to Celery Architecture Deep Dive in a public API?",
+        answer: "Security considerations for **Celery Architecture Deep Dive**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +226,15 @@ response = await client.get(url, timeout=5.0)`
         id: "fastapi-celery-integration-core",
         type: "concept",
         title: "Architectural Mental Model: Integrating Celery with FastAPI",
-        content: `In modern distributed systems, **Integrating Celery with FastAPI** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Integrating Celery with FastAPI** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Integrating Celery with FastAPI, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Integrating Celery with FastAPI, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "fastapi-celery-integration-implementation",
@@ -220,7 +243,7 @@ Without a rigorous design for Integrating Celery with FastAPI, backend services 
         content: "The following implementation demonstrates the correct production pattern for Integrating Celery with FastAPI in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-fastapi-celery-integration",
-          title: "Production Integrating Celery with FastAPI Implementation",
+          title: "Production Integrating Celery with FastAPI Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +254,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.fastapi_celery_integration")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Integrating Celery with FastAPI."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Integrating Celery with FastAPI with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +305,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-fastapi-celery-integration",
-        title: "Challenge: Stress Testing & Hardening Integrating Celery with FastAPI",
+        title: "Challenge: Hardening Integrating Celery with FastAPI",
         description: "Extend the service implementation for Integrating Celery with FastAPI to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +325,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-fastapi-celery-integration-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Integrating Celery with FastAPI?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you guarantee idempotency in Celery background workers when broker acknowledgments are lost?",
+        answer: `Because message brokers (RabbitMQ/Redis) provide 'at-least-once' delivery, workers may receive the same task multiple times if a network partition occurs before the ACK is received. Tasks must be designed to be strictly idempotent: use unique idempotency keys or business state machines (\`if order.status == 'processed': return\`) with database unique constraints or atomic Redis locks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-fastapi-celery-integration-2",
+        question: "What is the difference between Celery worker prefork, gevent, and threads concurrency models, and which should you choose for FastAPI background tasks?",
+        answer: `'prefork' uses multiprocessing (1 process per CPU core), ideal for CPU-bound tasks and non-async code. 'gevent' and 'eventlet' use greenlet coroutines, ideal for thousands of concurrent I/O-bound tasks using monkey patching. 'threads' uses OS threads. For modern Python async ecosystems, dedicated async queues like \`ARQ\` or \`SAQ\` running natively on \`asyncio\` are often preferred over Celery for lightweight I/O workers.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-fastapi-celery-integration-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Integrating Celery with FastAPI under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Integrating Celery with FastAPI**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-fastapi-celery-integration-4",
+        question: "What failure modes and edge cases must be handled when deploying Integrating Celery with FastAPI across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-fastapi-celery-integration-5",
+        question: "What security considerations and threat vectors apply to Integrating Celery with FastAPI in a public API?",
+        answer: "Security considerations for **Integrating Celery with FastAPI**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +428,15 @@ response = await client.get(url, timeout=5.0)`
         id: "task-design-patterns-core",
         type: "concept",
         title: "Architectural Mental Model: Task Design Patterns",
-        content: `In modern distributed systems, **Task Design Patterns** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Task Design Patterns** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Task Design Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Task Design Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "task-design-patterns-implementation",
@@ -399,7 +445,7 @@ Without a rigorous design for Task Design Patterns, backend services suffer from
         content: "The following implementation demonstrates the correct production pattern for Task Design Patterns in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-task-design-patterns",
-          title: "Production Task Design Patterns Implementation",
+          title: "Production Task Design Patterns Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +456,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.task_design_patterns")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Task Design Patterns."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Task Design Patterns with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +507,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-task-design-patterns",
-        title: "Challenge: Stress Testing & Hardening Task Design Patterns",
+        title: "Challenge: Hardening Task Design Patterns",
         description: "Extend the service implementation for Task Design Patterns to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +527,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-task-design-patterns-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Task Design Patterns?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Task Design Patterns under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Task Design Patterns**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-task-design-patterns-2",
+        question: "What failure modes and edge cases must be handled when deploying Task Design Patterns across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-task-design-patterns-3",
+        question: "What security considerations and threat vectors apply to Task Design Patterns in a public API?",
+        answer: "Security considerations for **Task Design Patterns**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +618,15 @@ response = await client.get(url, timeout=5.0)`
         id: "retry-exponential-backoff-core",
         type: "concept",
         title: "Architectural Mental Model: Retries & Exponential Backoff",
-        content: `In modern distributed systems, **Retries & Exponential Backoff** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Retries & Exponential Backoff** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Retries & Exponential Backoff, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Retries & Exponential Backoff, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "retry-exponential-backoff-implementation",
@@ -578,7 +635,7 @@ Without a rigorous design for Retries & Exponential Backoff, backend services su
         content: "The following implementation demonstrates the correct production pattern for Retries & Exponential Backoff in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-retry-exponential-backoff",
-          title: "Production Retries & Exponential Backoff Implementation",
+          title: "Production Retries & Exponential Backoff Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +646,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.retry_exponential_backoff")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Retries & Exponential Backoff."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Retries & Exponential Backoff with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +697,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-retry-exponential-backoff",
-        title: "Challenge: Stress Testing & Hardening Retries & Exponential Backoff",
+        title: "Challenge: Hardening Retries & Exponential Backoff",
         description: "Extend the service implementation for Retries & Exponential Backoff to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +717,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-retry-exponential-backoff-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Retries & Exponential Backoff?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Retries & Exponential Backoff under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Retries & Exponential Backoff**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-retry-exponential-backoff-2",
+        question: "What failure modes and edge cases must be handled when deploying Retries & Exponential Backoff across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-retry-exponential-backoff-3",
+        question: "What security considerations and threat vectors apply to Retries & Exponential Backoff in a public API?",
+        answer: "Security considerations for **Retries & Exponential Backoff**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +808,15 @@ response = await client.get(url, timeout=5.0)`
         id: "dead-letter-queues-core",
         type: "concept",
         title: "Architectural Mental Model: Dead-Letter Queues",
-        content: `In modern distributed systems, **Dead-Letter Queues** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Dead-Letter Queues** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Dead-Letter Queues, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Dead-Letter Queues, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "dead-letter-queues-implementation",
@@ -757,7 +825,7 @@ Without a rigorous design for Dead-Letter Queues, backend services suffer from r
         content: "The following implementation demonstrates the correct production pattern for Dead-Letter Queues in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-dead-letter-queues",
-          title: "Production Dead-Letter Queues Implementation",
+          title: "Production Dead-Letter Queues Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +836,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.dead_letter_queues")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Dead-Letter Queues."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Dead-Letter Queues with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +887,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-dead-letter-queues",
-        title: "Challenge: Stress Testing & Hardening Dead-Letter Queues",
+        title: "Challenge: Hardening Dead-Letter Queues",
         description: "Extend the service implementation for Dead-Letter Queues to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +907,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-dead-letter-queues-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Dead-Letter Queues?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you guarantee idempotency in Celery background workers when broker acknowledgments are lost?",
+        answer: `Because message brokers (RabbitMQ/Redis) provide 'at-least-once' delivery, workers may receive the same task multiple times if a network partition occurs before the ACK is received. Tasks must be designed to be strictly idempotent: use unique idempotency keys or business state machines (\`if order.status == 'processed': return\`) with database unique constraints or atomic Redis locks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-dead-letter-queues-2",
+        question: "What is the difference between Celery worker prefork, gevent, and threads concurrency models, and which should you choose for FastAPI background tasks?",
+        answer: `'prefork' uses multiprocessing (1 process per CPU core), ideal for CPU-bound tasks and non-async code. 'gevent' and 'eventlet' use greenlet coroutines, ideal for thousands of concurrent I/O-bound tasks using monkey patching. 'threads' uses OS threads. For modern Python async ecosystems, dedicated async queues like \`ARQ\` or \`SAQ\` running natively on \`asyncio\` are often preferred over Celery for lightweight I/O workers.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-dead-letter-queues-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Dead-Letter Queues under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Dead-Letter Queues**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-dead-letter-queues-4",
+        question: "What failure modes and edge cases must be handled when deploying Dead-Letter Queues across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-dead-letter-queues-5",
+        question: "What security considerations and threat vectors apply to Dead-Letter Queues in a public API?",
+        answer: "Security considerations for **Dead-Letter Queues**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +1010,15 @@ response = await client.get(url, timeout=5.0)`
         id: "celery-beat-scheduling-core",
         type: "concept",
         title: "Architectural Mental Model: Celery Beat: Scheduled & Periodic Tasks",
-        content: `In modern distributed systems, **Celery Beat: Scheduled & Periodic Tasks** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Celery Beat: Scheduled & Periodic Tasks** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Celery Beat: Scheduled & Periodic Tasks, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Celery Beat: Scheduled & Periodic Tasks, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "celery-beat-scheduling-implementation",
@@ -936,7 +1027,7 @@ Without a rigorous design for Celery Beat: Scheduled & Periodic Tasks, backend s
         content: "The following implementation demonstrates the correct production pattern for Celery Beat: Scheduled & Periodic Tasks in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-celery-beat-scheduling",
-          title: "Production Celery Beat: Scheduled & Periodic Tasks Implementation",
+          title: "Production Celery Beat: Scheduled & Periodic Tasks Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1038,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.celery_beat_scheduling")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Celery Beat: Scheduled & Periodic Tasks."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Celery Beat: Scheduled & Periodic Tasks with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1089,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-celery-beat-scheduling",
-        title: "Challenge: Stress Testing & Hardening Celery Beat: Scheduled & Periodic Tasks",
+        title: "Challenge: Hardening Celery Beat: Scheduled & Periodic Tasks",
         description: "Extend the service implementation for Celery Beat: Scheduled & Periodic Tasks to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1109,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-celery-beat-scheduling-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Celery Beat: Scheduled & Periodic Tasks?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you guarantee idempotency in Celery background workers when broker acknowledgments are lost?",
+        answer: `Because message brokers (RabbitMQ/Redis) provide 'at-least-once' delivery, workers may receive the same task multiple times if a network partition occurs before the ACK is received. Tasks must be designed to be strictly idempotent: use unique idempotency keys or business state machines (\`if order.status == 'processed': return\`) with database unique constraints or atomic Redis locks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-celery-beat-scheduling-2",
+        question: "What is the difference between Celery worker prefork, gevent, and threads concurrency models, and which should you choose for FastAPI background tasks?",
+        answer: `'prefork' uses multiprocessing (1 process per CPU core), ideal for CPU-bound tasks and non-async code. 'gevent' and 'eventlet' use greenlet coroutines, ideal for thousands of concurrent I/O-bound tasks using monkey patching. 'threads' uses OS threads. For modern Python async ecosystems, dedicated async queues like \`ARQ\` or \`SAQ\` running natively on \`asyncio\` are often preferred over Celery for lightweight I/O workers.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-beat-scheduling-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Celery Beat: Scheduled & Periodic Tasks under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Celery Beat: Scheduled & Periodic Tasks**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-beat-scheduling-4",
+        question: "What failure modes and edge cases must be handled when deploying Celery Beat: Scheduled & Periodic Tasks across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-beat-scheduling-5",
+        question: "What security considerations and threat vectors apply to Celery Beat: Scheduled & Periodic Tasks in a public API?",
+        answer: "Security considerations for **Celery Beat: Scheduled & Periodic Tasks**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1212,15 @@ response = await client.get(url, timeout=5.0)`
         id: "task-priorities-routing-core",
         type: "concept",
         title: "Architectural Mental Model: Task Priorities & Queue Routing",
-        content: `In modern distributed systems, **Task Priorities & Queue Routing** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Task Priorities & Queue Routing** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Task Priorities & Queue Routing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Task Priorities & Queue Routing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "task-priorities-routing-implementation",
@@ -1115,7 +1229,7 @@ Without a rigorous design for Task Priorities & Queue Routing, backend services 
         content: "The following implementation demonstrates the correct production pattern for Task Priorities & Queue Routing in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-task-priorities-routing",
-          title: "Production Task Priorities & Queue Routing Implementation",
+          title: "Production Task Priorities & Queue Routing Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1240,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.task_priorities_routing")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Task Priorities & Queue Routing."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Task Priorities & Queue Routing with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1291,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-task-priorities-routing",
-        title: "Challenge: Stress Testing & Hardening Task Priorities & Queue Routing",
+        title: "Challenge: Hardening Task Priorities & Queue Routing",
         description: "Extend the service implementation for Task Priorities & Queue Routing to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1311,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-task-priorities-routing-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Task Priorities & Queue Routing?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you guarantee idempotency in Celery background workers when broker acknowledgments are lost?",
+        answer: `Because message brokers (RabbitMQ/Redis) provide 'at-least-once' delivery, workers may receive the same task multiple times if a network partition occurs before the ACK is received. Tasks must be designed to be strictly idempotent: use unique idempotency keys or business state machines (\`if order.status == 'processed': return\`) with database unique constraints or atomic Redis locks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-task-priorities-routing-2",
+        question: "What is the difference between Celery worker prefork, gevent, and threads concurrency models, and which should you choose for FastAPI background tasks?",
+        answer: `'prefork' uses multiprocessing (1 process per CPU core), ideal for CPU-bound tasks and non-async code. 'gevent' and 'eventlet' use greenlet coroutines, ideal for thousands of concurrent I/O-bound tasks using monkey patching. 'threads' uses OS threads. For modern Python async ecosystems, dedicated async queues like \`ARQ\` or \`SAQ\` running natively on \`asyncio\` are often preferred over Celery for lightweight I/O workers.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-task-priorities-routing-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Task Priorities & Queue Routing under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Task Priorities & Queue Routing**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-task-priorities-routing-4",
+        question: "What failure modes and edge cases must be handled when deploying Task Priorities & Queue Routing across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-task-priorities-routing-5",
+        question: "What security considerations and threat vectors apply to Task Priorities & Queue Routing in a public API?",
+        answer: "Security considerations for **Task Priorities & Queue Routing**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1414,15 @@ response = await client.get(url, timeout=5.0)`
         id: "worker-concurrency-core",
         type: "concept",
         title: "Architectural Mental Model: Worker Concurrency Models",
-        content: `In modern distributed systems, **Worker Concurrency Models** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Worker Concurrency Models** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Worker Concurrency Models, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Worker Concurrency Models, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "worker-concurrency-implementation",
@@ -1294,7 +1431,7 @@ Without a rigorous design for Worker Concurrency Models, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Worker Concurrency Models in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-worker-concurrency",
-          title: "Production Worker Concurrency Models Implementation",
+          title: "Production Worker Concurrency Models Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1442,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.worker_concurrency")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Worker Concurrency Models."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Worker Concurrency Models with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1493,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-worker-concurrency",
-        title: "Challenge: Stress Testing & Hardening Worker Concurrency Models",
+        title: "Challenge: Hardening Worker Concurrency Models",
         description: "Extend the service implementation for Worker Concurrency Models to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1513,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-worker-concurrency-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Worker Concurrency Models?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you guarantee idempotency in Celery background workers when broker acknowledgments are lost?",
+        answer: `Because message brokers (RabbitMQ/Redis) provide 'at-least-once' delivery, workers may receive the same task multiple times if a network partition occurs before the ACK is received. Tasks must be designed to be strictly idempotent: use unique idempotency keys or business state machines (\`if order.status == 'processed': return\`) with database unique constraints or atomic Redis locks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-worker-concurrency-2",
+        question: "What is the difference between Celery worker prefork, gevent, and threads concurrency models, and which should you choose for FastAPI background tasks?",
+        answer: `'prefork' uses multiprocessing (1 process per CPU core), ideal for CPU-bound tasks and non-async code. 'gevent' and 'eventlet' use greenlet coroutines, ideal for thousands of concurrent I/O-bound tasks using monkey patching. 'threads' uses OS threads. For modern Python async ecosystems, dedicated async queues like \`ARQ\` or \`SAQ\` running natively on \`asyncio\` are often preferred over Celery for lightweight I/O workers.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-worker-concurrency-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Worker Concurrency Models under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Worker Concurrency Models**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-worker-concurrency-4",
+        question: "What failure modes and edge cases must be handled when deploying Worker Concurrency Models across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-worker-concurrency-5",
+        question: "What security considerations and threat vectors apply to Worker Concurrency Models in a public API?",
+        answer: "Security considerations for **Worker Concurrency Models**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1616,15 @@ response = await client.get(url, timeout=5.0)`
         id: "task-monitoring-flower-core",
         type: "concept",
         title: "Architectural Mental Model: Task Monitoring with Flower & Prometheus",
-        content: `In modern distributed systems, **Task Monitoring with Flower & Prometheus** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Task Monitoring with Flower & Prometheus** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Task Monitoring with Flower & Prometheus, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Task Monitoring with Flower & Prometheus, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "task-monitoring-flower-implementation",
@@ -1473,7 +1633,7 @@ Without a rigorous design for Task Monitoring with Flower & Prometheus, backend 
         content: "The following implementation demonstrates the correct production pattern for Task Monitoring with Flower & Prometheus in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-task-monitoring-flower",
-          title: "Production Task Monitoring with Flower & Prometheus Implementation",
+          title: "Production Task Monitoring with Flower & Prometheus Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1644,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.task_monitoring_flower")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Task Monitoring with Flower & Prometheus."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Task Monitoring with Flower & Prometheus with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1695,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-task-monitoring-flower",
-        title: "Challenge: Stress Testing & Hardening Task Monitoring with Flower & Prometheus",
+        title: "Challenge: Hardening Task Monitoring with Flower & Prometheus",
         description: "Extend the service implementation for Task Monitoring with Flower & Prometheus to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1715,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-task-monitoring-flower-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Task Monitoring with Flower & Prometheus?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How does OpenTelemetry propagate W3C Trace Context across asynchronous HTTP boundaries and message queues in FastAPI?",
+        answer: `OpenTelemetry injects and extracts the \`traceparent\` HTTP header (\`00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01\`). An ASGI middleware intercepts the incoming header, starts a child span linked to the parent trace ID, and stores the span in Python's \`contextvars.ContextVar\`. When the application makes an outbound HTTP call via \`httpx\` or publishes to Kafka, the instrumentation automatically injects the current \`traceparent\` header.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-task-monitoring-flower-2",
+        question: "What is the difference between Prometheus Counter, Gauge, and Histogram, and which should you use for tracking API latency in FastAPI?",
+        answer: "Counter: Monotonically increasing metric (resets only on restart), used for request counts and error totals. Gauge: Snapshot value that goes up and down, used for active connections and memory usage. Histogram: Samples observations into configurable buckets, used for request durations and response sizes. For API latency, always use Histogram to calculate p50, p95, and p99 percentiles across worker processes without skew from averages.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-task-monitoring-flower-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Task Monitoring with Flower & Prometheus under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Task Monitoring with Flower & Prometheus**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-task-monitoring-flower-4",
+        question: "What failure modes and edge cases must be handled when deploying Task Monitoring with Flower & Prometheus across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-task-monitoring-flower-5",
+        question: "What security considerations and threat vectors apply to Task Monitoring with Flower & Prometheus in a public API?",
+        answer: "Security considerations for **Task Monitoring with Flower & Prometheus**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1818,15 @@ response = await client.get(url, timeout=5.0)`
         id: "handling-long-tasks-core",
         type: "concept",
         title: "Architectural Mental Model: Handling Long-Running Tasks",
-        content: `In modern distributed systems, **Handling Long-Running Tasks** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Handling Long-Running Tasks** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Handling Long-Running Tasks, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Handling Long-Running Tasks, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "handling-long-tasks-implementation",
@@ -1652,7 +1835,7 @@ Without a rigorous design for Handling Long-Running Tasks, backend services suff
         content: "The following implementation demonstrates the correct production pattern for Handling Long-Running Tasks in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-handling-long-tasks",
-          title: "Production Handling Long-Running Tasks Implementation",
+          title: "Production Handling Long-Running Tasks Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1846,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.handling_long_tasks")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Handling Long-Running Tasks."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Handling Long-Running Tasks with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1897,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-handling-long-tasks",
-        title: "Challenge: Stress Testing & Hardening Handling Long-Running Tasks",
+        title: "Challenge: Hardening Handling Long-Running Tasks",
         description: "Extend the service implementation for Handling Long-Running Tasks to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1917,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-handling-long-tasks-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Handling Long-Running Tasks?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Handling Long-Running Tasks under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Handling Long-Running Tasks**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-handling-long-tasks-2",
+        question: "What failure modes and edge cases must be handled when deploying Handling Long-Running Tasks across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-handling-long-tasks-3",
+        question: "What security considerations and threat vectors apply to Handling Long-Running Tasks in a public API?",
+        answer: "Security considerations for **Handling Long-Running Tasks**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1814,15 +2008,15 @@ response = await client.get(url, timeout=5.0)`
         id: "task-result-patterns-core",
         type: "concept",
         title: "Architectural Mental Model: Task Result Patterns",
-        content: `In modern distributed systems, **Task Result Patterns** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Task Result Patterns** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Task Result Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Task Result Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "task-result-patterns-implementation",
@@ -1831,7 +2025,7 @@ Without a rigorous design for Task Result Patterns, backend services suffer from
         content: "The following implementation demonstrates the correct production pattern for Task Result Patterns in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-task-result-patterns",
-          title: "Production Task Result Patterns Implementation",
+          title: "Production Task Result Patterns Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1842,18 +2036,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.task_result_patterns")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Task Result Patterns."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Task Result Patterns with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1894,7 +2087,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-task-result-patterns",
-        title: "Challenge: Stress Testing & Hardening Task Result Patterns",
+        title: "Challenge: Hardening Task Result Patterns",
         description: "Extend the service implementation for Task Result Patterns to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1914,9 +2107,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-task-result-patterns-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Task Result Patterns?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Task Result Patterns under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Task Result Patterns**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-task-result-patterns-2",
+        question: "What failure modes and edge cases must be handled when deploying Task Result Patterns across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-task-result-patterns-3",
+        question: "What security considerations and threat vectors apply to Task Result Patterns in a public API?",
+        answer: "Security considerations for **Task Result Patterns**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1993,15 +2198,15 @@ response = await client.get(url, timeout=5.0)`
         id: "celery-testing-core",
         type: "concept",
         title: "Architectural Mental Model: Testing Celery Tasks",
-        content: `In modern distributed systems, **Testing Celery Tasks** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Testing Celery Tasks** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Testing Celery Tasks, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Testing Celery Tasks, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "celery-testing-implementation",
@@ -2010,7 +2215,7 @@ Without a rigorous design for Testing Celery Tasks, backend services suffer from
         content: "The following implementation demonstrates the correct production pattern for Testing Celery Tasks in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-celery-testing",
-          title: "Production Testing Celery Tasks Implementation",
+          title: "Production Testing Celery Tasks Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -2021,18 +2226,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.celery_testing")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Testing Celery Tasks."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Testing Celery Tasks with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -2073,7 +2277,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-celery-testing",
-        title: "Challenge: Stress Testing & Hardening Testing Celery Tasks",
+        title: "Challenge: Hardening Testing Celery Tasks",
         description: "Extend the service implementation for Testing Celery Tasks to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -2093,9 +2297,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-celery-testing-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Testing Celery Tasks?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you guarantee idempotency in Celery background workers when broker acknowledgments are lost?",
+        answer: `Because message brokers (RabbitMQ/Redis) provide 'at-least-once' delivery, workers may receive the same task multiple times if a network partition occurs before the ACK is received. Tasks must be designed to be strictly idempotent: use unique idempotency keys or business state machines (\`if order.status == 'processed': return\`) with database unique constraints or atomic Redis locks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-celery-testing-2",
+        question: "What is the difference between Celery worker prefork, gevent, and threads concurrency models, and which should you choose for FastAPI background tasks?",
+        answer: `'prefork' uses multiprocessing (1 process per CPU core), ideal for CPU-bound tasks and non-async code. 'gevent' and 'eventlet' use greenlet coroutines, ideal for thousands of concurrent I/O-bound tasks using monkey patching. 'threads' uses OS threads. For modern Python async ecosystems, dedicated async queues like \`ARQ\` or \`SAQ\` running natively on \`asyncio\` are often preferred over Celery for lightweight I/O workers.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-testing-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Testing Celery Tasks under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Testing Celery Tasks**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-testing-4",
+        question: "What failure modes and edge cases must be handled when deploying Testing Celery Tasks across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-celery-testing-5",
+        question: "What security considerations and threat vectors apply to Testing Celery Tasks in a public API?",
+        answer: "Security considerations for **Testing Celery Tasks**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
-import { Play, Folder, File, Code, Terminal, ExternalLink } from 'lucide-react';
+import { Play, Folder, File, Code, Terminal } from 'lucide-react';
 import CodeBlock from './CodeBlock';
 
 interface MultiFileCodeViewerProps {
@@ -21,20 +21,20 @@ export default function MultiFileCodeViewer({ example }: MultiFileCodeViewerProp
   if (!example.files) return null;
 
   return (
-    <div className="bg-slate-900 rounded-xl overflow-hidden shadow-sm mb-10 border border-slate-800 flex flex-col h-[600px]">
-      {/* Header */}
-      <div className="bg-slate-950 px-4 py-3 flex items-center justify-between border-b border-slate-800 shrink-0">
+    <div className="bg-white rounded-xl overflow-hidden shadow-sm mb-10 border border-slate-200 flex flex-col h-[580px]">
+      {/* Light Theme Header */}
+      <div className="bg-slate-100 px-4 py-3 flex items-center justify-between border-b border-slate-200 shrink-0">
         <div className="flex items-center">
-          <Terminal className="w-4 h-4 text-orange-500 mr-2" />
-          <h3 className="text-sm font-bold text-slate-200">{example.title}</h3>
+          <Terminal className="w-4 h-4 text-orange-600 mr-2" />
+          <h3 className="text-sm font-bold text-slate-800">{example.title}</h3>
         </div>
         {example.runnableUrl && (
           <button
             onClick={() => setIsExecuting(!isExecuting)}
             className={`flex items-center text-xs font-bold px-3 py-1.5 rounded transition-colors ${
               isExecuting 
-                ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' 
-                : 'bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30'
+                ? 'bg-slate-200 text-slate-700 hover:bg-slate-300' 
+                : 'bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100'
             }`}
           >
             {isExecuting ? (
@@ -61,23 +61,23 @@ export default function MultiFileCodeViewer({ example }: MultiFileCodeViewerProp
         </div>
       ) : (
         <div className="flex flex-1 overflow-hidden">
-          {/* File Explorer Sidebar */}
-          <div className="w-48 bg-slate-900 border-r border-slate-800 overflow-y-auto py-2 shrink-0">
+          {/* Light Theme File Explorer Sidebar */}
+          <div className="w-52 bg-slate-50 border-r border-slate-200 overflow-y-auto py-2 shrink-0">
             <div className="px-3 mb-2 flex items-center text-xs font-bold text-slate-500 uppercase tracking-wider">
-              <Folder className="w-3 h-3 mr-1.5" /> Explorer
+              <Folder className="w-3 h-3 mr-1.5 text-slate-400" /> Explorer
             </div>
-            <ul className="space-y-0.5">
+            <ul className="space-y-0.5 px-1.5">
               {Object.keys(example.files).map((filename) => (
                 <li key={filename}>
                   <button
                     onClick={() => setActiveFile(filename)}
-                    className={`w-full text-left px-3 py-1.5 text-sm flex items-center transition-colors ${
+                    className={`w-full text-left px-2.5 py-1.5 text-xs sm:text-sm font-mono rounded-lg flex items-center transition-colors ${
                       activeFile === filename
-                        ? 'bg-slate-800 text-orange-400 border-r-2 border-orange-500'
-                        : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                        ? 'bg-white text-orange-600 font-bold shadow-xs border border-slate-200'
+                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     }`}
                   >
-                    <File className="w-3.5 h-3.5 mr-2 opacity-70" />
+                    <File className="w-3.5 h-3.5 mr-2 opacity-70 shrink-0 text-slate-500" />
                     <span className="truncate">{filename}</span>
                   </button>
                 </li>
@@ -85,15 +85,15 @@ export default function MultiFileCodeViewer({ example }: MultiFileCodeViewerProp
             </ul>
           </div>
 
-          {/* Editor Area */}
-          <div className="flex-1 overflow-auto bg-[#0d1117] relative">
+          {/* Light Theme Editor Area */}
+          <div className="flex-1 overflow-auto bg-slate-50 relative">
             {activeFile && example.files[activeFile] && (
-              <div className="absolute inset-0">
+              <div className="absolute inset-0 overflow-auto">
                 <CodeBlock 
                   code={example.files[activeFile].code} 
                   language={example.files[activeFile].language} 
                   showLineNumbers={true}
-                  className="h-full rounded-none border-0"
+                  className="h-full rounded-none border-0 my-0 bg-white"
                 />
               </div>
             )}

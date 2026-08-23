@@ -24,15 +24,15 @@ export const ch24Lessons: Record<string, Lesson> = {
         id: "slo-sla-sli-core",
         type: "concept",
         title: "Architectural Mental Model: SLOs, SLAs & SLIs: Defining Reliability",
-        content: `In modern distributed systems, **SLOs, SLAs & SLIs: Defining Reliability** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **SLOs, SLAs & SLIs: Defining Reliability** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for SLOs, SLAs & SLIs: Defining Reliability, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for SLOs, SLAs & SLIs: Defining Reliability, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "slo-sla-sli-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for SLOs, SLAs & SLIs: Defining Reliability, backend s
         content: "The following implementation demonstrates the correct production pattern for SLOs, SLAs & SLIs: Defining Reliability in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-slo-sla-sli",
-          title: "Production SLOs, SLAs & SLIs: Defining Reliability Implementation",
+          title: "Production SLOs, SLAs & SLIs: Defining Reliability Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.slo_sla_sli")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for SLOs, SLAs & SLIs: Defining Reliability."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing SLOs, SLAs & SLIs: Defining Reliability with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-slo-sla-sli",
-        title: "Challenge: Stress Testing & Hardening SLOs, SLAs & SLIs: Defining Reliability",
+        title: "Challenge: Hardening SLOs, SLAs & SLIs: Defining Reliability",
         description: "Extend the service implementation for SLOs, SLAs & SLIs: Defining Reliability to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-slo-sla-sli-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with SLOs, SLAs & SLIs: Defining Reliability?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in SLOs, SLAs & SLIs: Defining Reliability under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **SLOs, SLAs & SLIs: Defining Reliability**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-slo-sla-sli-2",
+        question: "What failure modes and edge cases must be handled when deploying SLOs, SLAs & SLIs: Defining Reliability across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-slo-sla-sli-3",
+        question: "What security considerations and threat vectors apply to SLOs, SLAs & SLIs: Defining Reliability in a public API?",
+        answer: "Security considerations for **SLOs, SLAs & SLIs: Defining Reliability**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +214,15 @@ response = await client.get(url, timeout=5.0)`
         id: "error-budgets-core",
         type: "concept",
         title: "Architectural Mental Model: Error Budgets",
-        content: `In modern distributed systems, **Error Budgets** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Error Budgets** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Error Budgets, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Error Budgets, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "error-budgets-implementation",
@@ -220,7 +231,7 @@ Without a rigorous design for Error Budgets, backend services suffer from resour
         content: "The following implementation demonstrates the correct production pattern for Error Budgets in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-error-budgets",
-          title: "Production Error Budgets Implementation",
+          title: "Production Error Budgets Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +242,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.error_budgets")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Error Budgets."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Error Budgets with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +293,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-error-budgets",
-        title: "Challenge: Stress Testing & Hardening Error Budgets",
+        title: "Challenge: Hardening Error Budgets",
         description: "Extend the service implementation for Error Budgets to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +313,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-error-budgets-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Error Budgets?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Error Budgets under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Error Budgets**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-error-budgets-2",
+        question: "What failure modes and edge cases must be handled when deploying Error Budgets across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-error-budgets-3",
+        question: "What security considerations and threat vectors apply to Error Budgets in a public API?",
+        answer: "Security considerations for **Error Budgets**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +404,15 @@ response = await client.get(url, timeout=5.0)`
         id: "incident-response-core",
         type: "concept",
         title: "Architectural Mental Model: Incident Response & On-Call Engineering",
-        content: `In modern distributed systems, **Incident Response & On-Call Engineering** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Incident Response & On-Call Engineering** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Incident Response & On-Call Engineering, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Incident Response & On-Call Engineering, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "incident-response-implementation",
@@ -399,7 +421,7 @@ Without a rigorous design for Incident Response & On-Call Engineering, backend s
         content: "The following implementation demonstrates the correct production pattern for Incident Response & On-Call Engineering in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-incident-response",
-          title: "Production Incident Response & On-Call Engineering Implementation",
+          title: "Production Incident Response & On-Call Engineering Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +432,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.incident_response")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Incident Response & On-Call Engineering."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Incident Response & On-Call Engineering with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +483,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-incident-response",
-        title: "Challenge: Stress Testing & Hardening Incident Response & On-Call Engineering",
+        title: "Challenge: Hardening Incident Response & On-Call Engineering",
         description: "Extend the service implementation for Incident Response & On-Call Engineering to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +503,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-incident-response-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Incident Response & On-Call Engineering?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Incident Response & On-Call Engineering under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Incident Response & On-Call Engineering**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-incident-response-2",
+        question: "What failure modes and edge cases must be handled when deploying Incident Response & On-Call Engineering across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-incident-response-3",
+        question: "What security considerations and threat vectors apply to Incident Response & On-Call Engineering in a public API?",
+        answer: "Security considerations for **Incident Response & On-Call Engineering**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +594,15 @@ response = await client.get(url, timeout=5.0)`
         id: "graceful-degradation-production-core",
         type: "concept",
         title: "Architectural Mental Model: Graceful Degradation in Production",
-        content: `In modern distributed systems, **Graceful Degradation in Production** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Graceful Degradation in Production** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Graceful Degradation in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Graceful Degradation in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "graceful-degradation-production-implementation",
@@ -578,7 +611,7 @@ Without a rigorous design for Graceful Degradation in Production, backend servic
         content: "The following implementation demonstrates the correct production pattern for Graceful Degradation in Production in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-graceful-degradation-production",
-          title: "Production Graceful Degradation in Production Implementation",
+          title: "Production Graceful Degradation in Production Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +622,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.graceful_degradation_production")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Graceful Degradation in Production."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Graceful Degradation in Production with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +673,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-graceful-degradation-production",
-        title: "Challenge: Stress Testing & Hardening Graceful Degradation in Production",
+        title: "Challenge: Hardening Graceful Degradation in Production",
         description: "Extend the service implementation for Graceful Degradation in Production to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +693,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-graceful-degradation-production-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Graceful Degradation in Production?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Graceful Degradation in Production under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Graceful Degradation in Production**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-graceful-degradation-production-2",
+        question: "What failure modes and edge cases must be handled when deploying Graceful Degradation in Production across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-graceful-degradation-production-3",
+        question: "What security considerations and threat vectors apply to Graceful Degradation in Production in a public API?",
+        answer: "Security considerations for **Graceful Degradation in Production**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +784,15 @@ response = await client.get(url, timeout=5.0)`
         id: "chaos-engineering-core",
         type: "concept",
         title: "Architectural Mental Model: Chaos Engineering in Production",
-        content: `In modern distributed systems, **Chaos Engineering in Production** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Chaos Engineering in Production** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Chaos Engineering in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Chaos Engineering in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "chaos-engineering-implementation",
@@ -757,7 +801,7 @@ Without a rigorous design for Chaos Engineering in Production, backend services 
         content: "The following implementation demonstrates the correct production pattern for Chaos Engineering in Production in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-chaos-engineering",
-          title: "Production Chaos Engineering in Production Implementation",
+          title: "Production Chaos Engineering in Production Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +812,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.chaos_engineering")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Chaos Engineering in Production."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Chaos Engineering in Production with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +863,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-chaos-engineering",
-        title: "Challenge: Stress Testing & Hardening Chaos Engineering in Production",
+        title: "Challenge: Hardening Chaos Engineering in Production",
         description: "Extend the service implementation for Chaos Engineering in Production to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +883,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-chaos-engineering-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Chaos Engineering in Production?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Chaos Engineering in Production under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Chaos Engineering in Production**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-chaos-engineering-2",
+        question: "What failure modes and edge cases must be handled when deploying Chaos Engineering in Production across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-chaos-engineering-3",
+        question: "What security considerations and threat vectors apply to Chaos Engineering in Production in a public API?",
+        answer: "Security considerations for **Chaos Engineering in Production**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +974,15 @@ response = await client.get(url, timeout=5.0)`
         id: "database-backup-recovery-core",
         type: "concept",
         title: "Architectural Mental Model: Database Backup & Point-in-Time Recovery",
-        content: `In modern distributed systems, **Database Backup & Point-in-Time Recovery** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Database Backup & Point-in-Time Recovery** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Database Backup & Point-in-Time Recovery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Database Backup & Point-in-Time Recovery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "database-backup-recovery-implementation",
@@ -936,7 +991,7 @@ Without a rigorous design for Database Backup & Point-in-Time Recovery, backend 
         content: "The following implementation demonstrates the correct production pattern for Database Backup & Point-in-Time Recovery in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-database-backup-recovery",
-          title: "Production Database Backup & Point-in-Time Recovery Implementation",
+          title: "Production Database Backup & Point-in-Time Recovery Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1002,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.database_backup_recovery")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Database Backup & Point-in-Time Recovery."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Database Backup & Point-in-Time Recovery with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1053,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-database-backup-recovery",
-        title: "Challenge: Stress Testing & Hardening Database Backup & Point-in-Time Recovery",
+        title: "Challenge: Hardening Database Backup & Point-in-Time Recovery",
         description: "Extend the service implementation for Database Backup & Point-in-Time Recovery to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1073,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-database-backup-recovery-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Database Backup & Point-in-Time Recovery?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Database Backup & Point-in-Time Recovery under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Database Backup & Point-in-Time Recovery**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-database-backup-recovery-2",
+        question: "What failure modes and edge cases must be handled when deploying Database Backup & Point-in-Time Recovery across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-database-backup-recovery-3",
+        question: "What security considerations and threat vectors apply to Database Backup & Point-in-Time Recovery in a public API?",
+        answer: "Security considerations for **Database Backup & Point-in-Time Recovery**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1164,15 @@ response = await client.get(url, timeout=5.0)`
         id: "high-availability-database-core",
         type: "concept",
         title: "Architectural Mental Model: High Availability PostgreSQL",
-        content: `In modern distributed systems, **High Availability PostgreSQL** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **High Availability PostgreSQL** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for High Availability PostgreSQL, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for High Availability PostgreSQL, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "high-availability-database-implementation",
@@ -1115,7 +1181,7 @@ Without a rigorous design for High Availability PostgreSQL, backend services suf
         content: "The following implementation demonstrates the correct production pattern for High Availability PostgreSQL in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-high-availability-database",
-          title: "Production High Availability PostgreSQL Implementation",
+          title: "Production High Availability PostgreSQL Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1192,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.high_availability_database")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for High Availability PostgreSQL."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing High Availability PostgreSQL with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1243,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-high-availability-database",
-        title: "Challenge: Stress Testing & Hardening High Availability PostgreSQL",
+        title: "Challenge: Hardening High Availability PostgreSQL",
         description: "Extend the service implementation for High Availability PostgreSQL to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1263,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-high-availability-database-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with High Availability PostgreSQL?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-high-availability-database-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-high-availability-database-3",
+        question: "How do you profile, identify, and resolve bottlenecks in High Availability PostgreSQL under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **High Availability PostgreSQL**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-high-availability-database-4",
+        question: "What failure modes and edge cases must be handled when deploying High Availability PostgreSQL across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-high-availability-database-5",
+        question: "What security considerations and threat vectors apply to High Availability PostgreSQL in a public API?",
+        answer: "Security considerations for **High Availability PostgreSQL**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1366,15 @@ response = await client.get(url, timeout=5.0)`
         id: "deployment-safety-core",
         type: "concept",
         title: "Architectural Mental Model: Safe Deployment Practices",
-        content: `In modern distributed systems, **Safe Deployment Practices** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Safe Deployment Practices** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Safe Deployment Practices, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Safe Deployment Practices, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "deployment-safety-implementation",
@@ -1294,7 +1383,7 @@ Without a rigorous design for Safe Deployment Practices, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Safe Deployment Practices in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-deployment-safety",
-          title: "Production Safe Deployment Practices Implementation",
+          title: "Production Safe Deployment Practices Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1394,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.deployment_safety")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Safe Deployment Practices."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Safe Deployment Practices with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1445,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-deployment-safety",
-        title: "Challenge: Stress Testing & Hardening Safe Deployment Practices",
+        title: "Challenge: Hardening Safe Deployment Practices",
         description: "Extend the service implementation for Safe Deployment Practices to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1465,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-deployment-safety-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Safe Deployment Practices?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you configure Kubernetes liveness and readiness probes for a FastAPI service with database and Redis dependencies?",
+        answer: `Readiness Probe (\`/health/ready\`): Checks critical dependencies (PostgreSQL connection pool, Redis ping). If a dependency is down, K8s temporarily removes the Pod from Service endpoints so traffic isn't routed to a broken instance. Liveness Probe (\`/health/live\`): Checks ONLY that the Python event loop and Uvicorn process are responsive (returns 200 immediately). Never include database checks in liveness probes, or a brief DB blip will trigger a cascading restart of all Pods simultaneously.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-deployment-safety-2",
+        question: "Why is a 'preStop' hook and graceful shutdown configuration essential when deploying Uvicorn in Kubernetes?",
+        answer: `When a Pod is terminated, Kubernetes removes it from endpoints and sends \`SIGTERM\` simultaneously. Network iptables rules take several seconds to propagate across nodes. A \`preStop\` sleep hook (\`sleep 5\`) ensures the Pod continues accepting remaining inflight packets while traffic is rerouted. Setting \`uvicorn --timeout-graceful-shutdown 30\` allows active coroutines to finish database transactions before \`SIGKILL\`.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-deployment-safety-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Safe Deployment Practices under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Safe Deployment Practices**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-deployment-safety-4",
+        question: "What failure modes and edge cases must be handled when deploying Safe Deployment Practices across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-deployment-safety-5",
+        question: "What security considerations and threat vectors apply to Safe Deployment Practices in a public API?",
+        answer: "Security considerations for **Safe Deployment Practices**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1568,15 @@ response = await client.get(url, timeout=5.0)`
         id: "postmortems-core",
         type: "concept",
         title: "Architectural Mental Model: Blameless Postmortems",
-        content: `In modern distributed systems, **Blameless Postmortems** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Blameless Postmortems** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Blameless Postmortems, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Blameless Postmortems, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "postmortems-implementation",
@@ -1473,7 +1585,7 @@ Without a rigorous design for Blameless Postmortems, backend services suffer fro
         content: "The following implementation demonstrates the correct production pattern for Blameless Postmortems in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-postmortems",
-          title: "Production Blameless Postmortems Implementation",
+          title: "Production Blameless Postmortems Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1596,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.postmortems")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Blameless Postmortems."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Blameless Postmortems with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1647,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-postmortems",
-        title: "Challenge: Stress Testing & Hardening Blameless Postmortems",
+        title: "Challenge: Hardening Blameless Postmortems",
         description: "Extend the service implementation for Blameless Postmortems to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1667,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-postmortems-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Blameless Postmortems?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Blameless Postmortems under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Blameless Postmortems**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-postmortems-2",
+        question: "What failure modes and edge cases must be handled when deploying Blameless Postmortems across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-postmortems-3",
+        question: "What security considerations and threat vectors apply to Blameless Postmortems in a public API?",
+        answer: "Security considerations for **Blameless Postmortems**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1758,15 @@ response = await client.get(url, timeout=5.0)`
         id: "toil-elimination-core",
         type: "concept",
         title: "Architectural Mental Model: Toil Elimination & Automation",
-        content: `In modern distributed systems, **Toil Elimination & Automation** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Toil Elimination & Automation** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Toil Elimination & Automation, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Toil Elimination & Automation, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "toil-elimination-implementation",
@@ -1652,7 +1775,7 @@ Without a rigorous design for Toil Elimination & Automation, backend services su
         content: "The following implementation demonstrates the correct production pattern for Toil Elimination & Automation in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-toil-elimination",
-          title: "Production Toil Elimination & Automation Implementation",
+          title: "Production Toil Elimination & Automation Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1786,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.toil_elimination")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Toil Elimination & Automation."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Toil Elimination & Automation with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1837,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-toil-elimination",
-        title: "Challenge: Stress Testing & Hardening Toil Elimination & Automation",
+        title: "Challenge: Hardening Toil Elimination & Automation",
         description: "Extend the service implementation for Toil Elimination & Automation to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1857,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-toil-elimination-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Toil Elimination & Automation?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Toil Elimination & Automation under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Toil Elimination & Automation**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-toil-elimination-2",
+        question: "What failure modes and edge cases must be handled when deploying Toil Elimination & Automation across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-toil-elimination-3",
+        question: "What security considerations and threat vectors apply to Toil Elimination & Automation in a public API?",
+        answer: "Security considerations for **Toil Elimination & Automation**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1814,15 +1948,15 @@ response = await client.get(url, timeout=5.0)`
         id: "reliability-culture-core",
         type: "concept",
         title: "Architectural Mental Model: Building a Reliability Culture",
-        content: `In modern distributed systems, **Building a Reliability Culture** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Building a Reliability Culture** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Building a Reliability Culture, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Building a Reliability Culture, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "reliability-culture-implementation",
@@ -1831,7 +1965,7 @@ Without a rigorous design for Building a Reliability Culture, backend services s
         content: "The following implementation demonstrates the correct production pattern for Building a Reliability Culture in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-reliability-culture",
-          title: "Production Building a Reliability Culture Implementation",
+          title: "Production Building a Reliability Culture Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1842,18 +1976,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.reliability_culture")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Building a Reliability Culture."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Building a Reliability Culture with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1894,7 +2027,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-reliability-culture",
-        title: "Challenge: Stress Testing & Hardening Building a Reliability Culture",
+        title: "Challenge: Hardening Building a Reliability Culture",
         description: "Extend the service implementation for Building a Reliability Culture to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1914,9 +2047,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-reliability-culture-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Building a Reliability Culture?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Building a Reliability Culture under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Building a Reliability Culture**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-reliability-culture-2",
+        question: "What failure modes and edge cases must be handled when deploying Building a Reliability Culture across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-reliability-culture-3",
+        question: "What security considerations and threat vectors apply to Building a Reliability Culture in a public API?",
+        answer: "Security considerations for **Building a Reliability Culture**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

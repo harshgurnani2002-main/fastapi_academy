@@ -24,15 +24,15 @@ export const ch20Lessons: Record<string, Lesson> = {
         id: "nginx-reverse-proxy-fundamentals-core",
         type: "concept",
         title: "Architectural Mental Model: Nginx Reverse Proxy Fundamentals",
-        content: `In modern distributed systems, **Nginx Reverse Proxy Fundamentals** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Nginx Reverse Proxy Fundamentals** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Nginx Reverse Proxy Fundamentals, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Nginx Reverse Proxy Fundamentals, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "nginx-reverse-proxy-fundamentals-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for Nginx Reverse Proxy Fundamentals, backend services
         content: "The following implementation demonstrates the correct production pattern for Nginx Reverse Proxy Fundamentals in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-nginx-reverse-proxy-fundamentals",
-          title: "Production Nginx Reverse Proxy Fundamentals Implementation",
+          title: "Production Nginx Reverse Proxy Fundamentals Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.nginx_reverse_proxy_fundamentals")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Nginx Reverse Proxy Fundamentals."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Nginx Reverse Proxy Fundamentals with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-nginx-reverse-proxy-fundamentals",
-        title: "Challenge: Stress Testing & Hardening Nginx Reverse Proxy Fundamentals",
+        title: "Challenge: Hardening Nginx Reverse Proxy Fundamentals",
         description: "Extend the service implementation for Nginx Reverse Proxy Fundamentals to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-nginx-reverse-proxy-fundamentals-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Nginx Reverse Proxy Fundamentals?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Nginx Reverse Proxy Fundamentals under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Nginx Reverse Proxy Fundamentals**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-nginx-reverse-proxy-fundamentals-2",
+        question: "What failure modes and edge cases must be handled when deploying Nginx Reverse Proxy Fundamentals across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-nginx-reverse-proxy-fundamentals-3",
+        question: "What security considerations and threat vectors apply to Nginx Reverse Proxy Fundamentals in a public API?",
+        answer: "Security considerations for **Nginx Reverse Proxy Fundamentals**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +214,15 @@ response = await client.get(url, timeout=5.0)`
         id: "tls-https-setup-core",
         type: "concept",
         title: "Architectural Mental Model: TLS/HTTPS Configuration",
-        content: `In modern distributed systems, **TLS/HTTPS Configuration** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **TLS/HTTPS Configuration** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for TLS/HTTPS Configuration, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for TLS/HTTPS Configuration, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "tls-https-setup-implementation",
@@ -220,7 +231,7 @@ Without a rigorous design for TLS/HTTPS Configuration, backend services suffer f
         content: "The following implementation demonstrates the correct production pattern for TLS/HTTPS Configuration in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-tls-https-setup",
-          title: "Production TLS/HTTPS Configuration Implementation",
+          title: "Production TLS/HTTPS Configuration Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +242,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.tls_https_setup")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for TLS/HTTPS Configuration."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing TLS/HTTPS Configuration with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +293,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-tls-https-setup",
-        title: "Challenge: Stress Testing & Hardening TLS/HTTPS Configuration",
+        title: "Challenge: Hardening TLS/HTTPS Configuration",
         description: "Extend the service implementation for TLS/HTTPS Configuration to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +313,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-tls-https-setup-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with TLS/HTTPS Configuration?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in TLS/HTTPS Configuration under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **TLS/HTTPS Configuration**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-tls-https-setup-2",
+        question: "What failure modes and edge cases must be handled when deploying TLS/HTTPS Configuration across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-tls-https-setup-3",
+        question: "What security considerations and threat vectors apply to TLS/HTTPS Configuration in a public API?",
+        answer: "Security considerations for **TLS/HTTPS Configuration**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +404,15 @@ response = await client.get(url, timeout=5.0)`
         id: "load-balancing-core",
         type: "concept",
         title: "Architectural Mental Model: Load Balancing Algorithms",
-        content: `In modern distributed systems, **Load Balancing Algorithms** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Load Balancing Algorithms** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Load Balancing Algorithms, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Load Balancing Algorithms, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "load-balancing-implementation",
@@ -399,7 +421,7 @@ Without a rigorous design for Load Balancing Algorithms, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Load Balancing Algorithms in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-load-balancing",
-          title: "Production Load Balancing Algorithms Implementation",
+          title: "Production Load Balancing Algorithms Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +432,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.load_balancing")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Load Balancing Algorithms."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Load Balancing Algorithms with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +483,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-load-balancing",
-        title: "Challenge: Stress Testing & Hardening Load Balancing Algorithms",
+        title: "Challenge: Hardening Load Balancing Algorithms",
         description: "Extend the service implementation for Load Balancing Algorithms to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +503,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-load-balancing-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Load Balancing Algorithms?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Load Balancing Algorithms under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Load Balancing Algorithms**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-load-balancing-2",
+        question: "What failure modes and edge cases must be handled when deploying Load Balancing Algorithms across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-load-balancing-3",
+        question: "What security considerations and threat vectors apply to Load Balancing Algorithms in a public API?",
+        answer: "Security considerations for **Load Balancing Algorithms**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +594,15 @@ response = await client.get(url, timeout=5.0)`
         id: "websocket-proxying-core",
         type: "concept",
         title: "Architectural Mental Model: WebSocket Proxying",
-        content: `In modern distributed systems, **WebSocket Proxying** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **WebSocket Proxying** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for WebSocket Proxying, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for WebSocket Proxying, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "websocket-proxying-implementation",
@@ -578,7 +611,7 @@ Without a rigorous design for WebSocket Proxying, backend services suffer from r
         content: "The following implementation demonstrates the correct production pattern for WebSocket Proxying in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-websocket-proxying",
-          title: "Production WebSocket Proxying Implementation",
+          title: "Production WebSocket Proxying Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +622,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.websocket_proxying")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for WebSocket Proxying."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing WebSocket Proxying with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +673,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-websocket-proxying",
-        title: "Challenge: Stress Testing & Hardening WebSocket Proxying",
+        title: "Challenge: Hardening WebSocket Proxying",
         description: "Extend the service implementation for WebSocket Proxying to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +693,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-websocket-proxying-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with WebSocket Proxying?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in WebSocket Proxying under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **WebSocket Proxying**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-websocket-proxying-2",
+        question: "What failure modes and edge cases must be handled when deploying WebSocket Proxying across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-websocket-proxying-3",
+        question: "What security considerations and threat vectors apply to WebSocket Proxying in a public API?",
+        answer: "Security considerations for **WebSocket Proxying**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +784,15 @@ response = await client.get(url, timeout=5.0)`
         id: "compression-performance-core",
         type: "concept",
         title: "Architectural Mental Model: Compression & Performance Tuning",
-        content: `In modern distributed systems, **Compression & Performance Tuning** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Compression & Performance Tuning** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Compression & Performance Tuning, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Compression & Performance Tuning, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "compression-performance-implementation",
@@ -757,7 +801,7 @@ Without a rigorous design for Compression & Performance Tuning, backend services
         content: "The following implementation demonstrates the correct production pattern for Compression & Performance Tuning in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-compression-performance",
-          title: "Production Compression & Performance Tuning Implementation",
+          title: "Production Compression & Performance Tuning Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +812,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.compression_performance")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Compression & Performance Tuning."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Compression & Performance Tuning with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +863,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-compression-performance",
-        title: "Challenge: Stress Testing & Hardening Compression & Performance Tuning",
+        title: "Challenge: Hardening Compression & Performance Tuning",
         description: "Extend the service implementation for Compression & Performance Tuning to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +883,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-compression-performance-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Compression & Performance Tuning?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Compression & Performance Tuning under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Compression & Performance Tuning**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-compression-performance-2",
+        question: "What failure modes and edge cases must be handled when deploying Compression & Performance Tuning across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-compression-performance-3",
+        question: "What security considerations and threat vectors apply to Compression & Performance Tuning in a public API?",
+        answer: "Security considerations for **Compression & Performance Tuning**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +974,15 @@ response = await client.get(url, timeout=5.0)`
         id: "nginx-security-headers-core",
         type: "concept",
         title: "Architectural Mental Model: Security Headers in Nginx",
-        content: `In modern distributed systems, **Security Headers in Nginx** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Security Headers in Nginx** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Security Headers in Nginx, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Security Headers in Nginx, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "nginx-security-headers-implementation",
@@ -936,7 +991,7 @@ Without a rigorous design for Security Headers in Nginx, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Security Headers in Nginx in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-nginx-security-headers",
-          title: "Production Security Headers in Nginx Implementation",
+          title: "Production Security Headers in Nginx Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1002,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.nginx_security_headers")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Security Headers in Nginx."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Security Headers in Nginx with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1053,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-nginx-security-headers",
-        title: "Challenge: Stress Testing & Hardening Security Headers in Nginx",
+        title: "Challenge: Hardening Security Headers in Nginx",
         description: "Extend the service implementation for Security Headers in Nginx to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1073,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-nginx-security-headers-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Security Headers in Nginx?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-nginx-security-headers-2",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-nginx-security-headers-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Security Headers in Nginx under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Security Headers in Nginx**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-nginx-security-headers-4",
+        question: "What failure modes and edge cases must be handled when deploying Security Headers in Nginx across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-nginx-security-headers-5",
+        question: "What security considerations and threat vectors apply to Security Headers in Nginx in a public API?",
+        answer: "Security considerations for **Security Headers in Nginx**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1176,15 @@ response = await client.get(url, timeout=5.0)`
         id: "nginx-rate-limiting-core",
         type: "concept",
         title: "Architectural Mental Model: Rate Limiting at the Nginx Layer",
-        content: `In modern distributed systems, **Rate Limiting at the Nginx Layer** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Rate Limiting at the Nginx Layer** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Rate Limiting at the Nginx Layer, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Rate Limiting at the Nginx Layer, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "nginx-rate-limiting-implementation",
@@ -1115,7 +1193,7 @@ Without a rigorous design for Rate Limiting at the Nginx Layer, backend services
         content: "The following implementation demonstrates the correct production pattern for Rate Limiting at the Nginx Layer in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-nginx-rate-limiting",
-          title: "Production Rate Limiting at the Nginx Layer Implementation",
+          title: "Production Rate Limiting at the Nginx Layer Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1204,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.nginx_rate_limiting")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Rate Limiting at the Nginx Layer."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Rate Limiting at the Nginx Layer with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1255,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-nginx-rate-limiting",
-        title: "Challenge: Stress Testing & Hardening Rate Limiting at the Nginx Layer",
+        title: "Challenge: Hardening Rate Limiting at the Nginx Layer",
         description: "Extend the service implementation for Rate Limiting at the Nginx Layer to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1275,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-nginx-rate-limiting-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Rate Limiting at the Nginx Layer?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Rate Limiting at the Nginx Layer under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Rate Limiting at the Nginx Layer**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-nginx-rate-limiting-2",
+        question: "What failure modes and edge cases must be handled when deploying Rate Limiting at the Nginx Layer across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-nginx-rate-limiting-3",
+        question: "What security considerations and threat vectors apply to Rate Limiting at the Nginx Layer in a public API?",
+        answer: "Security considerations for **Rate Limiting at the Nginx Layer**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1366,15 @@ response = await client.get(url, timeout=5.0)`
         id: "caching-static-assets-core",
         type: "concept",
         title: "Architectural Mental Model: Caching & Static Asset Serving",
-        content: `In modern distributed systems, **Caching & Static Asset Serving** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Caching & Static Asset Serving** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Caching & Static Asset Serving, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Caching & Static Asset Serving, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "caching-static-assets-implementation",
@@ -1294,7 +1383,7 @@ Without a rigorous design for Caching & Static Asset Serving, backend services s
         content: "The following implementation demonstrates the correct production pattern for Caching & Static Asset Serving in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-caching-static-assets",
-          title: "Production Caching & Static Asset Serving Implementation",
+          title: "Production Caching & Static Asset Serving Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1394,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.caching_static_assets")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Caching & Static Asset Serving."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Caching & Static Asset Serving with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1445,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-caching-static-assets",
-        title: "Challenge: Stress Testing & Hardening Caching & Static Asset Serving",
+        title: "Challenge: Hardening Caching & Static Asset Serving",
         description: "Extend the service implementation for Caching & Static Asset Serving to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1465,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-caching-static-assets-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Caching & Static Asset Serving?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-caching-static-assets-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-static-assets-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Caching & Static Asset Serving under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Caching & Static Asset Serving**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-static-assets-4",
+        question: "What failure modes and edge cases must be handled when deploying Caching & Static Asset Serving across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-static-assets-5",
+        question: "What security considerations and threat vectors apply to Caching & Static Asset Serving in a public API?",
+        answer: "Security considerations for **Caching & Static Asset Serving**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1568,15 @@ response = await client.get(url, timeout=5.0)`
         id: "monitoring-nginx-core",
         type: "concept",
         title: "Architectural Mental Model: Monitoring Nginx with Prometheus",
-        content: `In modern distributed systems, **Monitoring Nginx with Prometheus** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Monitoring Nginx with Prometheus** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Monitoring Nginx with Prometheus, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Monitoring Nginx with Prometheus, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "monitoring-nginx-implementation",
@@ -1473,7 +1585,7 @@ Without a rigorous design for Monitoring Nginx with Prometheus, backend services
         content: "The following implementation demonstrates the correct production pattern for Monitoring Nginx with Prometheus in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-monitoring-nginx",
-          title: "Production Monitoring Nginx with Prometheus Implementation",
+          title: "Production Monitoring Nginx with Prometheus Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1596,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.monitoring_nginx")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Monitoring Nginx with Prometheus."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Monitoring Nginx with Prometheus with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1647,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-monitoring-nginx",
-        title: "Challenge: Stress Testing & Hardening Monitoring Nginx with Prometheus",
+        title: "Challenge: Hardening Monitoring Nginx with Prometheus",
         description: "Extend the service implementation for Monitoring Nginx with Prometheus to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1667,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-monitoring-nginx-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Monitoring Nginx with Prometheus?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How does OpenTelemetry propagate W3C Trace Context across asynchronous HTTP boundaries and message queues in FastAPI?",
+        answer: `OpenTelemetry injects and extracts the \`traceparent\` HTTP header (\`00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01\`). An ASGI middleware intercepts the incoming header, starts a child span linked to the parent trace ID, and stores the span in Python's \`contextvars.ContextVar\`. When the application makes an outbound HTTP call via \`httpx\` or publishes to Kafka, the instrumentation automatically injects the current \`traceparent\` header.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-monitoring-nginx-2",
+        question: "What is the difference between Prometheus Counter, Gauge, and Histogram, and which should you use for tracking API latency in FastAPI?",
+        answer: "Counter: Monotonically increasing metric (resets only on restart), used for request counts and error totals. Gauge: Snapshot value that goes up and down, used for active connections and memory usage. Histogram: Samples observations into configurable buckets, used for request durations and response sizes. For API latency, always use Histogram to calculate p50, p95, and p99 percentiles across worker processes without skew from averages.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-monitoring-nginx-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Monitoring Nginx with Prometheus under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Monitoring Nginx with Prometheus**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-monitoring-nginx-4",
+        question: "What failure modes and edge cases must be handled when deploying Monitoring Nginx with Prometheus across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-monitoring-nginx-5",
+        question: "What security considerations and threat vectors apply to Monitoring Nginx with Prometheus in a public API?",
+        answer: "Security considerations for **Monitoring Nginx with Prometheus**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

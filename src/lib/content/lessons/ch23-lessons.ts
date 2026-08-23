@@ -24,15 +24,15 @@ export const ch23Lessons: Record<string, Lesson> = {
         id: "microservices-vs-monolith-core",
         type: "concept",
         title: "Architectural Mental Model: Microservices vs Monolith: The Real Trade-offs",
-        content: `In modern distributed systems, **Microservices vs Monolith: The Real Trade-offs** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Microservices vs Monolith: The Real Trade-offs** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Microservices vs Monolith: The Real Trade-offs, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Microservices vs Monolith: The Real Trade-offs, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "microservices-vs-monolith-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for Microservices vs Monolith: The Real Trade-offs, ba
         content: "The following implementation demonstrates the correct production pattern for Microservices vs Monolith: The Real Trade-offs in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-microservices-vs-monolith",
-          title: "Production Microservices vs Monolith: The Real Trade-offs Implementation",
+          title: "Production Microservices vs Monolith: The Real Trade-offs Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.microservices_vs_monolith")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Microservices vs Monolith: The Real Trade-offs."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Microservices vs Monolith: The Real Trade-offs with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-microservices-vs-monolith",
-        title: "Challenge: Stress Testing & Hardening Microservices vs Monolith: The Real Trade-offs",
+        title: "Challenge: Hardening Microservices vs Monolith: The Real Trade-offs",
         description: "Extend the service implementation for Microservices vs Monolith: The Real Trade-offs to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-microservices-vs-monolith-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Microservices vs Monolith: The Real Trade-offs?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Microservices vs Monolith: The Real Trade-offs under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Microservices vs Monolith: The Real Trade-offs**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-microservices-vs-monolith-2",
+        question: "What failure modes and edge cases must be handled when deploying Microservices vs Monolith: The Real Trade-offs across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-microservices-vs-monolith-3",
+        question: "What security considerations and threat vectors apply to Microservices vs Monolith: The Real Trade-offs in a public API?",
+        answer: "Security considerations for **Microservices vs Monolith: The Real Trade-offs**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +214,15 @@ response = await client.get(url, timeout=5.0)`
         id: "service-boundaries-core",
         type: "concept",
         title: "Architectural Mental Model: Service Boundary Design",
-        content: `In modern distributed systems, **Service Boundary Design** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Service Boundary Design** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Service Boundary Design, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Service Boundary Design, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "service-boundaries-implementation",
@@ -220,7 +231,7 @@ Without a rigorous design for Service Boundary Design, backend services suffer f
         content: "The following implementation demonstrates the correct production pattern for Service Boundary Design in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-service-boundaries",
-          title: "Production Service Boundary Design Implementation",
+          title: "Production Service Boundary Design Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +242,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.service_boundaries")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Service Boundary Design."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Service Boundary Design with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +293,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-service-boundaries",
-        title: "Challenge: Stress Testing & Hardening Service Boundary Design",
+        title: "Challenge: Hardening Service Boundary Design",
         description: "Extend the service implementation for Service Boundary Design to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +313,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-service-boundaries-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Service Boundary Design?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Service Boundary Design under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Service Boundary Design**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-service-boundaries-2",
+        question: "What failure modes and edge cases must be handled when deploying Service Boundary Design across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-service-boundaries-3",
+        question: "What security considerations and threat vectors apply to Service Boundary Design in a public API?",
+        answer: "Security considerations for **Service Boundary Design**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +404,15 @@ response = await client.get(url, timeout=5.0)`
         id: "api-gateway-patterns-core",
         type: "concept",
         title: "Architectural Mental Model: API Gateway Patterns",
-        content: `In modern distributed systems, **API Gateway Patterns** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **API Gateway Patterns** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for API Gateway Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for API Gateway Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "api-gateway-patterns-implementation",
@@ -399,7 +421,7 @@ Without a rigorous design for API Gateway Patterns, backend services suffer from
         content: "The following implementation demonstrates the correct production pattern for API Gateway Patterns in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-api-gateway-patterns",
-          title: "Production API Gateway Patterns Implementation",
+          title: "Production API Gateway Patterns Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +432,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.api_gateway_patterns")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for API Gateway Patterns."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing API Gateway Patterns with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +483,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-api-gateway-patterns",
-        title: "Challenge: Stress Testing & Hardening API Gateway Patterns",
+        title: "Challenge: Hardening API Gateway Patterns",
         description: "Extend the service implementation for API Gateway Patterns to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +503,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-api-gateway-patterns-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with API Gateway Patterns?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in API Gateway Patterns under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **API Gateway Patterns**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-api-gateway-patterns-2",
+        question: "What failure modes and edge cases must be handled when deploying API Gateway Patterns across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-api-gateway-patterns-3",
+        question: "What security considerations and threat vectors apply to API Gateway Patterns in a public API?",
+        answer: "Security considerations for **API Gateway Patterns**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +594,15 @@ response = await client.get(url, timeout=5.0)`
         id: "service-communication-core",
         type: "concept",
         title: "Architectural Mental Model: Service-to-Service Communication Patterns",
-        content: `In modern distributed systems, **Service-to-Service Communication Patterns** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Service-to-Service Communication Patterns** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Service-to-Service Communication Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Service-to-Service Communication Patterns, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "service-communication-implementation",
@@ -578,7 +611,7 @@ Without a rigorous design for Service-to-Service Communication Patterns, backend
         content: "The following implementation demonstrates the correct production pattern for Service-to-Service Communication Patterns in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-service-communication",
-          title: "Production Service-to-Service Communication Patterns Implementation",
+          title: "Production Service-to-Service Communication Patterns Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +622,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.service_communication")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Service-to-Service Communication Patterns."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Service-to-Service Communication Patterns with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +673,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-service-communication",
-        title: "Challenge: Stress Testing & Hardening Service-to-Service Communication Patterns",
+        title: "Challenge: Hardening Service-to-Service Communication Patterns",
         description: "Extend the service implementation for Service-to-Service Communication Patterns to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +693,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-service-communication-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Service-to-Service Communication Patterns?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Service-to-Service Communication Patterns under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Service-to-Service Communication Patterns**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-service-communication-2",
+        question: "What failure modes and edge cases must be handled when deploying Service-to-Service Communication Patterns across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-service-communication-3",
+        question: "What security considerations and threat vectors apply to Service-to-Service Communication Patterns in a public API?",
+        answer: "Security considerations for **Service-to-Service Communication Patterns**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +784,15 @@ response = await client.get(url, timeout=5.0)`
         id: "shared-database-antipattern-core",
         type: "concept",
         title: "Architectural Mental Model: The Shared Database Anti-Pattern",
-        content: `In modern distributed systems, **The Shared Database Anti-Pattern** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **The Shared Database Anti-Pattern** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for The Shared Database Anti-Pattern, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for The Shared Database Anti-Pattern, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "shared-database-antipattern-implementation",
@@ -757,7 +801,7 @@ Without a rigorous design for The Shared Database Anti-Pattern, backend services
         content: "The following implementation demonstrates the correct production pattern for The Shared Database Anti-Pattern in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-shared-database-antipattern",
-          title: "Production The Shared Database Anti-Pattern Implementation",
+          title: "Production The Shared Database Anti-Pattern Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +812,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.shared_database_antipattern")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for The Shared Database Anti-Pattern."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing The Shared Database Anti-Pattern with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +863,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-shared-database-antipattern",
-        title: "Challenge: Stress Testing & Hardening The Shared Database Anti-Pattern",
+        title: "Challenge: Hardening The Shared Database Anti-Pattern",
         description: "Extend the service implementation for The Shared Database Anti-Pattern to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +883,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-shared-database-antipattern-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with The Shared Database Anti-Pattern?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in The Shared Database Anti-Pattern under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **The Shared Database Anti-Pattern**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-shared-database-antipattern-2",
+        question: "What failure modes and edge cases must be handled when deploying The Shared Database Anti-Pattern across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-shared-database-antipattern-3",
+        question: "What security considerations and threat vectors apply to The Shared Database Anti-Pattern in a public API?",
+        answer: "Security considerations for **The Shared Database Anti-Pattern**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +974,15 @@ response = await client.get(url, timeout=5.0)`
         id: "data-consistency-microservices-core",
         type: "concept",
         title: "Architectural Mental Model: Data Consistency Across Microservices",
-        content: `In modern distributed systems, **Data Consistency Across Microservices** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Data Consistency Across Microservices** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Data Consistency Across Microservices, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Data Consistency Across Microservices, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "data-consistency-microservices-implementation",
@@ -936,7 +991,7 @@ Without a rigorous design for Data Consistency Across Microservices, backend ser
         content: "The following implementation demonstrates the correct production pattern for Data Consistency Across Microservices in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-data-consistency-microservices",
-          title: "Production Data Consistency Across Microservices Implementation",
+          title: "Production Data Consistency Across Microservices Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1002,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.data_consistency_microservices")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Data Consistency Across Microservices."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Data Consistency Across Microservices with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1053,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-data-consistency-microservices",
-        title: "Challenge: Stress Testing & Hardening Data Consistency Across Microservices",
+        title: "Challenge: Hardening Data Consistency Across Microservices",
         description: "Extend the service implementation for Data Consistency Across Microservices to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1073,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-data-consistency-microservices-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Data Consistency Across Microservices?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Data Consistency Across Microservices under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Data Consistency Across Microservices**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-data-consistency-microservices-2",
+        question: "What failure modes and edge cases must be handled when deploying Data Consistency Across Microservices across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-data-consistency-microservices-3",
+        question: "What security considerations and threat vectors apply to Data Consistency Across Microservices in a public API?",
+        answer: "Security considerations for **Data Consistency Across Microservices**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1164,15 @@ response = await client.get(url, timeout=5.0)`
         id: "service-discovery-core",
         type: "concept",
         title: "Architectural Mental Model: Service Discovery",
-        content: `In modern distributed systems, **Service Discovery** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Service Discovery** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Service Discovery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Service Discovery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "service-discovery-implementation",
@@ -1115,7 +1181,7 @@ Without a rigorous design for Service Discovery, backend services suffer from re
         content: "The following implementation demonstrates the correct production pattern for Service Discovery in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-service-discovery",
-          title: "Production Service Discovery Implementation",
+          title: "Production Service Discovery Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1192,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.service_discovery")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Service Discovery."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Service Discovery with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1243,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-service-discovery",
-        title: "Challenge: Stress Testing & Hardening Service Discovery",
+        title: "Challenge: Hardening Service Discovery",
         description: "Extend the service implementation for Service Discovery to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1263,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-service-discovery-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Service Discovery?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Service Discovery under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Service Discovery**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-service-discovery-2",
+        question: "What failure modes and edge cases must be handled when deploying Service Discovery across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-service-discovery-3",
+        question: "What security considerations and threat vectors apply to Service Discovery in a public API?",
+        answer: "Security considerations for **Service Discovery**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1354,15 @@ response = await client.get(url, timeout=5.0)`
         id: "distributed-configuration-core",
         type: "concept",
         title: "Architectural Mental Model: Distributed Configuration Management",
-        content: `In modern distributed systems, **Distributed Configuration Management** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Distributed Configuration Management** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Distributed Configuration Management, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Distributed Configuration Management, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "distributed-configuration-implementation",
@@ -1294,7 +1371,7 @@ Without a rigorous design for Distributed Configuration Management, backend serv
         content: "The following implementation demonstrates the correct production pattern for Distributed Configuration Management in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-distributed-configuration",
-          title: "Production Distributed Configuration Management Implementation",
+          title: "Production Distributed Configuration Management Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1382,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.distributed_configuration")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Distributed Configuration Management."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Distributed Configuration Management with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1433,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-distributed-configuration",
-        title: "Challenge: Stress Testing & Hardening Distributed Configuration Management",
+        title: "Challenge: Hardening Distributed Configuration Management",
         description: "Extend the service implementation for Distributed Configuration Management to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1453,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-distributed-configuration-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Distributed Configuration Management?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Distributed Configuration Management under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Distributed Configuration Management**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-configuration-2",
+        question: "What failure modes and edge cases must be handled when deploying Distributed Configuration Management across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-configuration-3",
+        question: "What security considerations and threat vectors apply to Distributed Configuration Management in a public API?",
+        answer: "Security considerations for **Distributed Configuration Management**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1544,15 @@ response = await client.get(url, timeout=5.0)`
         id: "testing-microservices-core",
         type: "concept",
         title: "Architectural Mental Model: Testing in a Microservices World",
-        content: `In modern distributed systems, **Testing in a Microservices World** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Testing in a Microservices World** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Testing in a Microservices World, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Testing in a Microservices World, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "testing-microservices-implementation",
@@ -1473,7 +1561,7 @@ Without a rigorous design for Testing in a Microservices World, backend services
         content: "The following implementation demonstrates the correct production pattern for Testing in a Microservices World in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-testing-microservices",
-          title: "Production Testing in a Microservices World Implementation",
+          title: "Production Testing in a Microservices World Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1572,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.testing_microservices")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Testing in a Microservices World."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Testing in a Microservices World with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1623,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-testing-microservices",
-        title: "Challenge: Stress Testing & Hardening Testing in a Microservices World",
+        title: "Challenge: Hardening Testing in a Microservices World",
         description: "Extend the service implementation for Testing in a Microservices World to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1643,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-testing-microservices-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Testing in a Microservices World?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Testing in a Microservices World under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Testing in a Microservices World**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-testing-microservices-2",
+        question: "What failure modes and edge cases must be handled when deploying Testing in a Microservices World across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-testing-microservices-3",
+        question: "What security considerations and threat vectors apply to Testing in a Microservices World in a public API?",
+        answer: "Security considerations for **Testing in a Microservices World**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1734,15 @@ response = await client.get(url, timeout=5.0)`
         id: "strangler-fig-migration-core",
         type: "concept",
         title: "Architectural Mental Model: Strangler Fig: Migrating from Monolith",
-        content: `In modern distributed systems, **Strangler Fig: Migrating from Monolith** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Strangler Fig: Migrating from Monolith** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Strangler Fig: Migrating from Monolith, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Strangler Fig: Migrating from Monolith, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "strangler-fig-migration-implementation",
@@ -1652,7 +1751,7 @@ Without a rigorous design for Strangler Fig: Migrating from Monolith, backend se
         content: "The following implementation demonstrates the correct production pattern for Strangler Fig: Migrating from Monolith in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-strangler-fig-migration",
-          title: "Production Strangler Fig: Migrating from Monolith Implementation",
+          title: "Production Strangler Fig: Migrating from Monolith Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1762,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.strangler_fig_migration")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Strangler Fig: Migrating from Monolith."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Strangler Fig: Migrating from Monolith with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1813,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-strangler-fig-migration",
-        title: "Challenge: Stress Testing & Hardening Strangler Fig: Migrating from Monolith",
+        title: "Challenge: Hardening Strangler Fig: Migrating from Monolith",
         description: "Extend the service implementation for Strangler Fig: Migrating from Monolith to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1833,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-strangler-fig-migration-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Strangler Fig: Migrating from Monolith?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Strangler Fig: Migrating from Monolith under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Strangler Fig: Migrating from Monolith**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-strangler-fig-migration-2",
+        question: "What failure modes and edge cases must be handled when deploying Strangler Fig: Migrating from Monolith across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-strangler-fig-migration-3",
+        question: "What security considerations and threat vectors apply to Strangler Fig: Migrating from Monolith in a public API?",
+        answer: "Security considerations for **Strangler Fig: Migrating from Monolith**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1814,15 +1924,15 @@ response = await client.get(url, timeout=5.0)`
         id: "microservices-observability-core",
         type: "concept",
         title: "Architectural Mental Model: Observability for Microservices",
-        content: `In modern distributed systems, **Observability for Microservices** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Observability for Microservices** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Observability for Microservices, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Observability for Microservices, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "microservices-observability-implementation",
@@ -1831,7 +1941,7 @@ Without a rigorous design for Observability for Microservices, backend services 
         content: "The following implementation demonstrates the correct production pattern for Observability for Microservices in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-microservices-observability",
-          title: "Production Observability for Microservices Implementation",
+          title: "Production Observability for Microservices Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1842,18 +1952,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.microservices_observability")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Observability for Microservices."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Observability for Microservices with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1894,7 +2003,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-microservices-observability",
-        title: "Challenge: Stress Testing & Hardening Observability for Microservices",
+        title: "Challenge: Hardening Observability for Microservices",
         description: "Extend the service implementation for Observability for Microservices to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1914,9 +2023,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-microservices-observability-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Observability for Microservices?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How does OpenTelemetry propagate W3C Trace Context across asynchronous HTTP boundaries and message queues in FastAPI?",
+        answer: `OpenTelemetry injects and extracts the \`traceparent\` HTTP header (\`00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01\`). An ASGI middleware intercepts the incoming header, starts a child span linked to the parent trace ID, and stores the span in Python's \`contextvars.ContextVar\`. When the application makes an outbound HTTP call via \`httpx\` or publishes to Kafka, the instrumentation automatically injects the current \`traceparent\` header.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-microservices-observability-2",
+        question: "What is the difference between Prometheus Counter, Gauge, and Histogram, and which should you use for tracking API latency in FastAPI?",
+        answer: "Counter: Monotonically increasing metric (resets only on restart), used for request counts and error totals. Gauge: Snapshot value that goes up and down, used for active connections and memory usage. Histogram: Samples observations into configurable buckets, used for request durations and response sizes. For API latency, always use Histogram to calculate p50, p95, and p99 percentiles across worker processes without skew from averages.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-microservices-observability-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Observability for Microservices under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Observability for Microservices**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-microservices-observability-4",
+        question: "What failure modes and edge cases must be handled when deploying Observability for Microservices across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-microservices-observability-5",
+        question: "What security considerations and threat vectors apply to Observability for Microservices in a public API?",
+        answer: "Security considerations for **Observability for Microservices**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1993,15 +2126,15 @@ response = await client.get(url, timeout=5.0)`
         id: "service-mesh-core",
         type: "concept",
         title: "Architectural Mental Model: Service Mesh with Istio/Linkerd",
-        content: `In modern distributed systems, **Service Mesh with Istio/Linkerd** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Service Mesh with Istio/Linkerd** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Service Mesh with Istio/Linkerd, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Service Mesh with Istio/Linkerd, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "service-mesh-implementation",
@@ -2010,7 +2143,7 @@ Without a rigorous design for Service Mesh with Istio/Linkerd, backend services 
         content: "The following implementation demonstrates the correct production pattern for Service Mesh with Istio/Linkerd in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-service-mesh",
-          title: "Production Service Mesh with Istio/Linkerd Implementation",
+          title: "Production Service Mesh with Istio/Linkerd Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -2021,18 +2154,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.service_mesh")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Service Mesh with Istio/Linkerd."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Service Mesh with Istio/Linkerd with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -2073,7 +2205,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-service-mesh",
-        title: "Challenge: Stress Testing & Hardening Service Mesh with Istio/Linkerd",
+        title: "Challenge: Hardening Service Mesh with Istio/Linkerd",
         description: "Extend the service implementation for Service Mesh with Istio/Linkerd to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -2093,9 +2225,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-service-mesh-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Service Mesh with Istio/Linkerd?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Service Mesh with Istio/Linkerd under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Service Mesh with Istio/Linkerd**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-service-mesh-2",
+        question: "What failure modes and edge cases must be handled when deploying Service Mesh with Istio/Linkerd across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-service-mesh-3",
+        question: "What security considerations and threat vectors apply to Service Mesh with Istio/Linkerd in a public API?",
+        answer: "Security considerations for **Service Mesh with Istio/Linkerd**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

@@ -24,15 +24,15 @@ export const ch14Lessons: Record<string, Lesson> = {
         id: "rest-design-principles-core",
         type: "concept",
         title: "Architectural Mental Model: REST Design Principles",
-        content: `In modern distributed systems, **REST Design Principles** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **REST Design Principles** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for REST Design Principles, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for REST Design Principles, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "rest-design-principles-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for REST Design Principles, backend services suffer fr
         content: "The following implementation demonstrates the correct production pattern for REST Design Principles in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-rest-design-principles",
-          title: "Production REST Design Principles Implementation",
+          title: "Production REST Design Principles Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.rest_design_principles")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for REST Design Principles."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing REST Design Principles with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-rest-design-principles",
-        title: "Challenge: Stress Testing & Hardening REST Design Principles",
+        title: "Challenge: Hardening REST Design Principles",
         description: "Extend the service implementation for REST Design Principles to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-rest-design-principles-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with REST Design Principles?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in REST Design Principles under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **REST Design Principles**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-rest-design-principles-2",
+        question: "What failure modes and edge cases must be handled when deploying REST Design Principles across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-rest-design-principles-3",
+        question: "What security considerations and threat vectors apply to REST Design Principles in a public API?",
+        answer: "Security considerations for **REST Design Principles**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +214,15 @@ response = await client.get(url, timeout=5.0)`
         id: "resource-modeling-core",
         type: "concept",
         title: "Architectural Mental Model: Resource Modeling",
-        content: `In modern distributed systems, **Resource Modeling** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Resource Modeling** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Resource Modeling, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Resource Modeling, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "resource-modeling-implementation",
@@ -220,7 +231,7 @@ Without a rigorous design for Resource Modeling, backend services suffer from re
         content: "The following implementation demonstrates the correct production pattern for Resource Modeling in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-resource-modeling",
-          title: "Production Resource Modeling Implementation",
+          title: "Production Resource Modeling Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +242,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.resource_modeling")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Resource Modeling."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Resource Modeling with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +293,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-resource-modeling",
-        title: "Challenge: Stress Testing & Hardening Resource Modeling",
+        title: "Challenge: Hardening Resource Modeling",
         description: "Extend the service implementation for Resource Modeling to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +313,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-resource-modeling-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Resource Modeling?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Resource Modeling under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Resource Modeling**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-resource-modeling-2",
+        question: "What failure modes and edge cases must be handled when deploying Resource Modeling across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-resource-modeling-3",
+        question: "What security considerations and threat vectors apply to Resource Modeling in a public API?",
+        answer: "Security considerations for **Resource Modeling**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +404,15 @@ response = await client.get(url, timeout=5.0)`
         id: "http-method-semantics-core",
         type: "concept",
         title: "Architectural Mental Model: HTTP Method Semantics & Idempotency",
-        content: `In modern distributed systems, **HTTP Method Semantics & Idempotency** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **HTTP Method Semantics & Idempotency** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for HTTP Method Semantics & Idempotency, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for HTTP Method Semantics & Idempotency, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "http-method-semantics-implementation",
@@ -399,7 +421,7 @@ Without a rigorous design for HTTP Method Semantics & Idempotency, backend servi
         content: "The following implementation demonstrates the correct production pattern for HTTP Method Semantics & Idempotency in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-http-method-semantics",
-          title: "Production HTTP Method Semantics & Idempotency Implementation",
+          title: "Production HTTP Method Semantics & Idempotency Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +432,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.http_method_semantics")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for HTTP Method Semantics & Idempotency."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing HTTP Method Semantics & Idempotency with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +483,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-http-method-semantics",
-        title: "Challenge: Stress Testing & Hardening HTTP Method Semantics & Idempotency",
+        title: "Challenge: Hardening HTTP Method Semantics & Idempotency",
         description: "Extend the service implementation for HTTP Method Semantics & Idempotency to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +503,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-http-method-semantics-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with HTTP Method Semantics & Idempotency?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in HTTP Method Semantics & Idempotency under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **HTTP Method Semantics & Idempotency**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-http-method-semantics-2",
+        question: "What failure modes and edge cases must be handled when deploying HTTP Method Semantics & Idempotency across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-http-method-semantics-3",
+        question: "What security considerations and threat vectors apply to HTTP Method Semantics & Idempotency in a public API?",
+        answer: "Security considerations for **HTTP Method Semantics & Idempotency**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +594,15 @@ response = await client.get(url, timeout=5.0)`
         id: "pagination-strategies-core",
         type: "concept",
         title: "Architectural Mental Model: Pagination Strategies",
-        content: `In modern distributed systems, **Pagination Strategies** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Pagination Strategies** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Pagination Strategies, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Pagination Strategies, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "pagination-strategies-implementation",
@@ -578,7 +611,7 @@ Without a rigorous design for Pagination Strategies, backend services suffer fro
         content: "The following implementation demonstrates the correct production pattern for Pagination Strategies in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-pagination-strategies",
-          title: "Production Pagination Strategies Implementation",
+          title: "Production Pagination Strategies Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +622,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.pagination_strategies")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Pagination Strategies."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Pagination Strategies with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +673,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-pagination-strategies",
-        title: "Challenge: Stress Testing & Hardening Pagination Strategies",
+        title: "Challenge: Hardening Pagination Strategies",
         description: "Extend the service implementation for Pagination Strategies to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +693,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-pagination-strategies-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Pagination Strategies?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Pagination Strategies under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Pagination Strategies**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-pagination-strategies-2",
+        question: "What failure modes and edge cases must be handled when deploying Pagination Strategies across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-pagination-strategies-3",
+        question: "What security considerations and threat vectors apply to Pagination Strategies in a public API?",
+        answer: "Security considerations for **Pagination Strategies**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +784,15 @@ response = await client.get(url, timeout=5.0)`
         id: "filtering-sorting-core",
         type: "concept",
         title: "Architectural Mental Model: Filtering, Sorting & Searching",
-        content: `In modern distributed systems, **Filtering, Sorting & Searching** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Filtering, Sorting & Searching** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Filtering, Sorting & Searching, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Filtering, Sorting & Searching, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "filtering-sorting-implementation",
@@ -757,7 +801,7 @@ Without a rigorous design for Filtering, Sorting & Searching, backend services s
         content: "The following implementation demonstrates the correct production pattern for Filtering, Sorting & Searching in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-filtering-sorting",
-          title: "Production Filtering, Sorting & Searching Implementation",
+          title: "Production Filtering, Sorting & Searching Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +812,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.filtering_sorting")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Filtering, Sorting & Searching."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Filtering, Sorting & Searching with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +863,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-filtering-sorting",
-        title: "Challenge: Stress Testing & Hardening Filtering, Sorting & Searching",
+        title: "Challenge: Hardening Filtering, Sorting & Searching",
         description: "Extend the service implementation for Filtering, Sorting & Searching to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +883,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-filtering-sorting-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Filtering, Sorting & Searching?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Filtering, Sorting & Searching under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Filtering, Sorting & Searching**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-filtering-sorting-2",
+        question: "What failure modes and edge cases must be handled when deploying Filtering, Sorting & Searching across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-filtering-sorting-3",
+        question: "What security considerations and threat vectors apply to Filtering, Sorting & Searching in a public API?",
+        answer: "Security considerations for **Filtering, Sorting & Searching**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +974,15 @@ response = await client.get(url, timeout=5.0)`
         id: "error-response-design-core",
         type: "concept",
         title: "Architectural Mental Model: Error Response Design",
-        content: `In modern distributed systems, **Error Response Design** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Error Response Design** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Error Response Design, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Error Response Design, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "error-response-design-implementation",
@@ -936,7 +991,7 @@ Without a rigorous design for Error Response Design, backend services suffer fro
         content: "The following implementation demonstrates the correct production pattern for Error Response Design in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-error-response-design",
-          title: "Production Error Response Design Implementation",
+          title: "Production Error Response Design Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1002,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.error_response_design")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Error Response Design."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Error Response Design with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1053,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-error-response-design",
-        title: "Challenge: Stress Testing & Hardening Error Response Design",
+        title: "Challenge: Hardening Error Response Design",
         description: "Extend the service implementation for Error Response Design to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1073,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-error-response-design-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Error Response Design?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Error Response Design under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Error Response Design**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-error-response-design-2",
+        question: "What failure modes and edge cases must be handled when deploying Error Response Design across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-error-response-design-3",
+        question: "What security considerations and threat vectors apply to Error Response Design in a public API?",
+        answer: "Security considerations for **Error Response Design**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1164,15 @@ response = await client.get(url, timeout=5.0)`
         id: "openapi-documentation-core",
         type: "concept",
         title: "Architectural Mental Model: OpenAPI Documentation Excellence",
-        content: `In modern distributed systems, **OpenAPI Documentation Excellence** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **OpenAPI Documentation Excellence** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for OpenAPI Documentation Excellence, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for OpenAPI Documentation Excellence, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "openapi-documentation-implementation",
@@ -1115,7 +1181,7 @@ Without a rigorous design for OpenAPI Documentation Excellence, backend services
         content: "The following implementation demonstrates the correct production pattern for OpenAPI Documentation Excellence in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-openapi-documentation",
-          title: "Production OpenAPI Documentation Excellence Implementation",
+          title: "Production OpenAPI Documentation Excellence Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1192,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.openapi_documentation")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for OpenAPI Documentation Excellence."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing OpenAPI Documentation Excellence with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1243,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-openapi-documentation",
-        title: "Challenge: Stress Testing & Hardening OpenAPI Documentation Excellence",
+        title: "Challenge: Hardening OpenAPI Documentation Excellence",
         description: "Extend the service implementation for OpenAPI Documentation Excellence to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1263,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-openapi-documentation-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with OpenAPI Documentation Excellence?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in OpenAPI Documentation Excellence under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **OpenAPI Documentation Excellence**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-openapi-documentation-2",
+        question: "What failure modes and edge cases must be handled when deploying OpenAPI Documentation Excellence across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-openapi-documentation-3",
+        question: "What security considerations and threat vectors apply to OpenAPI Documentation Excellence in a public API?",
+        answer: "Security considerations for **OpenAPI Documentation Excellence**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1354,15 @@ response = await client.get(url, timeout=5.0)`
         id: "api-versioning-strategy-core",
         type: "concept",
         title: "Architectural Mental Model: API Versioning Strategy",
-        content: `In modern distributed systems, **API Versioning Strategy** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **API Versioning Strategy** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for API Versioning Strategy, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for API Versioning Strategy, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "api-versioning-strategy-implementation",
@@ -1294,7 +1371,7 @@ Without a rigorous design for API Versioning Strategy, backend services suffer f
         content: "The following implementation demonstrates the correct production pattern for API Versioning Strategy in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-api-versioning-strategy",
-          title: "Production API Versioning Strategy Implementation",
+          title: "Production API Versioning Strategy Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1382,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.api_versioning_strategy")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for API Versioning Strategy."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing API Versioning Strategy with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1433,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-api-versioning-strategy",
-        title: "Challenge: Stress Testing & Hardening API Versioning Strategy",
+        title: "Challenge: Hardening API Versioning Strategy",
         description: "Extend the service implementation for API Versioning Strategy to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1453,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-api-versioning-strategy-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with API Versioning Strategy?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in API Versioning Strategy under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **API Versioning Strategy**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-api-versioning-strategy-2",
+        question: "What failure modes and edge cases must be handled when deploying API Versioning Strategy across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-api-versioning-strategy-3",
+        question: "What security considerations and threat vectors apply to API Versioning Strategy in a public API?",
+        answer: "Security considerations for **API Versioning Strategy**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1544,15 @@ response = await client.get(url, timeout=5.0)`
         id: "backward-compatibility-core",
         type: "concept",
         title: "Architectural Mental Model: Backward Compatibility",
-        content: `In modern distributed systems, **Backward Compatibility** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Backward Compatibility** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Backward Compatibility, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Backward Compatibility, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "backward-compatibility-implementation",
@@ -1473,7 +1561,7 @@ Without a rigorous design for Backward Compatibility, backend services suffer fr
         content: "The following implementation demonstrates the correct production pattern for Backward Compatibility in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-backward-compatibility",
-          title: "Production Backward Compatibility Implementation",
+          title: "Production Backward Compatibility Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1572,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.backward_compatibility")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Backward Compatibility."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Backward Compatibility with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1623,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-backward-compatibility",
-        title: "Challenge: Stress Testing & Hardening Backward Compatibility",
+        title: "Challenge: Hardening Backward Compatibility",
         description: "Extend the service implementation for Backward Compatibility to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1643,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-backward-compatibility-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Backward Compatibility?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Backward Compatibility under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Backward Compatibility**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-backward-compatibility-2",
+        question: "What failure modes and edge cases must be handled when deploying Backward Compatibility across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-backward-compatibility-3",
+        question: "What security considerations and threat vectors apply to Backward Compatibility in a public API?",
+        answer: "Security considerations for **Backward Compatibility**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1734,15 @@ response = await client.get(url, timeout=5.0)`
         id: "api-design-review-core",
         type: "concept",
         title: "Architectural Mental Model: API Design Review & Common Mistakes",
-        content: `In modern distributed systems, **API Design Review & Common Mistakes** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **API Design Review & Common Mistakes** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for API Design Review & Common Mistakes, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for API Design Review & Common Mistakes, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "api-design-review-implementation",
@@ -1652,7 +1751,7 @@ Without a rigorous design for API Design Review & Common Mistakes, backend servi
         content: "The following implementation demonstrates the correct production pattern for API Design Review & Common Mistakes in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-api-design-review",
-          title: "Production API Design Review & Common Mistakes Implementation",
+          title: "Production API Design Review & Common Mistakes Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1762,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.api_design_review")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for API Design Review & Common Mistakes."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing API Design Review & Common Mistakes with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1813,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-api-design-review",
-        title: "Challenge: Stress Testing & Hardening API Design Review & Common Mistakes",
+        title: "Challenge: Hardening API Design Review & Common Mistakes",
         description: "Extend the service implementation for API Design Review & Common Mistakes to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1833,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-api-design-review-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with API Design Review & Common Mistakes?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in API Design Review & Common Mistakes under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **API Design Review & Common Mistakes**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-api-design-review-2",
+        question: "What failure modes and edge cases must be handled when deploying API Design Review & Common Mistakes across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-api-design-review-3",
+        question: "What security considerations and threat vectors apply to API Design Review & Common Mistakes in a public API?",
+        answer: "Security considerations for **API Design Review & Common Mistakes**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1814,15 +1924,15 @@ response = await client.get(url, timeout=5.0)`
         id: "webhook-design-core",
         type: "concept",
         title: "Architectural Mental Model: Webhook Design & Delivery",
-        content: `In modern distributed systems, **Webhook Design & Delivery** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Webhook Design & Delivery** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Webhook Design & Delivery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Webhook Design & Delivery, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "webhook-design-implementation",
@@ -1831,7 +1941,7 @@ Without a rigorous design for Webhook Design & Delivery, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Webhook Design & Delivery in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-webhook-design",
-          title: "Production Webhook Design & Delivery Implementation",
+          title: "Production Webhook Design & Delivery Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1842,18 +1952,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.webhook_design")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Webhook Design & Delivery."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Webhook Design & Delivery with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1894,7 +2003,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-webhook-design",
-        title: "Challenge: Stress Testing & Hardening Webhook Design & Delivery",
+        title: "Challenge: Hardening Webhook Design & Delivery",
         description: "Extend the service implementation for Webhook Design & Delivery to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1914,9 +2023,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-webhook-design-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Webhook Design & Delivery?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Webhook Design & Delivery under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Webhook Design & Delivery**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-webhook-design-2",
+        question: "What failure modes and edge cases must be handled when deploying Webhook Design & Delivery across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-webhook-design-3",
+        question: "What security considerations and threat vectors apply to Webhook Design & Delivery in a public API?",
+        answer: "Security considerations for **Webhook Design & Delivery**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

@@ -24,15 +24,15 @@ export const ch15Lessons: Record<string, Lesson> = {
         id: "async-event-loop-core",
         type: "concept",
         title: "Architectural Mental Model: The Python Async Event Loop",
-        content: `In modern distributed systems, **The Python Async Event Loop** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **The Python Async Event Loop** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for The Python Async Event Loop, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for The Python Async Event Loop, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "async-event-loop-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for The Python Async Event Loop, backend services suff
         content: "The following implementation demonstrates the correct production pattern for The Python Async Event Loop in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-async-event-loop",
-          title: "Production The Python Async Event Loop Implementation",
+          title: "Production The Python Async Event Loop Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.async_event_loop")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for The Python Async Event Loop."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing The Python Async Event Loop with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-async-event-loop",
-        title: "Challenge: Stress Testing & Hardening The Python Async Event Loop",
+        title: "Challenge: Hardening The Python Async Event Loop",
         description: "Extend the service implementation for The Python Async Event Loop to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-async-event-loop-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with The Python Async Event Loop?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in The Python Async Event Loop under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **The Python Async Event Loop**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-async-event-loop-2",
+        question: "What failure modes and edge cases must be handled when deploying The Python Async Event Loop across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-async-event-loop-3",
+        question: "What security considerations and threat vectors apply to The Python Async Event Loop in a public API?",
+        answer: "Security considerations for **The Python Async Event Loop**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +214,15 @@ response = await client.get(url, timeout=5.0)`
         id: "blocking-calls-core",
         type: "concept",
         title: "Architectural Mental Model: Detecting & Fixing Blocking Calls",
-        content: `In modern distributed systems, **Detecting & Fixing Blocking Calls** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Detecting & Fixing Blocking Calls** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Detecting & Fixing Blocking Calls, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Detecting & Fixing Blocking Calls, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "blocking-calls-implementation",
@@ -220,7 +231,7 @@ Without a rigorous design for Detecting & Fixing Blocking Calls, backend service
         content: "The following implementation demonstrates the correct production pattern for Detecting & Fixing Blocking Calls in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-blocking-calls",
-          title: "Production Detecting & Fixing Blocking Calls Implementation",
+          title: "Production Detecting & Fixing Blocking Calls Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +242,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.blocking_calls")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Detecting & Fixing Blocking Calls."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Detecting & Fixing Blocking Calls with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +293,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-blocking-calls",
-        title: "Challenge: Stress Testing & Hardening Detecting & Fixing Blocking Calls",
+        title: "Challenge: Hardening Detecting & Fixing Blocking Calls",
         description: "Extend the service implementation for Detecting & Fixing Blocking Calls to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +313,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-blocking-calls-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Detecting & Fixing Blocking Calls?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Detecting & Fixing Blocking Calls under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Detecting & Fixing Blocking Calls**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-blocking-calls-2",
+        question: "What failure modes and edge cases must be handled when deploying Detecting & Fixing Blocking Calls across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-blocking-calls-3",
+        question: "What security considerations and threat vectors apply to Detecting & Fixing Blocking Calls in a public API?",
+        answer: "Security considerations for **Detecting & Fixing Blocking Calls**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +404,15 @@ response = await client.get(url, timeout=5.0)`
         id: "connection-pool-tuning-core",
         type: "concept",
         title: "Architectural Mental Model: Connection Pool Tuning",
-        content: `In modern distributed systems, **Connection Pool Tuning** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Connection Pool Tuning** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Connection Pool Tuning, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Connection Pool Tuning, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "connection-pool-tuning-implementation",
@@ -399,7 +421,7 @@ Without a rigorous design for Connection Pool Tuning, backend services suffer fr
         content: "The following implementation demonstrates the correct production pattern for Connection Pool Tuning in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-connection-pool-tuning",
-          title: "Production Connection Pool Tuning Implementation",
+          title: "Production Connection Pool Tuning Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +432,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.connection_pool_tuning")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Connection Pool Tuning."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Connection Pool Tuning with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +483,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-connection-pool-tuning",
-        title: "Challenge: Stress Testing & Hardening Connection Pool Tuning",
+        title: "Challenge: Hardening Connection Pool Tuning",
         description: "Extend the service implementation for Connection Pool Tuning to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +503,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-connection-pool-tuning-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Connection Pool Tuning?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Connection Pool Tuning under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Connection Pool Tuning**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-connection-pool-tuning-2",
+        question: "What failure modes and edge cases must be handled when deploying Connection Pool Tuning across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-connection-pool-tuning-3",
+        question: "What security considerations and threat vectors apply to Connection Pool Tuning in a public API?",
+        answer: "Security considerations for **Connection Pool Tuning**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +594,15 @@ response = await client.get(url, timeout=5.0)`
         id: "pydantic-performance-core",
         type: "concept",
         title: "Architectural Mental Model: Pydantic v2 Performance Optimization",
-        content: `In modern distributed systems, **Pydantic v2 Performance Optimization** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Pydantic v2 Performance Optimization** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Pydantic v2 Performance Optimization, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Pydantic v2 Performance Optimization, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "pydantic-performance-implementation",
@@ -578,7 +611,7 @@ Without a rigorous design for Pydantic v2 Performance Optimization, backend serv
         content: "The following implementation demonstrates the correct production pattern for Pydantic v2 Performance Optimization in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-pydantic-performance",
-          title: "Production Pydantic v2 Performance Optimization Implementation",
+          title: "Production Pydantic v2 Performance Optimization Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +622,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.pydantic_performance")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Pydantic v2 Performance Optimization."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Pydantic v2 Performance Optimization with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +673,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-pydantic-performance",
-        title: "Challenge: Stress Testing & Hardening Pydantic v2 Performance Optimization",
+        title: "Challenge: Hardening Pydantic v2 Performance Optimization",
         description: "Extend the service implementation for Pydantic v2 Performance Optimization to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +693,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-pydantic-performance-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Pydantic v2 Performance Optimization?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Pydantic v2 Performance Optimization under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Pydantic v2 Performance Optimization**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-pydantic-performance-2",
+        question: "What failure modes and edge cases must be handled when deploying Pydantic v2 Performance Optimization across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-pydantic-performance-3",
+        question: "What security considerations and threat vectors apply to Pydantic v2 Performance Optimization in a public API?",
+        answer: "Security considerations for **Pydantic v2 Performance Optimization**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +784,15 @@ response = await client.get(url, timeout=5.0)`
         id: "database-query-optimization-core",
         type: "concept",
         title: "Architectural Mental Model: Database Query Optimization",
-        content: `In modern distributed systems, **Database Query Optimization** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Database Query Optimization** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Database Query Optimization, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Database Query Optimization, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "database-query-optimization-implementation",
@@ -757,7 +801,7 @@ Without a rigorous design for Database Query Optimization, backend services suff
         content: "The following implementation demonstrates the correct production pattern for Database Query Optimization in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-database-query-optimization",
-          title: "Production Database Query Optimization Implementation",
+          title: "Production Database Query Optimization Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +812,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.database_query_optimization")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Database Query Optimization."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Database Query Optimization with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +863,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-database-query-optimization",
-        title: "Challenge: Stress Testing & Hardening Database Query Optimization",
+        title: "Challenge: Hardening Database Query Optimization",
         description: "Extend the service implementation for Database Query Optimization to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +883,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-database-query-optimization-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Database Query Optimization?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Database Query Optimization under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Database Query Optimization**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-database-query-optimization-2",
+        question: "What failure modes and edge cases must be handled when deploying Database Query Optimization across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-database-query-optimization-3",
+        question: "What security considerations and threat vectors apply to Database Query Optimization in a public API?",
+        answer: "Security considerations for **Database Query Optimization**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +974,15 @@ response = await client.get(url, timeout=5.0)`
         id: "load-testing-locust-core",
         type: "concept",
         title: "Architectural Mental Model: Load Testing with Locust",
-        content: `In modern distributed systems, **Load Testing with Locust** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Load Testing with Locust** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Load Testing with Locust, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Load Testing with Locust, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "load-testing-locust-implementation",
@@ -936,7 +991,7 @@ Without a rigorous design for Load Testing with Locust, backend services suffer 
         content: "The following implementation demonstrates the correct production pattern for Load Testing with Locust in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-load-testing-locust",
-          title: "Production Load Testing with Locust Implementation",
+          title: "Production Load Testing with Locust Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1002,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.load_testing_locust")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Load Testing with Locust."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Load Testing with Locust with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1053,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-load-testing-locust",
-        title: "Challenge: Stress Testing & Hardening Load Testing with Locust",
+        title: "Challenge: Hardening Load Testing with Locust",
         description: "Extend the service implementation for Load Testing with Locust to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1073,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-load-testing-locust-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Load Testing with Locust?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Load Testing with Locust under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Load Testing with Locust**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-load-testing-locust-2",
+        question: "What failure modes and edge cases must be handled when deploying Load Testing with Locust across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-load-testing-locust-3",
+        question: "What security considerations and threat vectors apply to Load Testing with Locust in a public API?",
+        answer: "Security considerations for **Load Testing with Locust**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1164,15 @@ response = await client.get(url, timeout=5.0)`
         id: "profiling-py-spy-core",
         type: "concept",
         title: "Architectural Mental Model: Production Profiling with py-spy",
-        content: `In modern distributed systems, **Production Profiling with py-spy** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Production Profiling with py-spy** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Production Profiling with py-spy, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Production Profiling with py-spy, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "profiling-py-spy-implementation",
@@ -1115,7 +1181,7 @@ Without a rigorous design for Production Profiling with py-spy, backend services
         content: "The following implementation demonstrates the correct production pattern for Production Profiling with py-spy in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-profiling-py-spy",
-          title: "Production Production Profiling with py-spy Implementation",
+          title: "Production Production Profiling with py-spy Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1192,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.profiling_py_spy")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Production Profiling with py-spy."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Production Profiling with py-spy with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1243,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-profiling-py-spy",
-        title: "Challenge: Stress Testing & Hardening Production Profiling with py-spy",
+        title: "Challenge: Hardening Production Profiling with py-spy",
         description: "Extend the service implementation for Production Profiling with py-spy to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1263,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-profiling-py-spy-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Production Profiling with py-spy?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Production Profiling with py-spy under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Production Profiling with py-spy**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-profiling-py-spy-2",
+        question: "What failure modes and edge cases must be handled when deploying Production Profiling with py-spy across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-profiling-py-spy-3",
+        question: "What security considerations and threat vectors apply to Production Profiling with py-spy in a public API?",
+        answer: "Security considerations for **Production Profiling with py-spy**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1354,15 @@ response = await client.get(url, timeout=5.0)`
         id: "cpu-bound-workloads-core",
         type: "concept",
         title: "Architectural Mental Model: CPU-Bound Workloads in FastAPI",
-        content: `In modern distributed systems, **CPU-Bound Workloads in FastAPI** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **CPU-Bound Workloads in FastAPI** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for CPU-Bound Workloads in FastAPI, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for CPU-Bound Workloads in FastAPI, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "cpu-bound-workloads-implementation",
@@ -1294,7 +1371,7 @@ Without a rigorous design for CPU-Bound Workloads in FastAPI, backend services s
         content: "The following implementation demonstrates the correct production pattern for CPU-Bound Workloads in FastAPI in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-cpu-bound-workloads",
-          title: "Production CPU-Bound Workloads in FastAPI Implementation",
+          title: "Production CPU-Bound Workloads in FastAPI Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1382,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.cpu_bound_workloads")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for CPU-Bound Workloads in FastAPI."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing CPU-Bound Workloads in FastAPI with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1433,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-cpu-bound-workloads",
-        title: "Challenge: Stress Testing & Hardening CPU-Bound Workloads in FastAPI",
+        title: "Challenge: Hardening CPU-Bound Workloads in FastAPI",
         description: "Extend the service implementation for CPU-Bound Workloads in FastAPI to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1453,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-cpu-bound-workloads-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with CPU-Bound Workloads in FastAPI?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in CPU-Bound Workloads in FastAPI under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **CPU-Bound Workloads in FastAPI**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-cpu-bound-workloads-2",
+        question: "What failure modes and edge cases must be handled when deploying CPU-Bound Workloads in FastAPI across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cpu-bound-workloads-3",
+        question: "What security considerations and threat vectors apply to CPU-Bound Workloads in FastAPI in a public API?",
+        answer: "Security considerations for **CPU-Bound Workloads in FastAPI**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1544,15 @@ response = await client.get(url, timeout=5.0)`
         id: "response-streaming-core",
         type: "concept",
         title: "Architectural Mental Model: Response Streaming for Large Payloads",
-        content: `In modern distributed systems, **Response Streaming for Large Payloads** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Response Streaming for Large Payloads** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Response Streaming for Large Payloads, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Response Streaming for Large Payloads, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "response-streaming-implementation",
@@ -1473,7 +1561,7 @@ Without a rigorous design for Response Streaming for Large Payloads, backend ser
         content: "The following implementation demonstrates the correct production pattern for Response Streaming for Large Payloads in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-response-streaming",
-          title: "Production Response Streaming for Large Payloads Implementation",
+          title: "Production Response Streaming for Large Payloads Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1572,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.response_streaming")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Response Streaming for Large Payloads."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Response Streaming for Large Payloads with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1623,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-response-streaming",
-        title: "Challenge: Stress Testing & Hardening Response Streaming for Large Payloads",
+        title: "Challenge: Hardening Response Streaming for Large Payloads",
         description: "Extend the service implementation for Response Streaming for Large Payloads to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1643,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-response-streaming-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Response Streaming for Large Payloads?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Response Streaming for Large Payloads under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Response Streaming for Large Payloads**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-response-streaming-2",
+        question: "What failure modes and edge cases must be handled when deploying Response Streaming for Large Payloads across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-response-streaming-3",
+        question: "What security considerations and threat vectors apply to Response Streaming for Large Payloads in a public API?",
+        answer: "Security considerations for **Response Streaming for Large Payloads**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1734,15 @@ response = await client.get(url, timeout=5.0)`
         id: "caching-for-performance-core",
         type: "concept",
         title: "Architectural Mental Model: Caching as a Performance Tool",
-        content: `In modern distributed systems, **Caching as a Performance Tool** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Caching as a Performance Tool** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Caching as a Performance Tool, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Caching as a Performance Tool, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "caching-for-performance-implementation",
@@ -1652,7 +1751,7 @@ Without a rigorous design for Caching as a Performance Tool, backend services su
         content: "The following implementation demonstrates the correct production pattern for Caching as a Performance Tool in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-caching-for-performance",
-          title: "Production Caching as a Performance Tool Implementation",
+          title: "Production Caching as a Performance Tool Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1762,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.caching_for_performance")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Caching as a Performance Tool."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Caching as a Performance Tool with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1813,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-caching-for-performance",
-        title: "Challenge: Stress Testing & Hardening Caching as a Performance Tool",
+        title: "Challenge: Hardening Caching as a Performance Tool",
         description: "Extend the service implementation for Caching as a Performance Tool to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1833,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-caching-for-performance-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Caching as a Performance Tool?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-caching-for-performance-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-for-performance-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Caching as a Performance Tool under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Caching as a Performance Tool**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-for-performance-4",
+        question: "What failure modes and edge cases must be handled when deploying Caching as a Performance Tool across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-caching-for-performance-5",
+        question: "What security considerations and threat vectors apply to Caching as a Performance Tool in a public API?",
+        answer: "Security considerations for **Caching as a Performance Tool**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1814,15 +1936,15 @@ response = await client.get(url, timeout=5.0)`
         id: "uvicorn-gunicorn-tuning-core",
         type: "concept",
         title: "Architectural Mental Model: Uvicorn & Gunicorn Tuning",
-        content: `In modern distributed systems, **Uvicorn & Gunicorn Tuning** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Uvicorn & Gunicorn Tuning** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Uvicorn & Gunicorn Tuning, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Uvicorn & Gunicorn Tuning, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "uvicorn-gunicorn-tuning-implementation",
@@ -1831,7 +1953,7 @@ Without a rigorous design for Uvicorn & Gunicorn Tuning, backend services suffer
         content: "The following implementation demonstrates the correct production pattern for Uvicorn & Gunicorn Tuning in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-uvicorn-gunicorn-tuning",
-          title: "Production Uvicorn & Gunicorn Tuning Implementation",
+          title: "Production Uvicorn & Gunicorn Tuning Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1842,18 +1964,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.uvicorn_gunicorn_tuning")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Uvicorn & Gunicorn Tuning."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Uvicorn & Gunicorn Tuning with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1894,7 +2015,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-uvicorn-gunicorn-tuning",
-        title: "Challenge: Stress Testing & Hardening Uvicorn & Gunicorn Tuning",
+        title: "Challenge: Hardening Uvicorn & Gunicorn Tuning",
         description: "Extend the service implementation for Uvicorn & Gunicorn Tuning to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1914,9 +2035,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-uvicorn-gunicorn-tuning-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Uvicorn & Gunicorn Tuning?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Uvicorn & Gunicorn Tuning under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Uvicorn & Gunicorn Tuning**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-uvicorn-gunicorn-tuning-2",
+        question: "What failure modes and edge cases must be handled when deploying Uvicorn & Gunicorn Tuning across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-uvicorn-gunicorn-tuning-3",
+        question: "What security considerations and threat vectors apply to Uvicorn & Gunicorn Tuning in a public API?",
+        answer: "Security considerations for **Uvicorn & Gunicorn Tuning**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1993,15 +2126,15 @@ response = await client.get(url, timeout=5.0)`
         id: "performance-budget-core",
         type: "concept",
         title: "Architectural Mental Model: Performance Budgets & SLOs",
-        content: `In modern distributed systems, **Performance Budgets & SLOs** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Performance Budgets & SLOs** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Performance Budgets & SLOs, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Performance Budgets & SLOs, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "performance-budget-implementation",
@@ -2010,7 +2143,7 @@ Without a rigorous design for Performance Budgets & SLOs, backend services suffe
         content: "The following implementation demonstrates the correct production pattern for Performance Budgets & SLOs in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-performance-budget",
-          title: "Production Performance Budgets & SLOs Implementation",
+          title: "Production Performance Budgets & SLOs Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -2021,18 +2154,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.performance_budget")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Performance Budgets & SLOs."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Performance Budgets & SLOs with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -2073,7 +2205,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-performance-budget",
-        title: "Challenge: Stress Testing & Hardening Performance Budgets & SLOs",
+        title: "Challenge: Hardening Performance Budgets & SLOs",
         description: "Extend the service implementation for Performance Budgets & SLOs to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -2093,9 +2225,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-performance-budget-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Performance Budgets & SLOs?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Performance Budgets & SLOs under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Performance Budgets & SLOs**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-performance-budget-2",
+        question: "What failure modes and edge cases must be handled when deploying Performance Budgets & SLOs across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-performance-budget-3",
+        question: "What security considerations and threat vectors apply to Performance Budgets & SLOs in a public API?",
+        answer: "Security considerations for **Performance Budgets & SLOs**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/app/learn/[chapter]/[lesson]/page.tsx": {
-    "mtime": 1787476924.557569,
-    "ast_hash": "c690639fe22f75c7c40324584f4f4ed9",
+    "mtime": 1787477876.538841,
+    "ast_hash": "0555554f6579a902d801469b3f2591dc",
     "semantic_hash": ""
   },
   "src/app/learn/[chapter]/page.tsx": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "src/components/lesson/ArchitectureDiagram.tsx": {
-    "mtime": 1786954317.1305358,
-    "ast_hash": "75c13bc6d68f018e1a1ab51fea7bd5af",
+    "mtime": 1787477844.530612,
+    "ast_hash": "57ec0c4f3b039500c601c073a551ed19",
     "semantic_hash": ""
   },
   "src/components/lesson/BookmarkButton.tsx": {
@@ -255,13 +255,13 @@
     "semantic_hash": ""
   },
   "src/components/lesson/InterviewQuestion.tsx": {
-    "mtime": 1786954262.2881477,
-    "ast_hash": "db06ec8887f956b1d0f4769cbb9dbc01",
+    "mtime": 1787477856.7296994,
+    "ast_hash": "b1ecd2f94a836464d31b16707fc8be37",
     "semantic_hash": ""
   },
   "src/components/lesson/LabView.tsx": {
-    "mtime": 1786958908.374896,
-    "ast_hash": "8874cb0d9c165ac46c651ed42fcf41c7",
+    "mtime": 1787477852.7156706,
+    "ast_hash": "c30f876be1d321d42941c8cc46009bd9",
     "semantic_hash": ""
   },
   "src/components/lesson/LessonHeader.tsx": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "src/components/lesson/MultiFileCodeViewer.tsx": {
-    "mtime": 1786958984.2928674,
-    "ast_hash": "d476367b4d328c4a9633a0adad860363",
+    "mtime": 1787477849.3566465,
+    "ast_hash": "9ca135263484d56bddc0bc5ed664cd24",
     "semantic_hash": ""
   },
   "src/components/lesson/ProductionChecklist.tsx": {
@@ -325,38 +325,38 @@
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch01-lessons.ts": {
-    "mtime": 1787477121.9213834,
-    "ast_hash": "769c9e1db34a8aa2e593d95c8615bf0f",
+    "mtime": 1787477915.9198773,
+    "ast_hash": "e82fec58018b8d617b39d1533cd783fc",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch02-lessons.ts": {
-    "mtime": 1787477121.9244778,
-    "ast_hash": "7569fb3a194bacc654c1b737c1eb407f",
+    "mtime": 1787477915.9231288,
+    "ast_hash": "c014effa6aa35c060874bce9a2d2ee86",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch03-lessons.ts": {
-    "mtime": 1787477121.9286017,
-    "ast_hash": "a288f3c81908cf2f748056e67a670b51",
+    "mtime": 1787477915.929129,
+    "ast_hash": "d0a53c851b1397e3f2700809daf2c072",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch04-lessons.ts": {
-    "mtime": 1787477121.9320652,
-    "ast_hash": "40e75d04adbe7f1ea19dcd2a9c3f5df7",
+    "mtime": 1787477915.935938,
+    "ast_hash": "590022027be7e705552d11c566ed4c29",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch05-lessons.ts": {
-    "mtime": 1787477121.9356904,
-    "ast_hash": "837beafaf80d9382ca5cf64a9d250d13",
+    "mtime": 1787477915.9420018,
+    "ast_hash": "bd573a9534b4752e4970e64dbc9123c3",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch06-lessons.ts": {
-    "mtime": 1787477122.2921777,
-    "ast_hash": "1596cde1965ba8a5d648142d5fcdb9d7",
+    "mtime": 1787477915.946901,
+    "ast_hash": "d86df9d30d3dc3b7be963f61a0e2bdbd",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch07-lessons.ts": {
-    "mtime": 1787477122.297797,
-    "ast_hash": "824c633487485171182704883dc45668",
+    "mtime": 1787477915.951129,
+    "ast_hash": "c1f4cc38f66cf5bb13bc736a32ff6632",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch08-cache-stampede.ts": {
@@ -365,93 +365,93 @@
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch08-lessons.ts": {
-    "mtime": 1787477122.3071778,
-    "ast_hash": "b8378bcf81d93d08a7fd11b5b058478f",
+    "mtime": 1787477915.9551291,
+    "ast_hash": "7372138763ec0138b387b606436af26c",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch09-lessons.ts": {
-    "mtime": 1787477122.3118403,
-    "ast_hash": "5ef2385f970e977a09d4fa83ace1052d",
+    "mtime": 1787477915.9600616,
+    "ast_hash": "4c1da8a6fc94e79d5c4dd688df3bd059",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch10-lessons.ts": {
-    "mtime": 1787477122.315178,
-    "ast_hash": "2ffedb5562ec55b9b5a4842ef4b15d39",
+    "mtime": 1787477915.9647954,
+    "ast_hash": "6e9de1bf113c13147b77ef5141589644",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch11-lessons.ts": {
-    "mtime": 1787477122.330178,
-    "ast_hash": "8c61f127dabcbce0d5cf12597d3c1f3d",
+    "mtime": 1787477915.9681292,
+    "ast_hash": "9e2b4778ed2c928ca092bc1c2543927d",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch12-lessons.ts": {
-    "mtime": 1787477122.3351781,
-    "ast_hash": "195c594ac26c5554c21355e136df254c",
+    "mtime": 1787477915.9729838,
+    "ast_hash": "932e0ee18c5f741f1833f65e3bf28aae",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch13-lessons.ts": {
-    "mtime": 1787477122.339974,
-    "ast_hash": "1e918f7498731ea0614864190b52c43f",
+    "mtime": 1787477915.9769728,
+    "ast_hash": "03a9e4640fc81771e7bf99cd51db0362",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch14-lessons.ts": {
-    "mtime": 1787477122.3471782,
-    "ast_hash": "663de2069ce11ee702af2e03c6baebbc",
+    "mtime": 1787477915.9844935,
+    "ast_hash": "20a4b15a03a628ea47214dbf13c68c05",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch15-lessons.ts": {
-    "mtime": 1787477122.3561783,
-    "ast_hash": "823ea6e8b94912b00eef750dc6157f60",
+    "mtime": 1787477915.9911294,
+    "ast_hash": "bdb0c821e782e62c160afb45e4883147",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch16-lessons.ts": {
-    "mtime": 1787477122.3611784,
-    "ast_hash": "0058f91c032081c7cb20a2390f7654ad",
+    "mtime": 1787477916.0121295,
+    "ast_hash": "47eb2aedc4fde870e5cd9620d1b8e2f9",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch17-lessons.ts": {
-    "mtime": 1787477122.3669796,
-    "ast_hash": "cc5e17dc6543f99532f5f9c387a1497b",
+    "mtime": 1787477916.029072,
+    "ast_hash": "f441fa19d958848bfe70ea4e040b7673",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch18-lessons.ts": {
-    "mtime": 1787477122.3707895,
-    "ast_hash": "a792914411a99293a3fba8a3302ff52a",
+    "mtime": 1787477916.0359564,
+    "ast_hash": "b7dd2f0e14d090c98fdd4af3dcb4b2a1",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch19-lessons.ts": {
-    "mtime": 1787477122.374759,
-    "ast_hash": "1e52e272d51c6b742f7cf50e5b4ef3d4",
+    "mtime": 1787477916.0405214,
+    "ast_hash": "f9655efb4590b327a63d22a3647d35e7",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch20-lessons.ts": {
-    "mtime": 1787477122.3771784,
-    "ast_hash": "0e1f246327e9ab74196246eb908b51e0",
+    "mtime": 1787477916.05313,
+    "ast_hash": "6e3556b53f16012e540ecdbb669e093f",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch21-lessons.ts": {
-    "mtime": 1787477122.3811784,
-    "ast_hash": "d2e91eed7ff935488487fcb9d7d27457",
+    "mtime": 1787477916.1167393,
+    "ast_hash": "42a08e2a367a652223fdb2c6a01eee8a",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch22-lessons.ts": {
-    "mtime": 1787477122.387003,
-    "ast_hash": "54c939943726534caa1ac31019f4f3a8",
+    "mtime": 1787477916.121474,
+    "ast_hash": "c5750a381890faff7e537a60e945ba52",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch23-lessons.ts": {
-    "mtime": 1787477122.3901784,
-    "ast_hash": "fa9a42a87f39028ce0dfac7901ce60b7",
+    "mtime": 1787477916.125904,
+    "ast_hash": "3a3d3b49414a84cb82444aa2bb2e1bea",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch24-lessons.ts": {
-    "mtime": 1787477122.3941786,
-    "ast_hash": "81f1bba4acb2bbb24ea8aa57520776c9",
+    "mtime": 1787477916.1304543,
+    "ast_hash": "ac8ee20338a065bc1037429d909f46b5",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch25-lessons.ts": {
-    "mtime": 1787477122.3991785,
-    "ast_hash": "9d8bda2c61075fd18a17fb34f688c666",
+    "mtime": 1787477916.1351304,
+    "ast_hash": "3203beef71b938445902ce035659efd8",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/gen_ch01.py": {
@@ -3922,6 +3922,21 @@
   "scratch_gen_batch1.py": {
     "mtime": 1787477117.785141,
     "ast_hash": "da9fc68c48aa3dbc4fb72e43d20be474",
+    "semantic_hash": ""
+  },
+  "enrich_all_lessons_with_questions.py": {
+    "mtime": 1787477915.814128,
+    "ast_hash": "5116269e4c743f0dc5df2bc962e6741d",
+    "semantic_hash": ""
+  },
+  "enrich_interview_questions.py": {
+    "mtime": 1787477901.4960198,
+    "ast_hash": "31d1ea1d790347d3af9f45f4cb32a024",
+    "semantic_hash": ""
+  },
+  "src/components/lesson/MarkdownContent.tsx": {
+    "mtime": 1787477837.137559,
+    "ast_hash": "44d2d08f78832447ac3d6471862cbfec",
     "semantic_hash": ""
   }
 }

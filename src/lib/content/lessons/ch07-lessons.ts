@@ -24,15 +24,15 @@ export const ch07Lessons: Record<string, Lesson> = {
         id: "redis-architecture-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Architecture & Internals",
-        content: `In modern distributed systems, **Redis Architecture & Internals** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Architecture & Internals** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Architecture & Internals, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Architecture & Internals, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-architecture-implementation",
@@ -41,7 +41,7 @@ Without a rigorous design for Redis Architecture & Internals, backend services s
         content: "The following implementation demonstrates the correct production pattern for Redis Architecture & Internals in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-architecture",
-          title: "Production Redis Architecture & Internals Implementation",
+          title: "Production Redis Architecture & Internals Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -52,18 +52,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_architecture")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Architecture & Internals."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Architecture & Internals with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -104,7 +103,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-architecture",
-        title: "Challenge: Stress Testing & Hardening Redis Architecture & Internals",
+        title: "Challenge: Hardening Redis Architecture & Internals",
         description: "Extend the service implementation for Redis Architecture & Internals to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -124,9 +123,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-architecture-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Architecture & Internals?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-architecture-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-architecture-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis Architecture & Internals under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis Architecture & Internals**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-architecture-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis Architecture & Internals across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-architecture-5",
+        question: "What security considerations and threat vectors apply to Redis Architecture & Internals in a public API?",
+        answer: "Security considerations for **Redis Architecture & Internals**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -203,15 +226,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-data-structures-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Data Structures In-Depth",
-        content: `In modern distributed systems, **Redis Data Structures In-Depth** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Data Structures In-Depth** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Data Structures In-Depth, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Data Structures In-Depth, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-data-structures-implementation",
@@ -220,7 +243,7 @@ Without a rigorous design for Redis Data Structures In-Depth, backend services s
         content: "The following implementation demonstrates the correct production pattern for Redis Data Structures In-Depth in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-data-structures",
-          title: "Production Redis Data Structures In-Depth Implementation",
+          title: "Production Redis Data Structures In-Depth Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -231,18 +254,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_data_structures")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Data Structures In-Depth."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Data Structures In-Depth with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -283,7 +305,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-data-structures",
-        title: "Challenge: Stress Testing & Hardening Redis Data Structures In-Depth",
+        title: "Challenge: Hardening Redis Data Structures In-Depth",
         description: "Extend the service implementation for Redis Data Structures In-Depth to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -303,9 +325,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-data-structures-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Data Structures In-Depth?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-data-structures-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-data-structures-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis Data Structures In-Depth under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis Data Structures In-Depth**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-data-structures-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis Data Structures In-Depth across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-data-structures-5",
+        question: "What security considerations and threat vectors apply to Redis Data Structures In-Depth in a public API?",
+        answer: "Security considerations for **Redis Data Structures In-Depth**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -382,15 +428,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-transactions-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Transactions: MULTI/EXEC/WATCH",
-        content: `In modern distributed systems, **Redis Transactions: MULTI/EXEC/WATCH** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Transactions: MULTI/EXEC/WATCH** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Transactions: MULTI/EXEC/WATCH, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Transactions: MULTI/EXEC/WATCH, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-transactions-implementation",
@@ -399,7 +445,7 @@ Without a rigorous design for Redis Transactions: MULTI/EXEC/WATCH, backend serv
         content: "The following implementation demonstrates the correct production pattern for Redis Transactions: MULTI/EXEC/WATCH in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-transactions",
-          title: "Production Redis Transactions: MULTI/EXEC/WATCH Implementation",
+          title: "Production Redis Transactions: MULTI/EXEC/WATCH Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -410,18 +456,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_transactions")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Transactions: MULTI/EXEC/WATCH."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Transactions: MULTI/EXEC/WATCH with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -462,7 +507,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-transactions",
-        title: "Challenge: Stress Testing & Hardening Redis Transactions: MULTI/EXEC/WATCH",
+        title: "Challenge: Hardening Redis Transactions: MULTI/EXEC/WATCH",
         description: "Extend the service implementation for Redis Transactions: MULTI/EXEC/WATCH to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -482,9 +527,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-transactions-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Transactions: MULTI/EXEC/WATCH?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-transactions-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-transactions-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis Transactions: MULTI/EXEC/WATCH under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis Transactions: MULTI/EXEC/WATCH**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-transactions-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis Transactions: MULTI/EXEC/WATCH across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-transactions-5",
+        question: "What security considerations and threat vectors apply to Redis Transactions: MULTI/EXEC/WATCH in a public API?",
+        answer: "Security considerations for **Redis Transactions: MULTI/EXEC/WATCH**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -561,15 +630,15 @@ response = await client.get(url, timeout=5.0)`
         id: "lua-scripting-core",
         type: "concept",
         title: "Architectural Mental Model: Lua Scripts for Atomic Operations",
-        content: `In modern distributed systems, **Lua Scripts for Atomic Operations** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Lua Scripts for Atomic Operations** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Lua Scripts for Atomic Operations, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Lua Scripts for Atomic Operations, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "lua-scripting-implementation",
@@ -578,7 +647,7 @@ Without a rigorous design for Lua Scripts for Atomic Operations, backend service
         content: "The following implementation demonstrates the correct production pattern for Lua Scripts for Atomic Operations in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-lua-scripting",
-          title: "Production Lua Scripts for Atomic Operations Implementation",
+          title: "Production Lua Scripts for Atomic Operations Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -589,18 +658,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.lua_scripting")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Lua Scripts for Atomic Operations."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Lua Scripts for Atomic Operations with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -641,7 +709,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-lua-scripting",
-        title: "Challenge: Stress Testing & Hardening Lua Scripts for Atomic Operations",
+        title: "Challenge: Hardening Lua Scripts for Atomic Operations",
         description: "Extend the service implementation for Lua Scripts for Atomic Operations to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -661,9 +729,21 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-lua-scripting-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Lua Scripts for Atomic Operations?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "How do you profile, identify, and resolve bottlenecks in Lua Scripts for Atomic Operations under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Lua Scripts for Atomic Operations**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-lua-scripting-2",
+        question: "What failure modes and edge cases must be handled when deploying Lua Scripts for Atomic Operations across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-lua-scripting-3",
+        question: "What security considerations and threat vectors apply to Lua Scripts for Atomic Operations in a public API?",
+        answer: "Security considerations for **Lua Scripts for Atomic Operations**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -740,15 +820,15 @@ response = await client.get(url, timeout=5.0)`
         id: "distributed-locks-core",
         type: "concept",
         title: "Architectural Mental Model: Distributed Locks with Redis",
-        content: `In modern distributed systems, **Distributed Locks with Redis** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Distributed Locks with Redis** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Distributed Locks with Redis, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Distributed Locks with Redis, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "distributed-locks-implementation",
@@ -757,7 +837,7 @@ Without a rigorous design for Distributed Locks with Redis, backend services suf
         content: "The following implementation demonstrates the correct production pattern for Distributed Locks with Redis in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-distributed-locks",
-          title: "Production Distributed Locks with Redis Implementation",
+          title: "Production Distributed Locks with Redis Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -768,18 +848,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.distributed_locks")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Distributed Locks with Redis."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Distributed Locks with Redis with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -820,7 +899,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-distributed-locks",
-        title: "Challenge: Stress Testing & Hardening Distributed Locks with Redis",
+        title: "Challenge: Hardening Distributed Locks with Redis",
         description: "Extend the service implementation for Distributed Locks with Redis to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -840,9 +919,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-distributed-locks-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Distributed Locks with Redis?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-locks-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-locks-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Distributed Locks with Redis under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Distributed Locks with Redis**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-locks-4",
+        question: "What failure modes and edge cases must be handled when deploying Distributed Locks with Redis across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-distributed-locks-5",
+        question: "What security considerations and threat vectors apply to Distributed Locks with Redis in a public API?",
+        answer: "Security considerations for **Distributed Locks with Redis**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -919,15 +1022,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-streams-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Streams for Event Processing",
-        content: `In modern distributed systems, **Redis Streams for Event Processing** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Streams for Event Processing** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Streams for Event Processing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Streams for Event Processing, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-streams-implementation",
@@ -936,7 +1039,7 @@ Without a rigorous design for Redis Streams for Event Processing, backend servic
         content: "The following implementation demonstrates the correct production pattern for Redis Streams for Event Processing in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-streams",
-          title: "Production Redis Streams for Event Processing Implementation",
+          title: "Production Redis Streams for Event Processing Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -947,18 +1050,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_streams")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Streams for Event Processing."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Streams for Event Processing with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -999,7 +1101,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-streams",
-        title: "Challenge: Stress Testing & Hardening Redis Streams for Event Processing",
+        title: "Challenge: Hardening Redis Streams for Event Processing",
         description: "Extend the service implementation for Redis Streams for Event Processing to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1019,9 +1121,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-streams-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Streams for Event Processing?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-streams-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-streams-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis Streams for Event Processing under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis Streams for Event Processing**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-streams-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis Streams for Event Processing across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-streams-5",
+        question: "What security considerations and threat vectors apply to Redis Streams for Event Processing in a public API?",
+        answer: "Security considerations for **Redis Streams for Event Processing**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1098,15 +1224,15 @@ response = await client.get(url, timeout=5.0)`
         id: "pub-sub-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Pub/Sub for Real-Time Messaging",
-        content: `In modern distributed systems, **Redis Pub/Sub for Real-Time Messaging** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Pub/Sub for Real-Time Messaging** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Pub/Sub for Real-Time Messaging, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Pub/Sub for Real-Time Messaging, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "pub-sub-implementation",
@@ -1115,7 +1241,7 @@ Without a rigorous design for Redis Pub/Sub for Real-Time Messaging, backend ser
         content: "The following implementation demonstrates the correct production pattern for Redis Pub/Sub for Real-Time Messaging in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-pub-sub",
-          title: "Production Redis Pub/Sub for Real-Time Messaging Implementation",
+          title: "Production Redis Pub/Sub for Real-Time Messaging Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1126,18 +1252,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.pub_sub")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Pub/Sub for Real-Time Messaging."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Pub/Sub for Real-Time Messaging with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1178,7 +1303,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-pub-sub",
-        title: "Challenge: Stress Testing & Hardening Redis Pub/Sub for Real-Time Messaging",
+        title: "Challenge: Hardening Redis Pub/Sub for Real-Time Messaging",
         description: "Extend the service implementation for Redis Pub/Sub for Real-Time Messaging to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1198,9 +1323,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-pub-sub-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Pub/Sub for Real-Time Messaging?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-pub-sub-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-pub-sub-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis Pub/Sub for Real-Time Messaging under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis Pub/Sub for Real-Time Messaging**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-pub-sub-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis Pub/Sub for Real-Time Messaging across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-pub-sub-5",
+        question: "What security considerations and threat vectors apply to Redis Pub/Sub for Real-Time Messaging in a public API?",
+        answer: "Security considerations for **Redis Pub/Sub for Real-Time Messaging**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1277,15 +1426,15 @@ response = await client.get(url, timeout=5.0)`
         id: "cache-invalidation-core",
         type: "concept",
         title: "Architectural Mental Model: Cache Invalidation Strategies",
-        content: `In modern distributed systems, **Cache Invalidation Strategies** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Cache Invalidation Strategies** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Cache Invalidation Strategies, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Cache Invalidation Strategies, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "cache-invalidation-implementation",
@@ -1294,7 +1443,7 @@ Without a rigorous design for Cache Invalidation Strategies, backend services su
         content: "The following implementation demonstrates the correct production pattern for Cache Invalidation Strategies in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-cache-invalidation",
-          title: "Production Cache Invalidation Strategies Implementation",
+          title: "Production Cache Invalidation Strategies Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1305,18 +1454,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.cache_invalidation")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Cache Invalidation Strategies."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Cache Invalidation Strategies with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1357,7 +1505,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-cache-invalidation",
-        title: "Challenge: Stress Testing & Hardening Cache Invalidation Strategies",
+        title: "Challenge: Hardening Cache Invalidation Strategies",
         description: "Extend the service implementation for Cache Invalidation Strategies to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1377,9 +1525,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-cache-invalidation-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Cache Invalidation Strategies?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-cache-invalidation-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-invalidation-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Cache Invalidation Strategies under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Cache Invalidation Strategies**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-invalidation-4",
+        question: "What failure modes and edge cases must be handled when deploying Cache Invalidation Strategies across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-cache-invalidation-5",
+        question: "What security considerations and threat vectors apply to Cache Invalidation Strategies in a public API?",
+        answer: "Security considerations for **Cache Invalidation Strategies**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1456,15 +1628,15 @@ response = await client.get(url, timeout=5.0)`
         id: "memory-management-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Memory Management & Eviction",
-        content: `In modern distributed systems, **Redis Memory Management & Eviction** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Memory Management & Eviction** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Memory Management & Eviction, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Memory Management & Eviction, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "memory-management-implementation",
@@ -1473,7 +1645,7 @@ Without a rigorous design for Redis Memory Management & Eviction, backend servic
         content: "The following implementation demonstrates the correct production pattern for Redis Memory Management & Eviction in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-memory-management",
-          title: "Production Redis Memory Management & Eviction Implementation",
+          title: "Production Redis Memory Management & Eviction Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1484,18 +1656,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.memory_management")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Memory Management & Eviction."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Memory Management & Eviction with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1536,7 +1707,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-memory-management",
-        title: "Challenge: Stress Testing & Hardening Redis Memory Management & Eviction",
+        title: "Challenge: Hardening Redis Memory Management & Eviction",
         description: "Extend the service implementation for Redis Memory Management & Eviction to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1556,9 +1727,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-memory-management-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Memory Management & Eviction?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-memory-management-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-memory-management-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis Memory Management & Eviction under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis Memory Management & Eviction**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-memory-management-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis Memory Management & Eviction across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-memory-management-5",
+        question: "What security considerations and threat vectors apply to Redis Memory Management & Eviction in a public API?",
+        answer: "Security considerations for **Redis Memory Management & Eviction**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1635,15 +1830,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-cluster-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Cluster & High Availability",
-        content: `In modern distributed systems, **Redis Cluster & High Availability** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Cluster & High Availability** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Cluster & High Availability, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Cluster & High Availability, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-cluster-implementation",
@@ -1652,7 +1847,7 @@ Without a rigorous design for Redis Cluster & High Availability, backend service
         content: "The following implementation demonstrates the correct production pattern for Redis Cluster & High Availability in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-cluster",
-          title: "Production Redis Cluster & High Availability Implementation",
+          title: "Production Redis Cluster & High Availability Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1663,18 +1858,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_cluster")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Cluster & High Availability."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Cluster & High Availability with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1715,7 +1909,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-cluster",
-        title: "Challenge: Stress Testing & Hardening Redis Cluster & High Availability",
+        title: "Challenge: Hardening Redis Cluster & High Availability",
         description: "Extend the service implementation for Redis Cluster & High Availability to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1735,9 +1929,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-cluster-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Cluster & High Availability?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-cluster-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-cluster-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis Cluster & High Availability under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis Cluster & High Availability**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-cluster-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis Cluster & High Availability across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-cluster-5",
+        question: "What security considerations and threat vectors apply to Redis Cluster & High Availability in a public API?",
+        answer: "Security considerations for **Redis Cluster & High Availability**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1814,15 +2032,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-async-python-core",
         type: "concept",
         title: "Architectural Mental Model: Redis with Async Python: redis-py & aioredis",
-        content: `In modern distributed systems, **Redis with Async Python: redis-py & aioredis** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis with Async Python: redis-py & aioredis** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis with Async Python: redis-py & aioredis, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis with Async Python: redis-py & aioredis, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-async-python-implementation",
@@ -1831,7 +2049,7 @@ Without a rigorous design for Redis with Async Python: redis-py & aioredis, back
         content: "The following implementation demonstrates the correct production pattern for Redis with Async Python: redis-py & aioredis in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-async-python",
-          title: "Production Redis with Async Python: redis-py & aioredis Implementation",
+          title: "Production Redis with Async Python: redis-py & aioredis Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -1842,18 +2060,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_async_python")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis with Async Python: redis-py & aioredis."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis with Async Python: redis-py & aioredis with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -1894,7 +2111,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-async-python",
-        title: "Challenge: Stress Testing & Hardening Redis with Async Python: redis-py & aioredis",
+        title: "Challenge: Hardening Redis with Async Python: redis-py & aioredis",
         description: "Extend the service implementation for Redis with Async Python: redis-py & aioredis to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -1914,9 +2131,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-async-python-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis with Async Python: redis-py & aioredis?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-async-python-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-async-python-3",
+        question: "How do you profile, identify, and resolve bottlenecks in Redis with Async Python: redis-py & aioredis under heavy production concurrency?",
+        answer: `To isolate bottlenecks in **Redis with Async Python: redis-py & aioredis**: 1) Monitor event loop lag using Prometheus histogram metrics; 2) Inspect database connection pool saturation (\`pool_size\` vs active checkouts); 3) Analyze slow query logs and execution plans using \`EXPLAIN (ANALYZE, BUFFERS)\`; 4) Profile Python CPU usage using \`yappi\` or \`py-spy\` to detect un-offloaded synchronous calls; 5) Implement distributed tracing with OpenTelemetry to isolate whether latency originates in application logic, serialization, or network I/O.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-async-python-4",
+        question: "What failure modes and edge cases must be handled when deploying Redis with Async Python: redis-py & aioredis across multiple container instances?",
+        answer: `In a multi-instance deployment: 1) Local in-memory state (e.g. \`asyncio.Lock\`, local dict caches) does not coordinate across containers — distributed state must use Redis or PostgreSQL; 2) Network timeouts and connection drops require idempotent retry policies with exponential backoff and full jitter; 3) Graceful shutdown (\`SIGTERM\`) must allow active requests to finish before releasing resources.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-async-python-5",
+        question: "What security considerations and threat vectors apply to Redis with Async Python: redis-py & aioredis in a public API?",
+        answer: "Security considerations for **Redis with Async Python: redis-py & aioredis**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -1993,15 +2234,15 @@ response = await client.get(url, timeout=5.0)`
         id: "redis-security-core",
         type: "concept",
         title: "Architectural Mental Model: Redis Security in Production",
-        content: `In modern distributed systems, **Redis Security in Production** is critical for high availability, security, and low latency.
+        content: `In modern distributed systems, **Redis Security in Production** is a cornerstone of high availability, security, and low latency.
 
 ### The Problem It Solves
-Without a rigorous design for Redis Security in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
+Without a rigorous architecture for Redis Security in Production, backend services suffer from resource contention, unhandled edge cases, cascading timeouts, and security vulnerabilities under high concurrency.
 
 ### How It Works Internally
-1. **Request Interception**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
+1. **Request Interception & Routing**: Traffic or events are validated and routed through non-blocking asynchronous pipelines.
 2. **State Management**: Distributed state is coordinated using atomic operations, eliminating race conditions.
-3. **Fault Tolerance**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
+3. **Fault Tolerance & Resilience**: Circuit breakers and exponential retries protect upstream and downstream dependencies.`
       },
       {
         id: "redis-security-implementation",
@@ -2010,7 +2251,7 @@ Without a rigorous design for Redis Security in Production, backend services suf
         content: "The following implementation demonstrates the correct production pattern for Redis Security in Production in a high-throughput FastAPI application.",
         codeExample: {
           id: "code-redis-security",
-          title: "Production Redis Security in Production Implementation",
+          title: "Production Redis Security in Production Architecture",
           files: {
             'app/service.py': {
               language: "python",
@@ -2021,18 +2262,17 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("service.redis_security")
 
-class Config(BaseModel):
+class ServiceConfig(BaseModel):
     max_retries: int = 3
     timeout_seconds: float = 5.0
 
 class ComponentService:
     """Production implementation for Redis Security in Production."""
-    def __init__(self, config: Optional[Config] = None):
-        self.config = config or Config()
+    def __init__(self, config: Optional[ServiceConfig] = None):
+        self.config = config or ServiceConfig()
 
     async def execute(self, payload: dict) -> dict:
         logger.info("Executing Redis Security in Production with payload: %s", payload)
-        # Non-blocking async execution
         await asyncio.sleep(0.01)
         return {"status": "completed", "result": payload}`
             },
@@ -2073,7 +2313,7 @@ async def test_process():
     challenges: [
       {
         id: "chal-redis-security",
-        title: "Challenge: Stress Testing & Hardening Redis Security in Production",
+        title: "Challenge: Hardening Redis Security in Production",
         description: "Extend the service implementation for Redis Security in Production to handle concurrent failures, timeouts, and atomic state recovery.",
         hint: "Use asyncio.wait_for and proper exception isolation.",
         solution: "Wrap I/O operations inside asyncio.wait_for with explicit error recovery fallbacks.",
@@ -2093,9 +2333,33 @@ async def test_process():
     interviewQuestions: [
       {
         id: "iq-redis-security-1",
-        question: "In a high-throughput production environment, what are the primary failure modes associated with Redis Security in Production?",
-        answer: "The primary failure modes include thread/connection pool exhaustion, latency spikes during cache/dependency invalidation, unhandled retry storms during downstream partial outages, and memory leaks from unbounded data structures.",
+        question: "What is a Cache Stampede (Dog-piling), and how do you mitigate it in a multi-container FastAPI cluster?",
+        answer: `A Cache Stampede occurs when a popular cache key expires, causing hundreds of concurrent requests to experience a cache miss and hit the database simultaneously. Mitigations: 1) Redis Distributed Lock with Double-Checked Locking (\`SET NX PX\`), ensuring only one worker queries the database while others wait; 2) Probabilistic Early Expiration (XFetch algorithm), where requests refresh the cache probabilistically before TTL expiration; 3) Background cache warming tasks.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-redis-security-2",
+        question: "When should you use Redis Lua scripts instead of MULTI/EXEC transactions?",
+        answer: "MULTI/EXEC transactions in Redis queue commands without allowing conditional branching based on intermediate values (you cannot read a value inside MULTI and use it in the next command of the same block). Lua scripts execute atomically in Redis single-threaded execution context, allowing complex conditional logic (e.g. token bucket rate limiting, check-and-decrement inventory) in a single round-trip without race conditions.",
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-security-3",
+        question: "How do you prevent Server-Side Request Forgery (SSRF) when your FastAPI application fetches user-provided URLs?",
+        answer: `1) Parse the URL and resolve its DNS to an IP address; 2) Validate that the IP is not in private/reserved ranges (\`127.0.0.0/8\`, \`10.0.0.0/8\`, \`172.16.0.0/12\`, \`192.168.0.0/16\`, \`169.254.169.254\` AWS metadata); 3) Disable HTTP redirects or re-validate IP on every redirect hop; 4) Restrict allowed schemes to \`http\` and \`https\`; 5) Enforce socket connection timeouts.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-redis-security-4",
+        question: "Why is Argon2id preferred over bcrypt and PBKDF2 for password hashing in production?",
+        answer: "Argon2id (the winner of the Password Hashing Competition) provides hybrid defense against both side-channel attacks and GPU/ASIC hardware-assisted cracking by incorporating both memory-hardness (requiring configurable megabytes of RAM) and time cost. PBKDF2 and bcrypt have fixed memory footprints, making them significantly easier to brute-force with dedicated FPGA/GPU clusters.",
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-redis-security-5",
+        question: "What security considerations and threat vectors apply to Redis Security in Production in a public API?",
+        answer: "Security considerations for **Redis Security in Production**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [

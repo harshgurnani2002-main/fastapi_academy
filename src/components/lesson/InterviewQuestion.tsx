@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import DifficultyBadge from './DifficultyBadge';
+import MarkdownContent from './MarkdownContent';
 
 interface InterviewQuestionProps {
   question: string;
@@ -25,7 +26,7 @@ export default function InterviewQuestion({
             <span className="bg-violet-100 text-violet-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">
               Interview Question
             </span>
-            <DifficultyBadge difficulty={difficulty} />
+            <DifficultyBadge difficulty={difficulty as any} />
           </div>
           <h3 className="text-lg font-bold text-slate-800 leading-snug">
             {question}
@@ -56,10 +57,10 @@ export default function InterviewQuestion({
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="overflow-hidden"
           >
-            <div className="p-6 bg-violet-50/50">
-              <h4 className="text-sm font-bold text-violet-800 mb-3 uppercase tracking-wider">Answer</h4>
-              <div className="prose prose-slate max-w-none text-slate-700">
-                <p className="leading-relaxed">{answer}</p>
+            <div className="p-6 bg-violet-50/40">
+              <h4 className="text-xs font-bold text-violet-900 mb-3 uppercase tracking-wider">Staff / Senior Answer</h4>
+              <div className="prose-slate max-w-none text-slate-800">
+                <MarkdownContent content={answer} />
               </div>
             </div>
           </motion.div>

@@ -367,16 +367,34 @@ Header names MUST be lowercase ASCII bytes.`
     ],
     interviewQuestions: [
       {
-        id: "iq-01-01-1",
-        question: "Your FastAPI service has 4 Uvicorn workers and runs on an 8-core CPU. A junior engineer adds a synchronous time.sleep(5) inside an async def endpoint. What happens to throughput under 100 concurrent requests?",
-        answer: "Because the endpoint is declared with async def, FastAPI executes it directly on the main event loop of whichever Uvicorn worker received the request. The synchronous time.sleep(5) blocks that worker's entire event loop thread for 5 seconds, freezing all concurrent requests assigned to that worker. With 4 workers, if 4 concurrent requests hit this endpoint, the entire server becomes completely unresponsive until the sleeps finish. If the function had been declared as def (synchronous), FastAPI would have offloaded it to Starlette's anyio worker thread pool (default 40 threads), allowing the event loop to continue serving traffic.",
+        id: "iq-asgi-deep-dive-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-asgi-deep-dive-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
         difficulty: "expert"
       },
       {
-        id: "iq-01-01-2",
-        question: "What is the purpose of the lifespan protocol in ASGI, and how does it prevent resource leaks in production?",
-        answer: "The ASGI lifespan protocol (scope['type'] == 'lifespan') coordinates application startup and graceful shutdown before Uvicorn starts or stops accepting socket connections. On startup ('lifespan.startup'), the app initializes connection pools (PostgreSQL asyncpg, Redis) and background consumers. On shutdown ('lifespan.shutdown'), Uvicorn stops accepting new TCP connections, waits for inflight requests to complete (up to timeout_graceful_shutdown), and then signals the app to close pools, flush logs, and release distributed locks. This guarantees zero connection drops or corrupted transactions during deployments.",
+        id: "iq-asgi-deep-dive-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-asgi-deep-dive-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-asgi-deep-dive-5",
+        question: "What security considerations and threat vectors apply to ASGI Deep Dive: Understanding the Protocol in a public API?",
+        answer: "Security considerations for **ASGI Deep Dive: Understanding the Protocol**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [
@@ -677,9 +695,33 @@ async def stream_video(video_id: str):
     ],
     interviewQuestions: [
       {
-        id: "iq-01-02-1",
-        question: "When would you intentionally drop down to pure Starlette endpoints instead of using FastAPI standard route handlers?",
-        answer: "You drop down to pure Starlette when: 1) Serving extreme high-frequency, low-latency webhook endpoints (e.g. 50,000 RPS ingest) where Pydantic serialization overhead (even a few milliseconds) is unacceptable; 2) Handling complex raw binary protocol streaming or custom WebSockets where FastAPI parameter injection adds unnecessary layers; 3) Writing raw ASGI middleware or custom ASGI lifespans that execute before the FastAPI routing table is matched.",
+        id: "iq-how-fastapi-wraps-starlette-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-how-fastapi-wraps-starlette-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-how-fastapi-wraps-starlette-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-how-fastapi-wraps-starlette-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-how-fastapi-wraps-starlette-5",
+        question: "What security considerations and threat vectors apply to How FastAPI Wraps Starlette in a public API?",
+        answer: "Security considerations for **How FastAPI Wraps Starlette**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
         difficulty: "advanced"
       }
     ],
@@ -901,9 +943,33 @@ class TransactionSchema(BaseModel):
     ],
     interviewQuestions: [
       {
-        id: "iq-01-03-1",
-        question: "What is the difference between mode='before', mode='after', and mode='wrap' in Pydantic v2 field_validators?",
-        answer: "mode='before' runs before Pydantic core validation on raw input (e.g. normalizing whitespace or casting types). mode='after' runs after Pydantic core has validated and coerced the field into the target Python type. mode='wrap' wraps the entire validation process, allowing you to intercept validation errors, modify inputs, or delegate to the default validator via handler(v).",
+        id: "iq-pydantic-v2-internals-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-pydantic-v2-internals-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-pydantic-v2-internals-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-pydantic-v2-internals-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-pydantic-v2-internals-5",
+        question: "What security considerations and threat vectors apply to Pydantic v2 Internals & Validation Engine in a public API?",
+        answer: "Security considerations for **Pydantic v2 Internals & Validation Engine**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
         difficulty: "advanced"
       }
     ],
@@ -1090,10 +1156,34 @@ async def run_with_savepoint(session: AsyncSession, operation, *args, **kwargs):
     ],
     interviewQuestions: [
       {
-        id: "iq-01-04-1",
-        question: "What happens if an exception is raised inside a route handler when using a yield dependency that commits the database session?",
-        answer: "FastAPI guarantees that the execution flow jumps immediately to the 'except' and 'finally' blocks following the 'yield' in the dependency. If structured as 'try: yield session; await session.commit() except Exception: await session.rollback()', the exception triggers a clean rollback before the exception handler renders the HTTP error response to the client.",
+        id: "iq-dependency-injection-architecture-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-dependency-injection-architecture-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
         difficulty: "expert"
+      },
+      {
+        id: "iq-dependency-injection-architecture-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-dependency-injection-architecture-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-dependency-injection-architecture-5",
+        question: "What security considerations and threat vectors apply to Dependency Injection Architecture in a public API?",
+        answer: "Security considerations for **Dependency Injection Architecture**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
       }
     ],
     productionNotes: [],
@@ -1173,7 +1263,38 @@ async def health(request: Request):
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-application-lifecycle-lifespan-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-application-lifecycle-lifespan-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-application-lifecycle-lifespan-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-application-lifecycle-lifespan-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-application-lifecycle-lifespan-5",
+        question: "What security considerations and threat vectors apply to Application Lifecycle & Lifespan Events in a public API?",
+        answer: "Security considerations for **Application Lifecycle & Lifespan Events**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
@@ -1246,7 +1367,38 @@ When a response leaves:
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-building-middleware-chains-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-building-middleware-chains-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-building-middleware-chains-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-building-middleware-chains-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-building-middleware-chains-5",
+        question: "What security considerations and threat vectors apply to Building Middleware Chains in a public API?",
+        answer: "Security considerations for **Building Middleware Chains**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
@@ -1292,7 +1444,38 @@ src/
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-router-architecture-modular-design-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-router-architecture-modular-design-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-router-architecture-modular-design-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-router-architecture-modular-design-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-router-architecture-modular-design-5",
+        question: "What security considerations and threat vectors apply to Router Architecture & Modular Design in a public API?",
+        answer: "Security considerations for **Router Architecture & Modular Design**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
@@ -1368,7 +1551,38 @@ async def pay_order(order_id: str, amount_cents: int):
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-service-layer-pattern-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-service-layer-pattern-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-service-layer-pattern-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-service-layer-pattern-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-service-layer-pattern-5",
+        question: "What security considerations and threat vectors apply to Service Layer Pattern in a public API?",
+        answer: "Security considerations for **Service Layer Pattern**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
@@ -1404,7 +1618,38 @@ This decouples your business domain from SQLAlchemy or PostgreSQL specifics, mak
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-repository-pattern-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-repository-pattern-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-repository-pattern-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-repository-pattern-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-repository-pattern-5",
+        question: "What security considerations and threat vectors apply to Repository Pattern Implementation in a public API?",
+        answer: "Security considerations for **Repository Pattern Implementation**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
@@ -1443,7 +1688,38 @@ This decouples your business domain from SQLAlchemy or PostgreSQL specifics, mak
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-clean-architecture-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-clean-architecture-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-clean-architecture-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-clean-architecture-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-clean-architecture-5",
+        question: "What security considerations and threat vectors apply to Clean Architecture in FastAPI in a public API?",
+        answer: "Security considerations for **Clean Architecture in FastAPI**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
@@ -1481,7 +1757,38 @@ You can replace SendGrid with AWS SES or PostgreSQL with SQLite in tests by simp
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-hexagonal-architecture-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-hexagonal-architecture-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-hexagonal-architecture-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-hexagonal-architecture-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-hexagonal-architecture-5",
+        question: "What security considerations and threat vectors apply to Hexagonal Architecture & Ports/Adapters in a public API?",
+        answer: "Security considerations for **Hexagonal Architecture & Ports/Adapters**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
@@ -1548,7 +1855,38 @@ def get_settings() -> Settings:
     ],
     codeExamples: [],
     challenges: [],
-    interviewQuestions: [],
+    interviewQuestions: [
+      {
+        id: "iq-configuration-management-1",
+        question: "What is the difference between ASGI and WSGI concurrency models, and why does ASGI enable true async I/O?",
+        answer: `WSGI (PEP 3333) uses a synchronous, blocking request-response contract where each connection occupies a dedicated OS worker thread or process. When waiting on database I/O, the entire thread is blocked in kernel space. ASGI (Asynchronous Server Gateway Interface) is an event-driven protocol with a 3-argument callable \`async def app(scope, receive, send)\`. It multiplexes thousands of active connections across a single Python \`asyncio\` event loop by yielding control during I/O operations (\`await\`), enabling non-blocking concurrency, streaming, and WebSockets.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-configuration-management-2",
+        question: "If an endpoint is declared as 'async def' but contains a synchronous I/O call like 'time.sleep()' or 'requests.get()', what happens in production?",
+        answer: `Because it is declared with \`async def\`, FastAPI executes it directly on the worker's main event loop thread without offloading. The blocking call freezes the entire event loop for that duration, preventing any other concurrent coroutines on that worker process from executing. If 4 concurrent requests hit a 5-second blocking call across 4 Uvicorn workers, all 4 workers become completely unresponsive. To prevent this, either use async non-blocking drivers (\`httpx\`, \`asyncio.sleep\`) or declare the endpoint with regular synchronous \`def\`, which instructs FastAPI to run it in Starlette's \`anyio\` worker thread pool.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-configuration-management-3",
+        question: "How does FastAPI resolve dependency injection graphs with 'Depends(..., use_cache=True)' during a request lifecycle?",
+        answer: `FastAPI constructs a Directed Acyclic Graph (DAG) of all declared dependencies. It traverses the DAG in topological order, resolving root dependencies first. With \`use_cache=True\` (the default), if multiple sub-dependencies or routes require the same dependency (e.g. \`get_db()\`), FastAPI resolves it exactly once per HTTP request and caches the result for the entire request lifecycle. Dependencies using \`yield\` execute their setup phase before the route handler and their cleanup/teardown phase in reverse topological order after the response is sent.`,
+        difficulty: "expert"
+      },
+      {
+        id: "iq-configuration-management-4",
+        question: "What is the performance advantage of Pydantic v2's Rust-backed 'pydantic-core' over Pydantic v1?",
+        answer: `Pydantic v2 compiles Python class definitions into an internal validation schema tree at startup, which is executed directly in compiled C/Rust memory by \`pydantic-core\`. It validates and parses raw JSON bytes directly in Rust without creating intermediate Python strings or dictionary objects. This eliminates Python interpreter bytecode overhead and object allocation churn, delivering a 5x to 20x throughput improvement.`,
+        difficulty: "advanced"
+      },
+      {
+        id: "iq-configuration-management-5",
+        question: "What security considerations and threat vectors apply to Configuration Management with Pydantic Settings in a public API?",
+        answer: "Security considerations for **Configuration Management with Pydantic Settings**: 1) Input validation must enforce strict schema constraints and extra='forbid' to prevent parameter injection; 2) Authentication and authorization boundaries must be verified at the router/dependency level before business execution; 3) Rate limiting and request size limits must be enforced at the gateway and application level to mitigate Denial of Service (DoS) attacks.",
+        difficulty: "advanced"
+      }
+    ],
     productionNotes: [],
     realWorldScenarios: [],
     commonMistakes: [],
