@@ -58,7 +58,7 @@ export default function HeroSection({ stats }: HeroSectionProps) {
                 <div className="text-sm text-slate-500 font-medium">Lessons</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-slate-900">{stats?.totalProjects || 12}</div>
+                <div className="text-3xl font-bold text-slate-900">{stats?.totalProjects || 25}</div>
                 <div className="text-sm text-slate-500 font-medium">Projects</div>
               </div>
               <div>

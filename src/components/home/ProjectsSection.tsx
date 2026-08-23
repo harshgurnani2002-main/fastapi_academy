@@ -61,7 +61,7 @@ export default function ProjectsSection() {
             What You Will Build
           </h2>
           <p className="text-lg text-slate-600">
-            A curriculum rooted in applied engineering. You will complete 12 rigorous projects, designing architectures that handle real-world scale and complexity.
+            A curriculum rooted in applied engineering. You will complete 25 rigorous projects, designing architectures that handle real-world scale and complexity.
           </p>
         </div>
 
@@ -119,7 +119,7 @@ export default function ProjectsSection() {
         
         <div className="mt-12 text-center">
           <Link href="/projects" className="inline-flex justify-center items-center px-6 py-3 text-base font-semibold rounded-lg text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition-colors shadow-sm hover:shadow-md">
-            View All 12 Projects
+            View All 25 Projects
           </Link>
         </div>
       </div>

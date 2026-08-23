@@ -1,0 +1,2 @@
+"""Production E-Commerce Microservices."""
+__version__ = "23.0.0"

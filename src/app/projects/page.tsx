@@ -3,7 +3,7 @@ import { Project } from '@/components/projects/ProjectCard';
 
 export const metadata = {
   title: 'Projects | FastAPI Mastery',
-  description: '12 production-grade backend engineering projects.',
+  description: '25 production-grade backend engineering projects.',
 };
 
 import { curriculum } from '@/lib/content/curriculum';
@@ -37,7 +37,7 @@ export default function ProjectsPage() {
         <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 font-semibold text-sm mb-6 border border-orange-200">
             <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-            12 Production Projects
+            25 Production Projects
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-6 tracking-tight">
             Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600">Real Systems</span>

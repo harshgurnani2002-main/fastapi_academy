@@ -1,0 +1,80 @@
+from typing import Any, Optional
+from fastapi import Request, status
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class AppException(Exception):
+    def __init__(
+        self,
+        message: str,
+        status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR,
+        code: str = "INTERNAL_ERROR",
+        details: Optional[Any] = None,
+    ):
+        super().__init__(message)
+        self.message = message
+        self.status_code = status_code
+        self.code = code
+        self.details = details
+
+
+class LockAcquisitionException(AppException):
+    def __init__(self, message: str = "Resource is currently locked by another worker."):
+        super().__init__(message, status.HTTP_409_CONFLICT, "LOCK_CONFLICT")
+
+
+class RateLimitExceededException(AppException):
+    def __init__(self, retry_after_ms: int = 1000):
+        super().__init__(
+            message="Rate limit exceeded. Please wait before retrying.",
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            code="RATE_LIMIT_EXCEEDED",
+            details={"retry_after_ms": retry_after_ms}
+        )
+
+
+class NotFoundException(AppException):
+    def __init__(self, resource: str, key: str):
+        super().__init__(
+            message=f"{resource} key '{key}' not found or expired.",
+            status_code=status.HTTP_404_NOT_FOUND,
+            code=f"{resource.upper()}_NOT_FOUND"
+        )
+
+
+async def app_exception_handler(request: Request, exc: AppException) -> JSONResponse:
+    cid = getattr(request.state, "correlation_id", "unknown")
+    logger.warning(f"AppException: [{exc.code}] {exc.message} [CID: {cid}]")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "success": False,
+            "error": {
+                "code": exc.code,
+                "message": exc.message,
+                "details": exc.details,
+                "correlation_id": cid
+            }
+        }
+    )
+
+
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+    cid = getattr(request.state, "correlation_id", "unknown")
+    errors = [{"location": " -> ".join(str(l) for l in err.get("loc", [])), "message": err.get("msg")} for err in exc.errors()]
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "success": False,
+            "error": {
+                "code": "VALIDATION_ERROR",
+                "message": "Input validation error",
+                "details": errors,
+                "correlation_id": cid
+            }
+        }
+    )

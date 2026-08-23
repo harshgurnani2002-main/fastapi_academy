@@ -38,7 +38,7 @@ const reasons = [
   },
   {
     title: 'Real-World Projects',
-    description: 'Build 12 production-grade projects from scratch, simulating real business requirements and technical challenges.',
+    description: 'Build 25 production-grade projects from scratch, simulating real business requirements and technical challenges.',
     icon: Briefcase,
   },
 ]
