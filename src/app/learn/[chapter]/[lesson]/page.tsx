@@ -17,6 +17,7 @@ import LabView from '@/components/lesson/LabView';
 import SystemDesignView from '@/components/lesson/SystemDesignView';
 import ProductionChecklist from '@/components/lesson/ProductionChecklist';
 import MultiFileCodeViewer from '@/components/lesson/MultiFileCodeViewer';
+import ArchitectureDiagram from '@/components/lesson/ArchitectureDiagram';
 
 export async function generateMetadata({
   params,
@@ -108,19 +109,30 @@ export default async function LessonPage({
               <h2 className="text-2xl font-bold text-slate-900 mb-4">
                 {section.title}
               </h2>
+              {section.diagram && (
+                <ArchitectureDiagram
+                  title={section.diagram.title}
+                  diagram={section.diagram.diagram}
+                  caption={section.diagram.caption}
+                />
+              )}
               <div className="prose prose-slate max-w-none mb-4">
                 <p className="text-slate-700 leading-relaxed whitespace-pre-line">
                   {section.content}
                 </p>
               </div>
               {section.codeExample && (
-                <CodeBlock
-                  code={section.codeExample.code || ''}
-                  language={section.codeExample.language || 'text'}
-                  filename={section.codeExample.filename}
-                  title={section.codeExample.title}
-                  showLineNumbers
-                />
+                section.codeExample.files ? (
+                  <MultiFileCodeViewer example={section.codeExample} />
+                ) : (
+                  <CodeBlock
+                    code={section.codeExample.code || ''}
+                    language={section.codeExample.language || 'text'}
+                    filename={section.codeExample.filename}
+                    title={section.codeExample.title}
+                    showLineNumbers
+                  />
+                )
               )}
             </div>
           ))}
@@ -178,22 +190,21 @@ export default async function LessonPage({
             </section>
           )}
 
-          {/* Common Mistakes (Minimal Note) */}
+          {/* Common Mistakes */}
           {lesson.commonMistakes.length > 0 && (
             <section id="common-mistakes" className="mb-10">
-              <div className="bg-amber-50/50 border border-amber-200 rounded-lg p-5">
-                <h4 className="text-amber-800 font-bold mb-2 flex items-center text-sm">
-                  <span className="w-4 h-4 mr-2 inline-flex items-center justify-center bg-amber-200 text-amber-700 rounded-full text-xs font-bold">!</span>
-                  Common Pitfalls
-                </h4>
-                <ul className="list-disc pl-8 space-y-1 text-amber-900/80 text-sm">
-                  {lesson.commonMistakes.map((mistake) => (
-                    <li key={mistake.id}>
-                      <strong className="font-semibold text-amber-900">{mistake.title}:</strong> {mistake.description}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                Common Pitfalls & Failure Modes
+              </h2>
+              {lesson.commonMistakes.map((mistake) => (
+                <CommonMistake
+                  key={mistake.id}
+                  title={mistake.title}
+                  description={mistake.description}
+                  badCode={mistake.badCode}
+                  goodCode={mistake.goodCode}
+                />
+              ))}
             </section>
           )}
 

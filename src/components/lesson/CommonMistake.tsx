@@ -1,11 +1,6 @@
 import React from 'react';
 import CodeBlock from './CodeBlock';
-
-interface CodeExample {
-  code: string;
-  language?: string;
-  filename?: string;
-}
+import { CodeExample } from '@/lib/content/types';
 
 interface CommonMistakeProps {
   title: string;
@@ -41,7 +36,7 @@ export default function CommonMistake({
               <div className="border border-red-300 rounded-xl overflow-hidden relative">
                 <div className="absolute inset-0 bg-red-500/5 pointer-events-none z-10"></div>
                 <CodeBlock 
-                  code={badCode.code} 
+                  code={badCode.code || ''} 
                   language={badCode.language} 
                   filename={badCode.filename} 
                 />
@@ -58,7 +53,7 @@ export default function CommonMistake({
               <div className="border border-green-300 rounded-xl overflow-hidden relative">
                 <div className="absolute inset-0 bg-green-500/5 pointer-events-none z-10"></div>
                 <CodeBlock 
-                  code={goodCode.code} 
+                  code={goodCode.code || ''} 
                   language={goodCode.language} 
                   filename={goodCode.filename} 
                 />

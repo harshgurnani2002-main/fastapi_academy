@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/app/learn/[chapter]/[lesson]/page.tsx": {
-    "mtime": 1786959036.9645414,
-    "ast_hash": "c85c88cc0dc9d49c6d22df946f822e9d",
+    "mtime": 1787476924.557569,
+    "ast_hash": "c690639fe22f75c7c40324584f4f4ed9",
     "semantic_hash": ""
   },
   "src/app/learn/[chapter]/page.tsx": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "src/components/lesson/CommonMistake.tsx": {
-    "mtime": 1786954269.4581985,
-    "ast_hash": "5a9d81c74856e4c9ab1bc042704f83f1",
+    "mtime": 1787477170.3185685,
+    "ast_hash": "ea658d3349cb0597e2fb4a16d61257fd",
     "semantic_hash": ""
   },
   "src/components/lesson/DifficultyBadge.tsx": {
@@ -325,38 +325,38 @@
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch01-lessons.ts": {
-    "mtime": 1787342218.6268904,
-    "ast_hash": "cc06e1ed0cbdb3702c357c372509dec4",
+    "mtime": 1787477121.9213834,
+    "ast_hash": "769c9e1db34a8aa2e593d95c8615bf0f",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch02-lessons.ts": {
-    "mtime": 1787323108.8963225,
-    "ast_hash": "cba0dfdac3ed40e45e0e08d3106d8c0d",
+    "mtime": 1787477121.9244778,
+    "ast_hash": "7569fb3a194bacc654c1b737c1eb407f",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch03-lessons.ts": {
-    "mtime": 1787323186.548892,
-    "ast_hash": "b9b12067cc8471059e48202e33c2b13f",
+    "mtime": 1787477121.9286017,
+    "ast_hash": "a288f3c81908cf2f748056e67a670b51",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch04-lessons.ts": {
-    "mtime": 1787342412.5712092,
-    "ast_hash": "c79b652a37ccb6430a6dd0bed03fe339",
+    "mtime": 1787477121.9320652,
+    "ast_hash": "40e75d04adbe7f1ea19dcd2a9c3f5df7",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch05-lessons.ts": {
-    "mtime": 1787342412.5839946,
-    "ast_hash": "d05581e1624c4dda3db296279acce31c",
+    "mtime": 1787477121.9356904,
+    "ast_hash": "837beafaf80d9382ca5cf64a9d250d13",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch06-lessons.ts": {
-    "mtime": 1787342348.5217738,
-    "ast_hash": "4fec9b2c2e8516b4b5b3b7b67fc29e3a",
+    "mtime": 1787477122.2921777,
+    "ast_hash": "1596cde1965ba8a5d648142d5fcdb9d7",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch07-lessons.ts": {
-    "mtime": 1787342412.6432097,
-    "ast_hash": "47da695414afeb1f501e7e5c05b4efa9",
+    "mtime": 1787477122.297797,
+    "ast_hash": "824c633487485171182704883dc45668",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch08-cache-stampede.ts": {
@@ -365,93 +365,93 @@
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch08-lessons.ts": {
-    "mtime": 1787342412.6800523,
-    "ast_hash": "1bb7c0d1d8be52526c81b5f16eca9a2a",
+    "mtime": 1787477122.3071778,
+    "ast_hash": "b8378bcf81d93d08a7fd11b5b058478f",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch09-lessons.ts": {
-    "mtime": 1787342412.7332103,
-    "ast_hash": "ff18ee9e8899c27704296f9b1cda3823",
+    "mtime": 1787477122.3118403,
+    "ast_hash": "5ef2385f970e977a09d4fa83ace1052d",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch10-lessons.ts": {
-    "mtime": 1787342412.7753682,
-    "ast_hash": "c731f20dafde23bad690f57fa03d0f2d",
+    "mtime": 1787477122.315178,
+    "ast_hash": "2ffedb5562ec55b9b5a4842ef4b15d39",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch11-lessons.ts": {
-    "mtime": 1787342412.8212109,
-    "ast_hash": "69ff2c2281488685c2898df7e3d6584c",
+    "mtime": 1787477122.330178,
+    "ast_hash": "8c61f127dabcbce0d5cf12597d3c1f3d",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch12-lessons.ts": {
-    "mtime": 1787342182.173626,
-    "ast_hash": "ffba3468791b11ae391da8e337b0658e",
+    "mtime": 1787477122.3351781,
+    "ast_hash": "195c594ac26c5554c21355e136df254c",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch13-lessons.ts": {
-    "mtime": 1787342527.4839907,
-    "ast_hash": "a689125a58726417b603695515ba321a",
+    "mtime": 1787477122.339974,
+    "ast_hash": "1e918f7498731ea0614864190b52c43f",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch14-lessons.ts": {
-    "mtime": 1787323446.1487954,
-    "ast_hash": "0f6beb83b84bd03190c850c8e03d8899",
+    "mtime": 1787477122.3471782,
+    "ast_hash": "663de2069ce11ee702af2e03c6baebbc",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch15-lessons.ts": {
-    "mtime": 1787342530.0660083,
-    "ast_hash": "ed842e253ae9d8e333c681ee165ab4f5",
+    "mtime": 1787477122.3561783,
+    "ast_hash": "823ea6e8b94912b00eef750dc6157f60",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch16-lessons.ts": {
-    "mtime": 1787342535.2340434,
-    "ast_hash": "720f9ff6a8e73079aee6003405d1fecb",
+    "mtime": 1787477122.3611784,
+    "ast_hash": "0058f91c032081c7cb20a2390f7654ad",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch17-lessons.ts": {
-    "mtime": 1787342412.973502,
-    "ast_hash": "5ab1f43ef20cdca8658bd98ad9be3101",
+    "mtime": 1787477122.3669796,
+    "ast_hash": "cc5e17dc6543f99532f5f9c387a1497b",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch18-lessons.ts": {
-    "mtime": 1787342412.9843767,
-    "ast_hash": "99f4ec1b957e93eb162c6bedac92f4a0",
+    "mtime": 1787477122.3707895,
+    "ast_hash": "a792914411a99293a3fba8a3302ff52a",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch19-lessons.ts": {
-    "mtime": 1787342412.9972122,
-    "ast_hash": "7a9dd939d01b54856259915b832a0355",
+    "mtime": 1787477122.374759,
+    "ast_hash": "1e52e272d51c6b742f7cf50e5b4ef3d4",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch20-lessons.ts": {
-    "mtime": 1787342413.0082123,
-    "ast_hash": "781d0b75ce682cd4ac7a076f2959f454",
+    "mtime": 1787477122.3771784,
+    "ast_hash": "0e1f246327e9ab74196246eb908b51e0",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch21-lessons.ts": {
-    "mtime": 1787342538.3320644,
-    "ast_hash": "4760ad2f32b646b52c99071df695eba2",
+    "mtime": 1787477122.3811784,
+    "ast_hash": "d2e91eed7ff935488487fcb9d7d27457",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch22-lessons.ts": {
-    "mtime": 1787342413.030322,
-    "ast_hash": "00633e10f6a6e164cad633b1596be094",
+    "mtime": 1787477122.387003,
+    "ast_hash": "54c939943726534caa1ac31019f4f3a8",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch23-lessons.ts": {
-    "mtime": 1787342413.0344336,
-    "ast_hash": "ff65ee3c35ec6f02af3e92cd5a3315ae",
+    "mtime": 1787477122.3901784,
+    "ast_hash": "fa9a42a87f39028ce0dfac7901ce60b7",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch24-lessons.ts": {
-    "mtime": 1787342284.9682994,
-    "ast_hash": "43660079cd7650951e5423d7123c3f1a",
+    "mtime": 1787477122.3941786,
+    "ast_hash": "81f1bba4acb2bbb24ea8aa57520776c9",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/ch25-lessons.ts": {
-    "mtime": 1787342367.8009048,
-    "ast_hash": "5ea2be933c6a252def3031bfde09bdee",
+    "mtime": 1787477122.3991785,
+    "ast_hash": "9d8bda2c61075fd18a17fb34f688c666",
     "semantic_hash": ""
   },
   "src/lib/content/lessons/gen_ch01.py": {
@@ -465,8 +465,8 @@
     "semantic_hash": ""
   },
   "src/lib/content/types.ts": {
-    "mtime": 1786960147.161821,
-    "ast_hash": "27336c0a3901b9af68c399320ecb0fc8",
+    "mtime": 1787476913.5434792,
+    "ast_hash": "d5c6d70a51bd73b20e903f17b36f3dd0",
     "semantic_hash": ""
   },
   "src/lib/services/search.service.ts": {
@@ -3882,6 +3882,46 @@
   "projects/resilient-distributed-system/requirements.txt": {
     "mtime": 1787347657.2636733,
     "ast_hash": "9e882d5db1bd440c10c88c2254b2bfe1",
+    "semantic_hash": ""
+  },
+  "batch1_builder.py": {
+    "mtime": 1787477012.9712882,
+    "ast_hash": "163ad13c6f89cd5ef5c737539ec75ae7",
+    "semantic_hash": ""
+  },
+  "build_all_chapters.py": {
+    "mtime": 1787477057.050647,
+    "ast_hash": "9306724a63e4e9cd5e05bcc8cd3ced9d",
+    "semantic_hash": ""
+  },
+  "build_batch_1.py": {
+    "mtime": 1787477018.4323328,
+    "ast_hash": "cbc59771bc279f0c1ff3c567f410fe34",
+    "semantic_hash": ""
+  },
+  "generate_batch1_data.py": {
+    "mtime": 1787476988.9160926,
+    "ast_hash": "6b5d9b19dda8b15819a9cd347fa9220e",
+    "semantic_hash": ""
+  },
+  "generate_batch_1.py": {
+    "mtime": 1787477043.6305377,
+    "ast_hash": "c3c77027dbfd59ba6bce23038142632a",
+    "semantic_hash": ""
+  },
+  "generate_batch_2.py": {
+    "mtime": 1787477065.911719,
+    "ast_hash": "ea5ddb8b97abf7b5cb9213710115ee66",
+    "semantic_hash": ""
+  },
+  "generate_batches_3_4_5.py": {
+    "mtime": 1787477069.7427502,
+    "ast_hash": "8bace8be1542749f27dda793d8770fe5",
+    "semantic_hash": ""
+  },
+  "scratch_gen_batch1.py": {
+    "mtime": 1787477117.785141,
+    "ast_hash": "da9fc68c48aa3dbc4fb72e43d20be474",
     "semantic_hash": ""
   }
 }

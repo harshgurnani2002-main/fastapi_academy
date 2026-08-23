@@ -28,6 +28,11 @@ export interface LessonSection {
   title: string;
   content: string;
   codeExample?: CodeExample;
+  diagram?: {
+    title: string;
+    diagram: string;
+    caption?: string;
+  };
 }
 
 export interface Challenge {
